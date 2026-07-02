@@ -22,7 +22,7 @@ const MoveButton = styled.button`
   width: 100%;
   border: 1px solid #ffffff;
   border-radius: 12px;
-  padding: 16px;
+  padding: 15px;
   box-sizing: border-box;
 `;
 

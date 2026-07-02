@@ -9,11 +9,12 @@ export const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); /* 모니터 확인용 테두리 음영 */
+  position: relative;
 `;
 
 export const ContentContainer = styled.main`
   flex: 1;
-  padding: 24px 20px;
+  padding: 24px 20px 120px 20px;
 `;
 
 export const FormGroup = styled.div`
@@ -49,8 +50,14 @@ export const Input = styled.input`
 `;
 
 export const ButtonWrapper = styled.div`
-  margin-top: auto;
-  padding-top: 40px; /* 이름 입력창과 버튼 사이의 간격 격리 */
+  position: absolute; /* 부모인 PageWrapper 기준으로 절대 위치 고정 */
+  bottom: 0; /* 맨 밑바닥에 밀착 */
+  left: 0;
+  right: 0;
+  padding: 16px 20px 32px 20px; /* 위 16px, 좌우 20px, ★아래 여백 32px 주어 바닥에서 띄움 */
+  background: linear-gradient(to top, #fafaff 80%, rgba(250, 250, 255, 0) 100%);
+  /* ↑ 버튼 뒤로 본문 글씨가 겹쳐서 지나갈 때 지저분해 보이지 않도록 자연스러운 배경 그라데이션 처리 */
+  z-index: 10;
 `;
 
 export const SelectBox = styled.div`
@@ -164,4 +171,79 @@ export const ModalCloseButton = styled.button`
   background: #eee;
   border-radius: 6px;
   cursor: pointer;
+`;
+
+//OtherInfo.jsx 스타일 코드
+// 소득분위용 select 기본 스타일 (기존 Input/SelectBox 디자인 톤앤매너 매칭)
+export const SelectStyle = styled.select`
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #111111;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+
+  &:invalid {
+    color: #bbbbbb;
+  }
+`;
+
+// 학점 레이아웃 컨테이너
+export const GpaContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+// 너비를 콤팩트하게 제한한 학점 전용 select 박스
+export const CompactSelect = styled(SelectStyle)`
+  width: 80px; /* 기존 100%에서 와이어프레임 비율에 맞게 축소 */
+  text-align: center;
+  background-position: right 10px center;
+  padding: 0 24px 0 12px;
+`;
+
+export const Dot = styled.span`
+  font-size: 18px;
+  font-weight: 700;
+  color: #111111;
+`;
+
+// 관심분야 3열 정렬 Grid
+export const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 16px;
+  column-gap: 8px;
+  margin-top: 6px;
+`;
+
+// 네모 체크박스 라벨 컴포넌트
+export const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #111111;
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #999999;
+    border-radius: 4px;
+    cursor: pointer;
+    accent-color: #5c4ff2; /* BasicInfo 포커스 포인트 컬러와 통일 */
+  }
+
+  span {
+    white-space: nowrap;
+  }
 `;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import * as S from './BasicInfo.styles';
+import * as S from './Info.styles';
 import Header from '../components/Header';
 import SchoolModal from '../components/modal/SchoolModal';
 import DepartmentModal from '../components/modal/DepartmentModal';
@@ -8,6 +9,8 @@ import RegionModal from '../components/modal/RegionModal';
 import BasicButton from '../components/BasicButton';
 
 export default function BasicInfo() {
+  const navigate = useNavigate(); // 2. navigate 함수 선언
+
   // 1. 로컬스토리지에 저장할 초기 폼 객체 설정
   const initialFormState = {
     name: '',
@@ -72,6 +75,8 @@ export default function BasicInfo() {
   const handleNextStep = () => {
     console.log('로컬스토리지 최종본 제출:', formState);
     // 이후 페이지 라우팅 및 백엔드 전송 로직 작성 구간
+
+    navigate('/other-info');
   };
 
   return (

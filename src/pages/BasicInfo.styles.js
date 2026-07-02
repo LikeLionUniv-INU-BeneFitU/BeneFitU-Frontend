@@ -52,3 +52,116 @@ export const ButtonWrapper = styled.div`
   margin-top: auto;
   padding-top: 40px; /* 이름 입력창과 버튼 사이의 간격 격리 */
 `;
+
+export const SelectBox = styled.div`
+  width: 100%;
+  height: 48px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+`;
+
+export const SelectText = styled.span`
+  font-size: 14px;
+  color: ${(props) => (props.isSelected ? '#000' : '#BBB')};
+`;
+
+export const ArrowIcon = styled.span`
+  font-size: 12px;
+  color: #888;
+`;
+
+export const GradeSelectorContainer = styled.div`
+  display: flex;
+  border: 1px solid #a0a0a0;
+  border-radius: 6px;
+  overflow: hidden;
+`;
+
+export const GradeButton = styled.button`
+  flex: 1;
+  height: 40px;
+  background-color: ${(props) => (props.isActive ? '#000' : '#FFF')};
+  color: ${(props) => (props.isActive ? '#FFF' : '#000')};
+  border: none;
+  border-right: 1px solid #a0a0a0;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:last-child {
+    border-right: none;
+  }
+`;
+
+// 모달 스타일 예시
+export const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
+export const ModalContent = styled.div`
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 340px;
+
+  /* 💡 전체 모달 창이 화면 높이의 80%를 넘지 않도록 설정 */
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column; /* 내부 요소들을 세로로 정렬 */
+`;
+
+export const ModalList = styled.div`
+  margin-top: 16px;
+
+  /* 💡 핵심: 리스트 영역이 차지할 수 있는 남은 공간을 채우고, 넘치면 스크롤 생성 */
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px; /* 스크롤바와 버튼이 겹치지 않도록 여백 */
+
+  /* 스크롤바 스타일 커스텀 (선택 사항: 깔끔하게 보이기 위함) */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 4px;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #eee;
+    background: #f9f9f9;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+`;
+
+export const ModalCloseButton = styled.button`
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  border: none;
+  background: #eee;
+  border-radius: 6px;
+  cursor: pointer;
+`;

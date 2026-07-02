@@ -7,7 +7,7 @@ import BasicButton from '../components/BasicButton';
 export default function OtherInfo() {
   // 1. 로컬스토리지 초기 상태 설정 (BasicInfo의 하나의 객체 저장 방식과 통일)
   const initialFormState = {
-    gpaInteger: '4',
+    gpaInteger: '0',
     gpaDecimal: '5',
     incomeBracket: '',
     isVulnerable: false, // false: 해당 없음, true: 해당
@@ -32,6 +32,23 @@ export default function OtherInfo() {
     setFormState({
       ...formState,
       [key]: value,
+    });
+  };
+
+  // 학점 정수(앞자리) 변경 시 예외처리 핸들러
+  const handleGpaIntegerChange = (e) => {
+    const nextInteger = e.target.value;
+    let nextDecimal = formState.gpaDecimal;
+
+    // 앞자리가 4인데 기존 소수점 뒷자리가 50을 초과하고 있다면 50으로 강제 조정 (4.5 만점 제한)
+    if (nextInteger === '4' && parseInt(nextDecimal, 10) > 50) {
+      nextDecimal = '50';
+    }
+
+    setFormState({
+      ...formState,
+      gpaInteger: nextInteger,
+      gpaDecimal: nextDecimal,
     });
   };
 
@@ -62,9 +79,12 @@ export default function OtherInfo() {
     // 이후 백엔드 전송 및 라우팅 로직 작성 구간
   };
 
-  // 학점 옵션 생성 (정수: 0~4, 소수점: 00~99)
+  // 학점 정수 옵션 리스트 생성 (0 ~ 4)
   const integerOptions = Array.from({ length: 5 }, (_, i) => i);
-  const decimalOptions = Array.from({ length: 100 }, (_, i) =>
+
+  // 학점 소수점 옵션 리스트 동적 제어 (앞자리가 4이면 00~50까지만, 아니면 00~99까지)
+  const maxDecimalLength = formState.gpaInteger === '4' ? 51 : 100;
+  const decimalOptions = Array.from({ length: maxDecimalLength }, (_, i) =>
     i < 10 ? `0${i}` : `${i}`,
   );
 

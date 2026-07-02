@@ -9,11 +9,12 @@ export const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); /* 모니터 확인용 테두리 음영 */
+  position: relative;
 `;
 
 export const ContentContainer = styled.main`
   flex: 1;
-  padding: 24px 20px;
+  padding: 24px 20px 120px 20px;
 `;
 
 export const FormGroup = styled.div`
@@ -49,8 +50,14 @@ export const Input = styled.input`
 `;
 
 export const ButtonWrapper = styled.div`
-  margin-top: auto;
-  padding-top: 40px; /* 이름 입력창과 버튼 사이의 간격 격리 */
+  position: absolute; /* 부모인 PageWrapper 기준으로 절대 위치 고정 */
+  bottom: 0; /* 맨 밑바닥에 밀착 */
+  left: 0;
+  right: 0;
+  padding: 16px 20px 32px 20px; /* 위 16px, 좌우 20px, ★아래 여백 32px 주어 바닥에서 띄움 */
+  background: linear-gradient(to top, #fafaff 80%, rgba(250, 250, 255, 0) 100%);
+  /* ↑ 버튼 뒤로 본문 글씨가 겹쳐서 지나갈 때 지저분해 보이지 않도록 자연스러운 배경 그라데이션 처리 */
+  z-index: 10;
 `;
 
 export const SelectBox = styled.div`

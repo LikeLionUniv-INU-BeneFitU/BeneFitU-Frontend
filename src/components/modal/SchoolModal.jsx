@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import * as S from '../../pages/BasicInfo.styles';
+import * as S from '../../pages/Info.styles';
 
 export default function SchoolModal({ isOpen, onClose, onSelect }) {
   const [searchTerm, setSearchTerm] = useState('');

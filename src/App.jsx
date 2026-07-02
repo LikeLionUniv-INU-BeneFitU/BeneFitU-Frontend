@@ -5,6 +5,7 @@ import Splash from './pages/Splash';
 import LoginHome from './pages/Loginhome';
 import BasicInfo from './pages/BasicInfo';
 import OtherInfo from './pages/OtherInfo';
+import BenefitAll from './pages/BenefitAll';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login-home" element={<LoginHome />} />
           <Route path="/basic-info" element={<BasicInfo />} />
           <Route path="/other-info" element={<OtherInfo />} />
+          <Route path="/benefit-all" element={<BenefitAll />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

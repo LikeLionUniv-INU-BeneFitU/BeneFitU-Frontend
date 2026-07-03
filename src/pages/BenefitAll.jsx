@@ -104,7 +104,6 @@ function BenefitAll() {
           );
         })}
       </S.ScrollArea>
-      <Footer />
     </S.PageWrapper>
   );
 }

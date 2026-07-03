@@ -6,6 +6,7 @@ import LoginHome from './pages/Loginhome';
 import InfoIntro from './pages/InfoIntro';
 import BasicInfo from './pages/BasicInfo';
 import OtherInfo from './pages/OtherInfo';
+import InfoComplete from './pages/InfoComplete';
 import BenefitAll from './pages/BenefitAll';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/info-intro" element={<InfoIntro />} />
           <Route path="/basic-info" element={<BasicInfo />} />
           <Route path="/other-info" element={<OtherInfo />} />
+          <Route path="/info-complete" element={<InfoComplete />} />
           <Route path="/benefit-all" element={<BenefitAll />} />
         </Routes>
       </AppLayout>

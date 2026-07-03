@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import * as S from './Info.styles';
 import Header from '../components/Header';
 import BasicButton from '../components/BasicButton';
 
 export default function OtherInfo() {
+  const navigate = useNavigate();
+
   // 1. 로컬스토리지 초기 상태 설정 (BasicInfo의 하나의 객체 저장 방식과 통일)
   const initialFormState = {
     gpaInteger: '0',
@@ -78,6 +81,8 @@ export default function OtherInfo() {
 
     console.log('로컬스토리지 최종본 제출:', finalData);
     // 이후 백엔드 전송 및 라우팅 로직 작성 구간
+
+    navigate('/info-complete');
   };
 
   // 학점 정수 옵션 리스트 생성 (0 ~ 4)

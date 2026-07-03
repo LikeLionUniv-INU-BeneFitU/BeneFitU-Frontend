@@ -9,7 +9,7 @@ import RegionModal from '../components/modal/RegionModal';
 import BasicButton from '../components/BasicButton';
 
 export default function BasicInfo() {
-  const navigate = useNavigate(); // 2. navigate 함수 선언
+  const navigate = useNavigate(); // navigate 함수 선언
 
   // 1. 로컬스토리지에 저장할 초기 폼 객체 설정
   const initialFormState = {

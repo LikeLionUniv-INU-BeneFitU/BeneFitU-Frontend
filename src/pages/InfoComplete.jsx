@@ -71,7 +71,7 @@ export default function InfoComplete() {
 
         {/* 하단 고정 버튼 영역 (세로 2개 배치) */}
         <S.ButtonContainer>
-          <BasicButton onClick={() => navigate('/')}>
+          <BasicButton onClick={() => navigate('/benefit-all')}>
             맞춤 혜택 보러가기
           </BasicButton>
 

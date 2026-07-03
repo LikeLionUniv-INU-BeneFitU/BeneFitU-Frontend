@@ -1,12 +1,11 @@
-import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import BenefitDetailBox from '../components/BenefitDetailBox';
 import * as S from './BenefitAll.styles';
+import CategoryButtonBar from '../components/CategoryButtonBar';
 
 
 function BenefitAll() {
-  const navigate = useNavigate();
 
 // 카테고리 기억 상자
   const [currentCategory, setCurrentCategory] = useState('전체');
@@ -22,6 +21,8 @@ function BenefitAll() {
       { id: 2, title: "인천대학교 근로장학금", price: "최대 120만원" },
       { id: 3, title: "삼성꿈장학재단 장학금", price: "200만원" },
       { id: 4, title: "한국장학재단 국가장학금 1유형", price: "최대 120만원" },
+      { id: 5, title: "A장학금", price: "20만원" },
+      { id: 6, title: "B장학금", price: "최대 15만원" },
     ];
 
     // const backendUrl = `http://백엔드IP주소/api/benefits?category=${currentCategory}`; 진짜 백엔드 주소 넣는곳
@@ -43,15 +44,11 @@ function BenefitAll() {
       });
   }, [currentCategory])
 
-  // 화면에 보여줄 카테고리 이름 4개 배열
-  const categories = ['전체', '장학금', '교내 근로', '대외 활동'];
 
   return (
     <S.PageWrapper>
-      <Header 
-        currentCategory={currentCategory} 
-        setCurrentCategory={setCurrentCategory} 
-      />
+      <Header title="맞춤 추천 혜택" />
+      <CategoryButtonBar currentCategory={currentCategory} setCurrentCategory={setCurrentCategory} />
       <S.ScrollArea>
         <S.SubTitle>추천 혜택 <span>{benefitList.length}</span></S.SubTitle>
         {benefitList.map((benefit) => {

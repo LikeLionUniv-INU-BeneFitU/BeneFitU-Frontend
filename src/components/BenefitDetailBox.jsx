@@ -3,37 +3,69 @@ import { useNavigate } from 'react-router-dom';
 
 const PageWrapper = styled.div`
   width: 100%;
-  height: 100vh;
-
+  
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const Box = styled.div`
-  width: 80%;
-  border: 1px solid #e0e0e0;
+  width: 90%;
+
+  background-color: #FFFFFF;
+  
   border-radius: 12px;
-  padding: 16px;
-  box-sizing: border-box;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
+
+  padding: 15px;
+  gap: 10px;
+
+  display: flex;
+  flex-direction: column;
+`;
+
+const Rowbox = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Columnbox = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const MoveButton = styled.button`
   width: 100%;
-  border: 1px solid #ffffff;
+
+  background-color: #D9D9D9;
+
   border-radius: 12px;
   padding: 15px;
-  box-sizing: border-box;
 `;
+
+const BenefitIcon = styled.button`
+  width: 50px;
+  height: 50px;
+
+  background-color: #D9D9D9;
+
+  border-radius: 50%;
+  padding: 20px;
+  margin-right: 15px;
+`;
+
+
 
 export default function DetailBox({ children, buttonText, to }) {
   const navigate = useNavigate();
   return (
     <PageWrapper>
-      <Box>{children}
-      <MoveButton onClick={() => navigate(to)}>
-        {buttonText}
-      </MoveButton>
+      <Box>
+        <Rowbox>
+        <BenefitIcon></BenefitIcon>
+        <Columnbox>{children}</Columnbox>
+        </Rowbox>
+        <MoveButton onClick={() => navigate(to)}>{buttonText}</MoveButton>
       </Box>
     </PageWrapper>
   );

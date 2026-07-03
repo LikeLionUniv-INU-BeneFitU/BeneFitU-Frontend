@@ -10,7 +10,8 @@ export default function OtherInfo() {
     gpaInteger: '0',
     gpaDecimal: '5',
     incomeBracket: '',
-    isVulnerable: false, // false: 해당 없음, true: 해당
+    isBasicLiving: false, //기초생활수급자 여부 (false: 해당 없음, true: 해당)
+    isLowIncome: false, //차상위계층 여부
     interests: {
       scholarship: false,
       youthSupport: false,
@@ -126,6 +127,7 @@ export default function OtherInfo() {
           <S.Label>소득분위</S.Label>
           <S.SelectStyle
             value={formState.incomeBracket}
+            isSelected={!!formState.incomeBracket}
             onChange={(e) => handleInputChange('incomeBracket', e.target.value)}
           >
             <option value="" disabled hidden>
@@ -141,19 +143,39 @@ export default function OtherInfo() {
 
         {/* 기초생활수급자 / 차상위계층 여부 (세그먼트 탭 스타일 매칭) */}
         <S.FormGroup>
-          <S.Label>기초생활수급자 / 차상위계층 여부</S.Label>
+          <S.Label>기초생활수급자 여부</S.Label>
           <S.GradeSelectorContainer>
             <S.GradeButton
               type="button"
-              isActive={!formState.isVulnerable}
+              isActive={!formState.isBasicLiving}
               onClick={() => handleInputChange('isVulnerable', false)}
             >
               해당 없음
             </S.GradeButton>
             <S.GradeButton
               type="button"
-              isActive={formState.isVulnerable}
-              onClick={() => handleInputChange('isVulnerable', true)}
+              isActive={formState.isBasicLiving}
+              onClick={() => handleInputChange('isBasicLiving', true)}
+            >
+              해당
+            </S.GradeButton>
+          </S.GradeSelectorContainer>
+        </S.FormGroup>
+
+        <S.FormGroup>
+          <S.Label>차상위계층 여부</S.Label>
+          <S.GradeSelectorContainer>
+            <S.GradeButton
+              type="button"
+              isActive={!formState.isVulnerable}
+              onClick={() => handleInputChange('isLowIncome', false)}
+            >
+              해당 없음
+            </S.GradeButton>
+            <S.GradeButton
+              type="button"
+              isActive={formState.isLowIncome}
+              onClick={() => handleInputChange('isLowIncome', true)}
             >
               해당
             </S.GradeButton>

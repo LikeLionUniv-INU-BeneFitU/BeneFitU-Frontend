@@ -49,6 +49,47 @@ export const Input = styled.input`
   }
 `;
 
+export const DateInput = styled(Input)`
+  font-family: sans-serif;
+  cursor: pointer;
+  position: relative;
+
+  /* 💡 값이 없을 때는 텍스트 색상을 다른 placeholder와 일치하는 회색(#BBB)으로 지정 */
+  color: ${(props) => (props.hasValue ? '#000' : '#BBB')};
+
+  /* iOS 등 일부 브라우저에서 date 인풋 서식이 깨지거나 투명해지는 현상 방지 */
+  &::-webkit-datetime-edit {
+    display: flex;
+  }
+
+  /* 년, 월, 일 글자 각각의 색상을 유기적으로 제어하기 위한 서식 (크롬/Vite 웹킷 계열 대응) */
+  &::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-datetime-edit-text,
+  &::-webkit-datetime-edit-year-field,
+  &::-webkit-datetime-edit-month-field,
+  &::-webkit-datetime-edit-day-field {
+    color: ${(props) => (props.hasValue ? '#000' : '#BBB')};
+  }
+
+  /* 우측 내장 달력 아이콘 스타일 */
+  &::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    cursor: pointer;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;
+
 export const ButtonWrapper = styled.div`
   position: absolute; /* 부모인 PageWrapper 기준으로 절대 위치 고정 */
   bottom: 0; /* 맨 밑바닥에 밀착 */
@@ -63,8 +104,8 @@ export const ButtonWrapper = styled.div`
 export const SelectBox = styled.div`
   width: 100%;
   height: 48px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid #999999;
+  border-radius: 8px;
   padding: 0 16px;
   box-sizing: border-box;
   background-color: #fff;
@@ -75,7 +116,7 @@ export const SelectBox = styled.div`
 `;
 
 export const SelectText = styled.span`
-  font-size: 14px;
+  font-size: 0.95rem;
   color: ${(props) => (props.isSelected ? '#000' : '#BBB')};
 `;
 
@@ -86,19 +127,19 @@ export const ArrowIcon = styled.span`
 
 export const GradeSelectorContainer = styled.div`
   display: flex;
-  border: 1px solid #a0a0a0;
-  border-radius: 6px;
+  border: 1px solid #999999;
+  border-radius: 8px;
   overflow: hidden;
 `;
 
 export const GradeButton = styled.button`
   flex: 1;
-  height: 40px;
+  height: 48px;
   background-color: ${(props) => (props.isActive ? '#000' : '#FFF')};
   color: ${(props) => (props.isActive ? '#FFF' : '#000')};
   border: none;
-  border-right: 1px solid #a0a0a0;
-  font-size: 13px;
+  border-right: 1px solid #999999;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.2s;
 
@@ -179,11 +220,11 @@ export const SelectStyle = styled.select`
   width: 100%;
   height: 48px;
   padding: 0 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
+  border: 1px solid #999999;
+  border-radius: 8px;
+  font-size: 0.95rem;
   background-color: #ffffff;
-  color: #111111;
+  color: ${(props) => (props.isSelected ? '#111111' : '#BBBBBB')};
   outline: none;
   appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
@@ -204,7 +245,7 @@ export const GpaContainer = styled.div`
 
 // 너비를 콤팩트하게 제한한 학점 전용 select 박스
 export const CompactSelect = styled(SelectStyle)`
-  width: 80px; /* 기존 100%에서 와이어프레임 비율에 맞게 축소 */
+  width: 70px; /* 기존 100%에서 와이어프레임 비율에 맞게 축소 */
   text-align: center;
   background-position: right 10px center;
   padding: 0 24px 0 12px;
@@ -230,7 +271,7 @@ export const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: 0.85rem;
   color: #111111;
   cursor: pointer;
 

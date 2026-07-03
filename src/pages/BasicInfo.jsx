@@ -14,9 +14,10 @@ export default function BasicInfo() {
   // 1. 로컬스토리지에 저장할 초기 폼 객체 설정
   const initialFormState = {
     name: '',
+    birthDate: '',
     school: '',
     department: '',
-    grade: '1학년',
+    grade: '',
     region: '',
   };
 
@@ -95,6 +96,20 @@ export default function BasicInfo() {
           />
         </S.FormGroup>
 
+        {/* 생년월일 입력 */}
+        <S.FormGroup>
+          <S.Label>생년월일</S.Label>
+          <S.DateInput
+            type="date"
+            min="1900-01-01"
+            max="2026-12-31"
+            value={formState.birthDate}
+            onChange={(e) => handleInputChange('birthDate', e.target.value)}
+            hasValue={!!formState.birthDate}
+            required
+          />
+        </S.FormGroup>
+
         {/* 학교 선택 */}
         <S.FormGroup>
           <S.Label>학교</S.Label>
@@ -117,10 +132,6 @@ export default function BasicInfo() {
                 return;
               }
               setIsDeptModalOpen(true);
-            }}
-            style={{
-              opacity: formState.school ? 1 : 0.5,
-              cursor: formState.school ? 'pointer' : 'not-allowed',
             }}
           >
             <S.SelectText isSelected={!!formState.department}>

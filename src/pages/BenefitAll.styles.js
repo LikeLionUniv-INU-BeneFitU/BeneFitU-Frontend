@@ -10,6 +10,13 @@ export const PageWrapper = styled.div`
   flex-direction: column;
 `;
 
+export const Rowbox = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-between;
+`;
+
 export const SubTitle = styled.div`
   font-size: 18px;
   font-weight: bold;

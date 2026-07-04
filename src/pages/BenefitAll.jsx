@@ -15,8 +15,11 @@ function BenefitAll() {
   // 장학금 리스트 정보 저장용 상자
   const [benefitList, setBenefitList] = useState([]);
 
-  // 정렬 기준 기억 상자 ('최신순' 또는 '금액순')
+  // 정렬 기준 기억 상자
   const [sortType, setSortType] = useState('최신순');
+
+  // 드롭다운이 열려있는지 기억하는 상자
+  const [isSortOpen, setIsSortOpen] = useState(false);
 
   // 사용자 정보 저장용 상자
   const [userInfo, setUserInfo] = useState({
@@ -91,8 +94,14 @@ function BenefitAll() {
   ? benefitList
   : benefitList.filter((item) => item.category === currentCategory);
 
-console.log("선택된 카테고리:", currentCategory);
-console.log("걸러진 리스트:", filteredList);
+  const sortedList = [...filteredList].sort((a, b) => {
+  if (sortType === '최신순') {
+    return new Date(b.date) - new Date(a.date); // 최신 날짜가 위로
+  } else {
+    return b.priceValue - a.priceValue; // 금액 높은 게 위로
+  }
+  });
+
 
   return (
     <S.PageWrapper>
@@ -106,9 +115,25 @@ console.log("걸러진 리스트:", filteredList);
       <S.ScrollArea>
         <S.Rowbox>
           <S.SubTitle>추천 혜택 <span>{filteredList.length}</span></S.SubTitle>
-          정렬기준 버튼
+          <S.SortWrapper>
+
+            {/* 클릭하면 열고 닫는 버튼 */}
+            <S.SortButton onClick={() => setIsSortOpen(!isSortOpen)}>{sortType} ▼ </S.SortButton>
+
+            {/* isSortOpen이 true일 때만 아래 목록을 보여줌 */}
+            {isSortOpen && (
+              <S.SortDropdown>
+                <S.SortOption onClick={() => { setSortType('최신순'); setIsSortOpen(false); }}>
+                  최신순
+                </S.SortOption>
+                <S.SortOption onClick={() => { setSortType('금액순'); setIsSortOpen(false); }}>
+                  금액순
+                </S.SortOption>
+              </S.SortDropdown>
+            )}
+          </S.SortWrapper>
         </S.Rowbox>
-        {filteredList.map((benefit) => {
+        {sortedList.map((benefit) => {
           return (
             <BenefitDetailBox key={benefit.id} buttonText="상세 보기" to={`/detail/${benefit.id}`} /* 클릭 시 상세페이지 이동용 주소 */>
               <h2>{benefit.title}</h2>

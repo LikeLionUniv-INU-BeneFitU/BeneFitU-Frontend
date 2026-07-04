@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   /* 1. 기본 여백 및 박스 사이징 초기화 */
@@ -9,14 +9,30 @@ const GlobalStyle = createGlobalStyle`
   }
 
   /* 2. html 및 body 기본 세팅 */
-  html, body {
+  html, body, #root {
     width: 100%;
     height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-color: #ffffff; /* 원하는 배경색 */
-    color: #333333;            /* 원하는 기본 글자색 */
+    color: #333333;       /* 원하는 기본 글자색 */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  @media (max-width: 380px){
+    html {
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 370px){
+    html {
+      font-size: 12px;
+    }
   }
 
   /* 3. 링크, 리스트 등 기본 컴포넌트 스타일 초기화 */

@@ -15,10 +15,10 @@ export default function BasicInfo() {
   const initialFormState = {
     name: '',
     birthDate: '',
-    school: '',
+    schoolName: '',
     department: '',
     grade: '',
-    region: '',
+    residence: '',
   };
 
   // 2. useLocalStorage 훅 적용
@@ -83,97 +83,97 @@ export default function BasicInfo() {
   return (
     <S.PageWrapper>
       <Header title="기본 정보 입력" />
+      <S.ScrollArea>
+        <S.ContentContainer>
+          {/* 이름 입력 */}
+          <S.FormGroup>
+            <S.Label>이름</S.Label>
+            <S.Input
+              type="text"
+              placeholder="이름을 입력해주세요"
+              value={formState.name}
+              onChange={(e) => handleInputChange('name', e.target.value)}
+            />
+          </S.FormGroup>
 
-      <S.ContentContainer>
-        {/* 이름 입력 */}
-        <S.FormGroup>
-          <S.Label>이름</S.Label>
-          <S.Input
-            type="text"
-            placeholder="이름을 입력해주세요"
-            value={formState.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-          />
-        </S.FormGroup>
+          {/* 생년월일 입력 */}
+          <S.FormGroup>
+            <S.Label>생년월일</S.Label>
+            <S.DateInput
+              type="date"
+              min="1900-01-01"
+              max="2026-12-31"
+              value={formState.birthDate}
+              onChange={(e) => handleInputChange('birthDate', e.target.value)}
+              hasValue={!!formState.birthDate}
+              required
+            />
+          </S.FormGroup>
 
-        {/* 생년월일 입력 */}
-        <S.FormGroup>
-          <S.Label>생년월일</S.Label>
-          <S.DateInput
-            type="date"
-            min="1900-01-01"
-            max="2026-12-31"
-            value={formState.birthDate}
-            onChange={(e) => handleInputChange('birthDate', e.target.value)}
-            hasValue={!!formState.birthDate}
-            required
-          />
-        </S.FormGroup>
+          {/* 학교 선택 */}
+          <S.FormGroup>
+            <S.Label>학교</S.Label>
+            <S.SelectBox onClick={() => setIsSchoolModalOpen(true)}>
+              <S.SelectText isSelected={!!formState.school}>
+                {formState.school || '학교명을 검색해주세요'}
+              </S.SelectText>
+              <S.ArrowIcon>▼</S.ArrowIcon>
+            </S.SelectBox>
+          </S.FormGroup>
 
-        {/* 학교 선택 */}
-        <S.FormGroup>
-          <S.Label>학교</S.Label>
-          <S.SelectBox onClick={() => setIsSchoolModalOpen(true)}>
-            <S.SelectText isSelected={!!formState.school}>
-              {formState.school || '학교명을 검색해주세요'}
-            </S.SelectText>
-            <S.ArrowIcon>▼</S.ArrowIcon>
-          </S.SelectBox>
-        </S.FormGroup>
+          {/* 학과 선택 */}
+          <S.FormGroup>
+            <S.Label>학과</S.Label>
+            {/* 학교가 없으면 흐릿하게 비활성화된 것처럼 보이게 스타일링 제어 */}
+            <S.SelectBox
+              onClick={() => {
+                if (!formState.school) {
+                  alert('학교를 먼저 선택해주세요!');
+                  return;
+                }
+                setIsDeptModalOpen(true);
+              }}
+            >
+              <S.SelectText isSelected={!!formState.department}>
+                {formState.department || '학과를 선택해주세요'}
+              </S.SelectText>
+              <S.ArrowIcon>▼</S.ArrowIcon>
+            </S.SelectBox>
+          </S.FormGroup>
 
-        {/* 학과 선택 */}
-        <S.FormGroup>
-          <S.Label>학과</S.Label>
-          {/* 학교가 없으면 흐릿하게 비활성화된 것처럼 보이게 스타일링 제어 */}
-          <S.SelectBox
-            onClick={() => {
-              if (!formState.school) {
-                alert('학교를 먼저 선택해주세요!');
-                return;
-              }
-              setIsDeptModalOpen(true);
-            }}
-          >
-            <S.SelectText isSelected={!!formState.department}>
-              {formState.department || '학과를 선택해주세요'}
-            </S.SelectText>
-            <S.ArrowIcon>▼</S.ArrowIcon>
-          </S.SelectBox>
-        </S.FormGroup>
+          {/* 학년 선택 (세그먼트 탭 스타일) */}
+          <S.FormGroup>
+            <S.Label>학년</S.Label>
+            <S.GradeSelectorContainer>
+              {grades.map((g) => (
+                <S.GradeButton
+                  key={g}
+                  type="button"
+                  isActive={formState.grade === g}
+                  onClick={() => handleInputChange('grade', g)}
+                >
+                  {g}
+                </S.GradeButton>
+              ))}
+            </S.GradeSelectorContainer>
+          </S.FormGroup>
 
-        {/* 학년 선택 (세그먼트 탭 스타일) */}
-        <S.FormGroup>
-          <S.Label>학년</S.Label>
-          <S.GradeSelectorContainer>
-            {grades.map((g) => (
-              <S.GradeButton
-                key={g}
-                type="button"
-                isActive={formState.grade === g}
-                onClick={() => handleInputChange('grade', g)}
-              >
-                {g}
-              </S.GradeButton>
-            ))}
-          </S.GradeSelectorContainer>
-        </S.FormGroup>
-
-        {/* 거주 지역 선택 (클릭 시 모달 오픈) */}
-        <S.FormGroup>
-          <S.Label>거주 지역</S.Label>
-          <S.SelectBox onClick={() => setIsRegionModalOpen(true)}>
-            <S.SelectText isSelected={!!formState.region}>
-              {formState.region || '거주 지역을 선택해주세요'}
-            </S.SelectText>
-            <S.ArrowIcon>▼</S.ArrowIcon>
-          </S.SelectBox>
-        </S.FormGroup>
-
-        {/* 3. 하단 다음 버튼 */}
-        <S.ButtonWrapper>
-          <BasicButton onClick={handleNextStep}>다음</BasicButton>
-        </S.ButtonWrapper>
-      </S.ContentContainer>
+          {/* 거주 지역 선택 (클릭 시 모달 오픈) */}
+          <S.FormGroup>
+            <S.Label>거주 지역</S.Label>
+            <S.SelectBox onClick={() => setIsRegionModalOpen(true)}>
+              <S.SelectText isSelected={!!formState.residence}>
+                {formState.residence || '거주 지역을 선택해주세요'}
+              </S.SelectText>
+              <S.ArrowIcon>▼</S.ArrowIcon>
+            </S.SelectBox>
+          </S.FormGroup>
+          {/* 3. 하단 다음 버튼 */}
+        </S.ContentContainer>
+      </S.ScrollArea>
+      <S.ButtonWrapper>
+        <BasicButton onClick={handleNextStep}>다음</BasicButton>
+      </S.ButtonWrapper>
 
       {/* 1. 학교 검색 모달 */}
       <SchoolModal

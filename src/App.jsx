@@ -7,6 +7,7 @@ import InfoIntro from './pages/InfoIntro';
 import BasicInfo from './pages/BasicInfo';
 import OtherInfo from './pages/OtherInfo';
 import InfoComplete from './pages/InfoComplete';
+import Home from './pages/Home';
 import BenefitAll from './pages/BenefitAll';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/basic-info" element={<BasicInfo />} />
           <Route path="/other-info" element={<OtherInfo />} />
           <Route path="/info-complete" element={<InfoComplete />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/benefit-all" element={<BenefitAll />} />
         </Routes>
       </AppLayout>

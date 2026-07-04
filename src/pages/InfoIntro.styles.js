@@ -14,18 +14,19 @@ export const PageWrapper = styled.div`
 
 export const ContentContainer = styled.main`
   flex: 1;
-  padding: 40px 24px 120px 24px; /* 안내 페이지 특성에 맞춰 상단 여백을 조금 더 여유롭게 조절 */
+  padding: 20px 24px 120px 30px; /* 안내 페이지 특성에 맞춰 상단 여백을 조금 더 여유롭게 조절 */
   display: flex;
   flex-direction: column;
 `;
 
 // "맞춤 혜택 추천을 위해..." 상단 타이틀
-export const MainTitle = styled.h1`
-  font-size: 1.45rem;
+export const MainTitle = styled.span`
+  font-size: 2rem;
   font-weight: 800;
   line-height: 1.4;
   color: #111111;
-  margin-bottom: 48px; /* 타이틀과 컨텐츠 사이 거리 확보 */
+  margin-top: 10vh;
+  margin-bottom: 36px; /* 타이틀과 컨텐츠 사이 거리 확보 */
 `;
 
 // 특장점 아이템들을 감싸는 컨테이너
@@ -60,7 +61,7 @@ export const TextGroup = styled.div`
 
 // 특장점 제목 (정확한 추천, 더 많은 혜택 등)
 export const FeatureTitle = styled.h2`
-  font-size: 1.1rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #111111;
   margin: 0;
@@ -68,10 +69,9 @@ export const FeatureTitle = styled.h2`
 
 // 특장점 본문 설명
 export const FeatureDesc = styled.p`
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1.25rem;
   line-height: 1.45;
-  color: #666666; /* 제목보다 살짝 연한 톤으로 시선 분산 방지 */
+  color: #4a4a4a; /* 제목보다 살짝 연한 톤으로 시선 분산 방지 */
   margin: 0;
 `;
 

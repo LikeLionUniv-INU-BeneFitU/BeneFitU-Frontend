@@ -50,9 +50,6 @@ export default function InfoComplete() {
 
   return (
     <S.PageWrapper>
-      {/* 상단 헤더 (기존 컴포넌트 활용) */}
-      <Header title="추천 완료" />
-
       <S.ContentContainer>
         {/* 메인 타이틀 */}
         <S.MainTitle>맞춤 추천이 완료됐어요!</S.MainTitle>

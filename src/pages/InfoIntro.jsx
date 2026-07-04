@@ -14,9 +14,6 @@ export default function InfoIntro() {
 
   return (
     <S.PageWrapper>
-      {/* 상단 헤더 (기존 컴포넌트 활용) */}
-      <Header title="맞춤 혜택 안내" />
-
       <S.ContentContainer>
         {/* 메인 타이틀 */}
         <S.MainTitle>
@@ -69,7 +66,7 @@ export default function InfoIntro() {
 
         {/* 하단 고정 버튼 영역 */}
         <S.ButtonWrapper>
-          <BasicButton onClick={handleStart}>정보 입력 시작</BasicButton>
+          <BasicButton onClick={handleStart}>다음</BasicButton>
         </S.ButtonWrapper>
       </S.ContentContainer>
     </S.PageWrapper>

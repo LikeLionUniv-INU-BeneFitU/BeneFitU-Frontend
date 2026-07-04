@@ -2,19 +2,47 @@ import styled from 'styled-components';
 
 // 모바일 웹앱 레이아웃 감싸기 (배경색 및 정렬)
 export const PageWrapper = styled.div`
-  max-width: 450px; /* 전형적인 모바일 뷰 너비 제한 */
-  min-height: 100vh;
+  max-width: 450px;
+  width: 100%;
+  height: 100vh; /* 브라우저 화면 높이에 꽉 맞춤 */
   margin: 0 auto;
-  background-color: #fafaff; /* 와이어프레임의 아주 연한 보랏빛/회색빛 톤 반영 */
+  background-color: #edeaff;
   display: flex;
-  flex-direction: column;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); /* 모니터 확인용 테두리 음영 */
+  flex-direction: column; /* 수직 배치: 헤더 -> 스크롤 영역 -> 버튼 */
   position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* 영역을 벗어나는 모든 부모 스크롤 방지 */
+`;
+
+export const ScrollArea = styled.div`
+  flex: 1; /* 헤더와 버튼 wrapper를 제외한 나머지 화면을 전부 차지 */
+  overflow-y: auto; /* 내용이 넘치면 이 안에서만 세로 스크롤 발생 */
+  -webkit-overflow-scrolling: touch; /* 모바일 부드러운 스크롤 대응 */
+
+  /* 스크롤바 커스텀 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+  }
 `;
 
 export const ContentContainer = styled.main`
-  flex: 1;
-  padding: 24px 20px 120px 20px;
+  padding: 5px 20px 120px 20px;
+`;
+
+export const ButtonWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 96px;
+  padding: 16px 20px 32px 20px;
+  background: linear-gradient(to top, #edeaff 80%, rgba(237, 234, 255, 0) 100%);
+  /* 💡 그라데이션 배경색을 PageWrapper 배경색(#edeaff)과 통일하여 자연스럽게 매칭 */
+  z-index: 10;
 `;
 
 export const FormGroup = styled.div`
@@ -25,18 +53,18 @@ export const FormGroup = styled.div`
 `;
 
 export const Label = styled.label`
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #111111;
 `;
 
 export const Input = styled.input`
   width: 100%;
-  height: 48px;
+  height: 46px;
   padding: 0 16px;
-  border: 1px solid #999999; /* 와이어프레임의 선명한 테두리 느낌 반영 */
-  border-radius: 8px;
-  font-size: 0.95rem;
+  border: 1px solid #828282; /* 와이어프레임의 선명한 테두리 느낌 반영 */
+  border-radius: 5px;
+  font-size: 0.875rem;
   background-color: #ffffff;
   outline: none;
 
@@ -90,22 +118,11 @@ export const DateInput = styled(Input)`
   }
 `;
 
-export const ButtonWrapper = styled.div`
-  position: absolute; /* 부모인 PageWrapper 기준으로 절대 위치 고정 */
-  bottom: 0; /* 맨 밑바닥에 밀착 */
-  left: 0;
-  right: 0;
-  padding: 16px 20px 32px 20px; /* 위 16px, 좌우 20px, ★아래 여백 32px 주어 바닥에서 띄움 */
-  background: linear-gradient(to top, #fafaff 80%, rgba(250, 250, 255, 0) 100%);
-  /* ↑ 버튼 뒤로 본문 글씨가 겹쳐서 지나갈 때 지저분해 보이지 않도록 자연스러운 배경 그라데이션 처리 */
-  z-index: 10;
-`;
-
 export const SelectBox = styled.div`
   width: 100%;
-  height: 48px;
-  border: 1px solid #999999;
-  border-radius: 8px;
+  height: 46px;
+  border: 1px solid #828282;
+  border-radius: 5px;
   padding: 0 16px;
   box-sizing: border-box;
   background-color: #fff;
@@ -116,7 +133,7 @@ export const SelectBox = styled.div`
 `;
 
 export const SelectText = styled.span`
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   color: ${(props) => (props.isSelected ? '#000' : '#BBB')};
 `;
 
@@ -127,19 +144,19 @@ export const ArrowIcon = styled.span`
 
 export const GradeSelectorContainer = styled.div`
   display: flex;
-  border: 1px solid #999999;
-  border-radius: 8px;
+  border: 1px solid #828282;
+  border-radius: 5px;
   overflow: hidden;
 `;
 
 export const GradeButton = styled.button`
   flex: 1;
-  height: 48px;
+  height: 41px;
   background-color: ${(props) => (props.isActive ? '#000' : '#FFF')};
   color: ${(props) => (props.isActive ? '#FFF' : '#000')};
   border: none;
-  border-right: 1px solid #999999;
-  font-size: 0.85rem;
+  border-right: 1px solid #828282;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: background-color 0.2s;
 
@@ -218,11 +235,11 @@ export const ModalCloseButton = styled.button`
 // 소득분위용 select 기본 스타일 (기존 Input/SelectBox 디자인 톤앤매너 매칭)
 export const SelectStyle = styled.select`
   width: 100%;
-  height: 48px;
+  height: 46px;
   padding: 0 16px;
-  border: 1px solid #999999;
-  border-radius: 8px;
-  font-size: 0.95rem;
+  border: 1px solid #828282;
+  border-radius: 5px;
+  font-size: 0.875rem;
   background-color: #ffffff;
   color: ${(props) => (props.isSelected ? '#111111' : '#BBBBBB')};
   outline: none;
@@ -251,40 +268,30 @@ export const CompactSelect = styled(SelectStyle)`
   padding: 0 24px 0 12px;
 `;
 
-export const Dot = styled.span`
-  font-size: 18px;
-  font-weight: 700;
-  color: #111111;
-`;
-
-// 관심분야 3열 정렬 Grid
+// 관심분야 2열 정렬 Grid
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 16px;
-  column-gap: 8px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   margin-top: 6px;
 `;
 
-// 네모 체크박스 라벨 컴포넌트
-export const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: #111111;
+export const InterestButton = styled.button`
+  width: 100%;
+  height: 46px; /* 기존 인풋창들과 높이 균형 유지 */
+  border-radius: 20px; /* 요청하신 모서리 둥글기 값 20 */
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
 
-  input[type='checkbox'] {
-    width: 18px;
-    height: 18px;
-    border: 1px solid #999999;
-    border-radius: 4px;
-    cursor: pointer;
-    accent-color: #5c4ff2; /* BasicInfo 포커스 포인트 컬러와 통일 */
-  }
+  /* 비활성화 vs 활성화 상태 스타일 분기 */
+  background-color: ${(props) => (props.isActive ? '#756df8' : '#ffffff')};
+  color: ${(props) => (props.isActive ? '#ffffff' : '#111111')};
+  border: 1px solid #828282;
 
-  span {
-    white-space: nowrap;
+  &:hover {
+    opacity: 0.9;
   }
 `;

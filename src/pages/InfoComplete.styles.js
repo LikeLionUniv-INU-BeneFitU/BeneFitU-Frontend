@@ -14,7 +14,7 @@ export const PageWrapper = styled.div`
 
 export const ContentContainer = styled.main`
   flex: 1;
-  padding: 60px 24px 180px 24px; /* 하단 2단 버튼 컴포넌트 높이를 고려해 하단 여백 확대 */
+  padding: 80px 24px 60px 24px; /* 하단 2단 버튼 컴포넌트 높이를 고려해 하단 여백 확대 */
   display: flex;
   flex-direction: column;
   align-items: center; /* 본문 내용 중앙 정렬 */
@@ -22,8 +22,8 @@ export const ContentContainer = styled.main`
 
 // "맞춤 추천이 완료됐어요!" 상단 타이틀
 export const MainTitle = styled.h1`
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 2rem;
+  font-weight: 700;
   color: #111111;
   text-align: center;
   margin-bottom: 40px;
@@ -47,7 +47,7 @@ export const CompleteGraphic = styled.div`
 
 // 하단 설명 안내 문구
 export const DescriptionText = styled.p`
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-weight: 600;
   line-height: 1.5;
   color: #444444;

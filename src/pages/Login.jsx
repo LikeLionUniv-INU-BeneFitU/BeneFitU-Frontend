@@ -10,17 +10,25 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  background-color: #ffffff;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  background-color: #E9E6FF;  
 `;
 
 const ContentWrapper = styled.div`
+  width: 100%;
+
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px;
   box-sizing: border-box;
   position: relative;
+
+  margin-top: 40px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+  background-color: #ffffff;
+  box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
@@ -76,6 +84,16 @@ const SubmitButton = styled.button`
   }
 `;
 
+const LogoBox = styled.div`
+  width: 100%;
+  height: 100px;
+
+  background-image: url('/BeneFitU로고.png');
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -91,8 +109,9 @@ export default function Login() {
 
   return (
   <PageWrapper>
-    <Header title="로그인" onBack={() => navigate(-1)} />
+    <Header color="#E9E6FF" title="로그인" onBack={() => navigate(-1)} />
     <ContentWrapper>
+      <LogoBox />
       <Label>아이디</Label>
       <Input
         placeholder="아이디를 입력해주세요"

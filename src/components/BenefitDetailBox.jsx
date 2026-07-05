@@ -10,7 +10,7 @@ const PageWrapper = styled.div`
 `;
 
 const Box = styled.div`
-  width: 90%;
+  width: 98%;
 
   background-color: #FFFFFF;
   
@@ -34,13 +34,27 @@ const Columnbox = styled.div`
   flex-direction: column;
 `;
 
-const MoveButton = styled.button`
-  width: 100%;
+const KwordBox = styled.div`
+  width: 50px;
+  height: 20px;
 
   background-color: #D9D9D9;
 
-  border-radius: 12px;
-  padding: 15px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-right: 5px;
+  margin-top: 5px;
+`;
+
+const MoveButton = styled.button`
+  width: 100%;
+  height: 40px;
+
+  background-color: #DFFFFFF;
+  border: 1px solid #584FEA;
+
+  border-radius: 5px;
+  padding: 10px;
 `;
 
 const BenefitIcon = styled.button`
@@ -62,9 +76,16 @@ export default function DetailBox({ children, buttonText, to }) {
     <PageWrapper>
       <Box>
         <Rowbox>
-        <BenefitIcon></BenefitIcon>
-        <Columnbox>{children}</Columnbox>
+          <BenefitIcon></BenefitIcon>
+          <Columnbox>
+            {children}
+            <Rowbox>
+              <KwordBox />
+              <KwordBox />
+            </Rowbox>
+          </Columnbox>
         </Rowbox>
+        
         <MoveButton onClick={() => navigate(to)}>{buttonText}</MoveButton>
       </Box>
     </PageWrapper>

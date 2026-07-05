@@ -5,7 +5,7 @@ const CategoryBar = styled.div`
   display: flex;
   justify-content: space-around;
 
-  background-color: #F8F7FF;
+  background-color: #EEEEFF;
   border-bottom: 1px solid #D9D9D9; /* 전체 밑에 깔리는 연한 회색 줄 */
 `;
 

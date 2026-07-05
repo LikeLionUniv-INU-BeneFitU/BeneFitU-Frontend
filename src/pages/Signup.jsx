@@ -103,7 +103,7 @@ export default function Signup() {
     if (isPasswordMismatch) {
       return; // 비밀번호가 다르면 회원가입 진행 안 함
     }
-    // TODO: 여기에 실제 회원가입 API 요청 코드 넣을 예정
+    // 여기에 실제 회원가입 API 요청 코드 넣을 예정
     console.log('회원가입:', userId, password);
   };
 

@@ -4,7 +4,7 @@ export const PageWrapper = styled.div`
   width: 100%;
   height: 100vh;
   
-  background-color: #F8F7FF;
+  background-color: #EEEEFF;
 
   display: flex;
   flex-direction: column;
@@ -19,8 +19,7 @@ export const Rowbox = styled.div`
 export const SubTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 16px;
-  span {color: #3b82f6;}
+  span {color: #584FEA;}
 `;
 
 export const ScrollArea = styled.div`
@@ -39,7 +38,8 @@ export const SortWrapper = styled.div`
 `;
 
 export const SortButton = styled.button`
-  background-color: #D9D9D9;
+  background-color: #EEEEFF;
+  
 
   border-radius: 8px;
   padding: 6px 12px;
@@ -51,7 +51,8 @@ export const SortDropdown = styled.div`
   top: 100%;
   left: 10px;
   
-  background-color: #D9D9D9;
+  background-color: #EEEEFF;
+  
   border-radius: 5px;  
 `;
 
@@ -59,6 +60,7 @@ export const SortOption = styled.div`
   padding: 8px 12px;
   cursor: pointer;
 
+  border: 1px solid #584FEA;
   border-radius: 5px; 
   &:hover {
     background-color: #000000;

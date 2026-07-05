@@ -44,8 +44,7 @@ const SignupButton = styled.div`
 const LogoBox = styled.div`
   width: 50%;
   height: 20%;
-  background-color: #D9D9D9;
-  border-radius: 60px;
+  
   margin: 60px 0;
 
   display: flex;
@@ -75,7 +74,7 @@ export default function LoginHome() {
     <PageWrapper>
       <Title>BeneFitU</Title><br/>
       내가 맞는 혜택을 찾고, 놓치지 않도록 도와드릴게요!
-      <LogoBox>로고박스</LogoBox>
+      <LogoBox />
       <LoginButton onClick={() => navigate('/login') }>로그인</LoginButton>
       <SignupButton onClick={() => navigate('/signup') }>회원가입</SignupButton>
       <TermsAgreement>로그인 또는 회원가입 시<Highlight>BeneFitU 이용약관 및 개인정보 처리 방침</Highlight>에 동의한 것으로 간주됩니다.</TermsAgreement>

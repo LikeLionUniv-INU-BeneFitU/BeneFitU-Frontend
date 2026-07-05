@@ -12,7 +12,7 @@ const PageWrapper = styled.div`
 const Card = styled.div`
   width: 90%;
 
-  background-color: #D9D9D9;
+  background-color: #584FEA;
   
   border-radius: 12px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
@@ -33,8 +33,8 @@ const TopRow = styled.div`
 `;
 
 const NameText = styled.p`
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 15px;
+  color: #FFFFFF;
 `;
 
 const MyButton = styled.button`
@@ -52,11 +52,11 @@ const TagRow = styled.div`
 `;
 
 const Tag = styled.span`
-  font-size: 10px;
+  font-size: 8px;
   background-color: #FFFFFF;
   color: #000000;
   padding: 4px 8px;
-  border-radius: 5px;
+  border-radius: 7px;
 `;
 
 export default function UserInfoCard({ name, grade, incomeLevel, onMyClick }) {

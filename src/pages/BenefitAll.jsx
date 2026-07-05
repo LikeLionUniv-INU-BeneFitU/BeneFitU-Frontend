@@ -43,7 +43,7 @@ function BenefitAll() {
   { id: 6, title: "대외 봉사활동 지원금", price: "최대 15만원", priceValue: 150000, category: "대외 활동", date: "2026-04-30" },
 ];
 
-    const backendUrl = 'API_주소URL'; // 실제 장학금 리스트 API 주소로 교체하기
+    const backendUrl = 'http://43.201.77.120:8080/test'; // 실제 장학금 리스트 API 주소로 교체하기
 
     fetch(backendUrl) 
       .then((res) => {
@@ -137,7 +137,7 @@ function BenefitAll() {
           return (
             <BenefitDetailBox key={benefit.id} buttonText="상세 보기" to={`/detail/${benefit.id}`} /* 클릭 시 상세페이지 이동용 주소 */>
               <h2>{benefit.title}</h2>
-              <p>{benefit.price}</p>
+              <p style={{ color: '#2578B0', fontWeight: 'bold' }}>{benefit.price}</p>
             </BenefitDetailBox>
           );
         })}

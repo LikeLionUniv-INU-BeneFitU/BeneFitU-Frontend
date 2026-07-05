@@ -10,13 +10,17 @@ export const PageWrapper = styled.div`
   flex-direction: column;
 `;
 
+export const Rowbox = styled.div`
+  
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const SubTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 16px;
-  span {
-    color: #3b82f6;
-  }
+  span {color: #3b82f6;}
 `;
 
 export const ScrollArea = styled.div`
@@ -27,4 +31,36 @@ export const ScrollArea = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+`;
+
+export const SortWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+export const SortButton = styled.button`
+  background-color: #D9D9D9;
+
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+`;
+
+export const SortDropdown = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  
+  background-color: #D9D9D9;
+  border-radius: 5px;  
+`;
+
+export const SortOption = styled.div`
+  padding: 8px 12px;
+  cursor: pointer;
+
+  border-radius: 5px; 
+  &:hover {
+    background-color: #000000;
+  }
 `;

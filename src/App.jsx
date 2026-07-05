@@ -9,6 +9,8 @@ import OtherInfo from './pages/OtherInfo';
 import InfoComplete from './pages/InfoComplete';
 import Home from './pages/Home';
 import BenefitAll from './pages/BenefitAll';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="/info-complete" element={<InfoComplete />} />
           <Route path="/home" element={<Home />} />
           <Route path="/benefit-all" element={<BenefitAll />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

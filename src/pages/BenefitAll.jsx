@@ -15,6 +15,12 @@ function BenefitAll() {
   // 장학금 리스트 정보 저장용 상자
   const [benefitList, setBenefitList] = useState([]);
 
+  // 정렬 기준 기억 상자
+  const [sortType, setSortType] = useState('최신순');
+
+  // 드롭다운이 열려있는지 기억하는 상자
+  const [isSortOpen, setIsSortOpen] = useState(false);
+
   // 사용자 정보 저장용 상자
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -29,13 +35,13 @@ function BenefitAll() {
   useEffect(() => {
     // 예시 데이터
     const dummyData = [
-      { id: 1, title: "교내 성적우수 장학금", price: "최대 100만원" },
-      { id: 2, title: "인천대학교 근로장학금", price: "최대 120만원" },
-      { id: 3, title: "삼성꿈장학재단 장학금", price: "200만원" },
-      { id: 4, title: "한국장학재단 국가장학금 1유형", price: "최대 120만원" },
-      { id: 5, title: "A장학금", price: "20만원" },
-      { id: 6, title: "B장학금", price: "최대 15만원" },
-    ];
+  { id: 1, title: "교내 성적우수 장학금", price: "최대 100만원", priceValue: 1000000, category: "장학금", date: "2026-06-15" },
+  { id: 2, title: "인천대학교 근로장학금", price: "최대 120만원", priceValue: 1200000, category: "교내 근로", date: "2026-06-20" },
+  { id: 3, title: "삼성꿈장학재단 장학금", price: "200만원", priceValue: 2000000, category: "장학금", date: "2026-05-10" },
+  { id: 4, title: "한국장학재단 국가장학금 1유형", price: "최대 120만원", priceValue: 1200000, category: "장학금", date: "2026-06-01" },
+  { id: 5, title: "청년월세지원금", price: "20만원", priceValue: 200000, category: "청년지원금", date: "2026-06-25" },
+  { id: 6, title: "대외 봉사활동 지원금", price: "최대 15만원", priceValue: 150000, category: "대외 활동", date: "2026-04-30" },
+];
 
     const backendUrl = 'API_주소URL'; // 실제 장학금 리스트 API 주소로 교체하기
 
@@ -83,6 +89,19 @@ function BenefitAll() {
       });
   }, []);
 
+  // currentCategory에 맞는 장학금만 골라내기
+  const filteredList = currentCategory === '전체'
+  ? benefitList
+  : benefitList.filter((item) => item.category === currentCategory);
+
+  const sortedList = [...filteredList].sort((a, b) => {
+  if (sortType === '최신순') {
+    return new Date(b.date) - new Date(a.date); // 최신 날짜가 위로
+  } else {
+    return b.priceValue - a.priceValue; // 금액 높은 게 위로
+  }
+  });
+
 
   return (
     <S.PageWrapper>
@@ -94,8 +113,27 @@ function BenefitAll() {
       />
       <CategoryButtonBar currentCategory={currentCategory} setCurrentCategory={setCurrentCategory} />
       <S.ScrollArea>
-        <S.SubTitle>추천 혜택 <span>{benefitList.length}</span></S.SubTitle>
-        {benefitList.map((benefit) => {
+        <S.Rowbox>
+          <S.SubTitle>추천 혜택 <span>{filteredList.length}</span></S.SubTitle>
+          <S.SortWrapper>
+
+            {/* 클릭하면 열고 닫는 버튼 */}
+            <S.SortButton onClick={() => setIsSortOpen(!isSortOpen)}>{sortType} ▼ </S.SortButton>
+
+            {/* isSortOpen이 true일 때만 아래 목록을 보여줌 */}
+            {isSortOpen && (
+              <S.SortDropdown>
+                <S.SortOption onClick={() => { setSortType('최신순'); setIsSortOpen(false); }}>
+                  최신순
+                </S.SortOption>
+                <S.SortOption onClick={() => { setSortType('금액순'); setIsSortOpen(false); }}>
+                  금액순
+                </S.SortOption>
+              </S.SortDropdown>
+            )}
+          </S.SortWrapper>
+        </S.Rowbox>
+        {sortedList.map((benefit) => {
           return (
             <BenefitDetailBox key={benefit.id} buttonText="상세 보기" to={`/detail/${benefit.id}`} /* 클릭 시 상세페이지 이동용 주소 */>
               <h2>{benefit.title}</h2>

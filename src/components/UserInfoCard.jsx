@@ -44,6 +44,10 @@ const MyButton = styled.button`
   padding: 4px 10px;
   font-size: 10px;
   cursor: pointer;
+
+  background-image: url('/user.png');
+  background-size: contain;
+  background-repeat: no-repeat;
 `;
 
 const TagRow = styled.div`
@@ -66,7 +70,7 @@ export default function UserInfoCard({ name, grade, incomeLevel, onMyClick }) {
       <Card>
         <TopRow>
           <NameText>{name}님의 정보</NameText>
-          <MyButton onClick={() => navigate('/login-home')/*마이페이지로 바꾸기*/ }>MY Page</MyButton>
+          <MyButton onClick={() => navigate('/login-home')/*마이페이지로 바꾸기*/ }></MyButton>
         </TopRow>
         <TagRow>
           <Tag>성적 {grade}</Tag>

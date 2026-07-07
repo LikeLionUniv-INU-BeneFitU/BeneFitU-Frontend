@@ -45,12 +45,12 @@ export default function BasicInfo() {
 
   // 학교 선택 완료 핸들러
   const handleSelectSchool = (selectedSchool) => {
-    const schoolName =
+    const schoolNamestr =
       typeof selectedSchool === 'object' ? selectedSchool.name : selectedSchool;
 
     setFormState({
       ...formState,
-      school: schoolName,
+      schoolName: schoolNamestr,
       department: '',
     });
     setIsSchoolModalOpen(false);
@@ -68,7 +68,7 @@ export default function BasicInfo() {
   const handleSelectRegion = (selectedRegion) => {
     const regionName =
       typeof selectedRegion === 'object' ? selectedRegion.name : selectedRegion;
-    handleInputChange('region', regionName);
+    handleInputChange('residence', regionName);
     setIsRegionModalOpen(false);
   };
 

@@ -78,12 +78,15 @@ const LogoBox = styled.div`
 
 // 로고 이미지
 const LogoimgBox = styled.div`
-  width: 50%;
-  height: 20%;
+  width: 70%;
+  height: 50%;
   
   margin: 60px 0;
 
-  background-color: #000000;
+  background-image: url('/로고.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 
   display: flex;
   align-items: center;

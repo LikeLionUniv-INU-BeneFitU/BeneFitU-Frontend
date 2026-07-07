@@ -5,7 +5,7 @@ const StyledBtn = styled.button`
   height: 56px;
   padding: 16px 44px;
   border-radius: 8px;
-  font-size: 20px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;

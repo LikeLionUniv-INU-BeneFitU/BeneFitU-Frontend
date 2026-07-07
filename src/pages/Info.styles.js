@@ -6,7 +6,7 @@ export const PageWrapper = styled.div`
   width: 100%;
   height: 100vh; /* 브라우저 화면 높이에 꽉 맞춤 */
   margin: 0 auto;
-  background-color: #edeaff;
+  background-color: #fbfbff;
   display: flex;
   flex-direction: column; /* 수직 배치: 헤더 -> 스크롤 영역 -> 버튼 */
   position: relative;
@@ -30,7 +30,7 @@ export const ScrollArea = styled.div`
 `;
 
 export const ContentContainer = styled.main`
-  padding: 5px 20px 120px 20px;
+  padding: 5px 20px 50px 20px;
 `;
 
 export const ButtonWrapper = styled.div`
@@ -48,7 +48,7 @@ export const ButtonWrapper = styled.div`
 export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: calc(8 * (100dvh / 874));
   margin-top: 10px;
 `;
 
@@ -60,7 +60,7 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   width: 100%;
-  height: 46px;
+  height: calc(46 * (100dvh / 874));
   padding: 0 16px;
   border: 1px solid #828282; /* 와이어프레임의 선명한 테두리 느낌 반영 */
   border-radius: 5px;
@@ -120,7 +120,7 @@ export const DateInput = styled(Input)`
 
 export const SelectBox = styled.div`
   width: 100%;
-  height: 46px;
+  height: calc(46 * (100dvh / 874));
   border: 1px solid #828282;
   border-radius: 5px;
   padding: 0 16px;
@@ -151,8 +151,8 @@ export const GradeSelectorContainer = styled.div`
 
 export const GradeButton = styled.button`
   flex: 1;
-  height: 41px;
-  background-color: ${(props) => (props.isActive ? '#000' : '#FFF')};
+  height: calc(41 * (100dvh / 874));
+  background-color: ${(props) => (props.isActive ? '#756df8' : '#FFF')};
   color: ${(props) => (props.isActive ? '#FFF' : '#000')};
   border: none;
   border-right: 1px solid #828282;
@@ -235,7 +235,7 @@ export const ModalCloseButton = styled.button`
 // 소득분위용 select 기본 스타일 (기존 Input/SelectBox 디자인 톤앤매너 매칭)
 export const SelectStyle = styled.select`
   width: 100%;
-  height: 46px;
+  height: calc(46 * (100dvh / 874));
   padding: 0 16px;
   border: 1px solid #828282;
   border-radius: 5px;
@@ -272,13 +272,13 @@ export const CompactSelect = styled(SelectStyle)`
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: calc(12 * (100dvh / 874));
   margin-top: 6px;
 `;
 
 export const InterestButton = styled.button`
   width: 100%;
-  height: 46px; /* 기존 인풋창들과 높이 균형 유지 */
+  height: calc(46 * (100dvh / 874)); /* 기존 인풋창들과 높이 균형 유지 */
   border-radius: 20px; /* 요청하신 모서리 둥글기 값 20 */
   font-size: 1rem;
   font-weight: 500;

@@ -14,7 +14,7 @@ const CategoryButton = styled.button`
   background: none;
   border: none;
   padding: 10px 4px;
-  font-size: 15px;
+  font-size: 10px;
   cursor: pointer;
   transition: all 0.2s ease; /* 색상이 부드럽게 변하는 효과 */
 
@@ -23,11 +23,11 @@ const CategoryButton = styled.button`
   font-weight: ${props => props.active ? 'bold' : '500'};
   
   /* active가 true일 때만 아래에 3픽셀짜리 진한 밑줄 생성 */
-  border-bottom: ${props => props.active ? '3px solid #584FEA' : '3px solid transparent'};
+  border-bottom: ${props => props.active ? '2px solid #584FEA' : '3px solid transparent'};
 `;
 
   // 화면에 보여줄 카테고리 이름 4개 배열
-  const categories = ['전체', '장학금', '교내 근로', '대외 활동', '청년지원금'];
+  const categories = ['전체', '국가장학금', '기업·재단 장학금', '지역 장학금', '조건별 장학금'];
 
 export default function CategoryButtonBar({ currentCategory, setCurrentCategory }) {
   return (

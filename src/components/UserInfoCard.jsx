@@ -9,6 +9,7 @@ const PageWrapper = styled.div`
   align-items: center;
 `;
 
+// 전체 박스 (보라색)
 const Card = styled.div`
   width: 90%;
 
@@ -37,19 +38,19 @@ const NameText = styled.p`
   color: #FFFFFF;
 `;
 
+// 마이페이지 이동 버튼
 const MyButton = styled.button`
-  background-color: #FFFFFF;
   border: none;
-  border-radius: 5px;
-  padding: 4px 10px;
-  font-size: 10px;
   cursor: pointer;
+  padding: 10px;
 
   background-image: url('/user.png');
   background-size: contain;
   background-repeat: no-repeat;
 `;
 
+
+// 태그 관련 스타일
 const TagRow = styled.div`
   display: flex;
   gap: 5px;

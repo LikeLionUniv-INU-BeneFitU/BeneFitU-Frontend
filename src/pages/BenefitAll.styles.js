@@ -32,6 +32,8 @@ export const ScrollArea = styled.div`
   gap: 20px;
 `;
 
+
+// 정렬순서 버튼 관련 스타일
 export const SortWrapper = styled.div`
   position: relative;
   display: inline-block;
@@ -39,30 +41,45 @@ export const SortWrapper = styled.div`
 
 export const SortButton = styled.button`
   background-color: #EEEEFF;
-  
+  border: 1px solid #4A4A4A;
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+  padding: 5px 10px;
+  margin-bottom: 2px;
 
   border-radius: 8px;
-  padding: 6px 12px;
+  font-size: 14px;
   cursor: pointer;
 `;
 
 export const SortDropdown = styled.div`
   position: absolute;
   top: 100%;
-  left: 10px;
-  
-  background-color: #EEEEFF;
-  
+  width: 100%;
+
+
+
+  overflow: hidden; /* 안쪽 모서리도 둥글게 잘리도록 */
   border-radius: 5px;  
 `;
 
 export const SortOption = styled.div`
-  padding: 8px 12px;
+  padding: 5px 10px;
+  font-size: 14px;
   cursor: pointer;
 
-  border: 1px solid #584FEA;
+  border: 1px solid #4A4A4A;
   border-radius: 5px; 
+
+  /* 선택된 항목만 보라색 배경 + 흰 글씨 */
+  background-color: ${(props) => (props.$isActive ? '#584FEA' : '#EEEEFF')};
+  color: ${(props) => (props.$isActive ? '#ffffff' : '#111111')};
+
   &:hover {
-    background-color: #000000;
+    background-color: #584FEA;
+    color: #EEEEFF;
   }
 `;

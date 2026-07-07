@@ -9,12 +9,13 @@ const PageWrapper = styled.div`
   align-items: center;
 `;
 
+// 전체 박스 (흰색)
 const Box = styled.div`
   width: 98%;
 
   background-color: #FFFFFF;
   
-  border-radius: 12px;
+  border-radius: 12px; /* 전체 박스 모서리 */
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
 
   padding: 15px;
@@ -34,6 +35,7 @@ const Columnbox = styled.div`
   flex-direction: column;
 `;
 
+// 키워드 박스 스타일
 const KwordBox = styled.div`
   width: 50px;
   height: 20px;
@@ -46,6 +48,7 @@ const KwordBox = styled.div`
   margin-top: 5px;
 `;
 
+// 상세보기 버튼 스타일
 const MoveButton = styled.button`
   width: 100%;
   height: 40px;
@@ -57,6 +60,7 @@ const MoveButton = styled.button`
   padding: 10px;
 `;
 
+// 혜택 아이콘 스타일
 const BenefitIcon = styled.button`
   width: 50px;
   height: 50px;

@@ -35,12 +35,12 @@ function BenefitAll() {
   useEffect(() => {
     // 예시 데이터
     const dummyData = [
-  { id: 1, title: "A장학금", price: "최대 100만원", priceValue: 1000000, category: "국가장학금", date: "2026-06-15" },
-  { id: 2, title: "B장학금", price: "최대 120만원", priceValue: 1200000, category: "기업·재단 장학금", date: "2026-06-20" },
-  { id: 3, title: "C장학금", price: "200만원", priceValue: 2000000, category: "국가장학금", date: "2026-05-10" },
-  { id: 4, title: "D장학금", price: "최대 120만원", priceValue: 1200000, category: "국가장학금", date: "2026-06-01" },
-  { id: 5, title: "E장학금", price: "20만원", priceValue: 200000, category: "조건별 장학금", date: "2026-06-25" },
-  { id: 6, title: "F장학금", price: "최대 15만원", priceValue: 150000, category: "지역 장학금", date: "2026-04-30" },
+  { id: 1, title: "A장학금", price: "최대 100만원", priceValue: 1000000, category: "국가장학금", date: "2026-06-15", tags: ["교내장학금", "성적우수"] },
+  { id: 2, title: "B장학금", price: "최대 120만원", priceValue: 1200000, category: "기업·재단 장학금", date: "2026-06-20", tags: ["교내장학금", "성적우수"] },
+  { id: 3, title: "C장학금", price: "200만원", priceValue: 2000000, category: "국가장학금", date: "2026-05-10", tags: ["교내장학금", "성적우수"] },
+  { id: 4, title: "D장학금", price: "최대 120만원", priceValue: 1200000, category: "국가장학금", date: "2026-06-01", tags: ["교내장학금", "성적우수"] },
+  { id: 5, title: "E장학금", price: "20만원", priceValue: 200000, category: "조건별 장학금", date: "2026-06-25", tags: ["교내장학금", "성적우수"] },
+  { id: 6, title: "F장학금", price: "최대 15만원", priceValue: 150000, category: "지역 장학금", date: "2026-04-30", tags: ["교내장학금", "성적우수"] },
 ];
 
     const backendUrl = 'http://43.201.77.120:8080/test'; // 실제 장학금 리스트 API 주소로 교체하기
@@ -106,17 +106,20 @@ function BenefitAll() {
   return (
     <S.PageWrapper>
       <Header title="맞춤 추천 혜택" />
+      {/* 사용자 정보 카드 */}
       <UserInfoCard 
       name={userInfo.name} 
       grade={userInfo.grade} 
       incomeLevel={userInfo.incomeLevel}
       />
+      {/* 카테고리 버튼 바 */}
       <CategoryButtonBar currentCategory={currentCategory} setCurrentCategory={setCurrentCategory} />
       <S.ScrollArea>
         <S.Rowbox>
           <S.SubTitle>추천 혜택 <span>{filteredList.length}</span></S.SubTitle>
+          
+          {/* 정렬기준 버튼 */}
           <S.SortWrapper>
-
             {/* 클릭하면 열고 닫는 버튼 */}
             <S.SortButton onClick={() => setIsSortOpen(!isSortOpen)}>{sortType} ▼ </S.SortButton>
 
@@ -137,11 +140,18 @@ function BenefitAll() {
             )}
           </S.SortWrapper>
         </S.Rowbox>
+
+        {/* 장학금 카드 */}
         {sortedList.map((benefit) => {
           return (
-            <BenefitDetailBox key={benefit.id} buttonText="상세 보기" to={`/detail/${benefit.id}`} /* 클릭 시 상세페이지 이동용 주소 */>
+            <BenefitDetailBox 
+              key={benefit.id} 
+              buttonText="상세 보기" 
+              to={`/detail/${benefit.id}`}
+              tags={benefit.tags}
+              > 
               <h2>{benefit.title}</h2>
-              <p style={{ color: '#2578B0', fontWeight: 'bold' }}>{benefit.price}</p>
+              <p style={{ color: '#2578B0', fontWeight: 'bold', fontSize: '20px' }}>{benefit.price}</p>
             </BenefitDetailBox>
           );
         })}

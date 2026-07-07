@@ -13,6 +13,7 @@ const PageWrapper = styled.div`
   background-color: #E9E6FF;  
 `;
 
+// 전체 박스 (흰색)
 const ContentWrapper = styled.div`
   width: 100%;
 
@@ -23,7 +24,7 @@ const ContentWrapper = styled.div`
   box-sizing: border-box;
   position: relative;
 
-  margin-top: 40px;
+  margin-top: 60px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 
@@ -31,11 +32,16 @@ const ContentWrapper = styled.div`
   box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
 `;
 
-const Title = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #111111;
-  margin-bottom: 30px;
+// 로고 사진
+const LogoBox = styled.div`
+  width: 100%;
+  height: 50px;
+  margin: 70px 0;
+
+  background-image: url('/BeneFitU로고.png');
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const Label = styled.label`
@@ -44,19 +50,29 @@ const Label = styled.label`
   color: #111111;
   display: block;
   margin-bottom: 8px;
+  margin-left: 15px;
 `;
 
+// 입력창
 const Input = styled.input`
-  width: 100%;
-  height: 46px;
-  padding: 0 16px;
+  height: 45px;
+  padding: 0 16px 0 40px;
+  margin-bottom: 20px;
+  margin-left: 15px;
+  margin-right: 15px;
+
+  background-color: #ffffff;
   border: 1px solid #828282;
   border-radius: 5px;
-  font-size: 0.875rem;
-  background-color: #ffffff;
+  
   outline: none;
+  font-size: 0.875rem;
   box-sizing: border-box;
-  margin-bottom: 20px;
+  
+  background-image: url(${(props) => props.$icon});
+  background-repeat: no-repeat;
+  background-position: 12px center; /* 왼쪽에서 12px 떨어진 위치 */
+  background-size: 18px 18px; /* 아이콘 크기 */
 
   &::placeholder {
     color: #cccccc;
@@ -67,8 +83,8 @@ const Input = styled.input`
   }
 `;
 
-const SubmitButton = styled.button`
-  width: 100%;
+// 로그인 버튼
+const LoginButton = styled.button`
   height: 50px;
   background-color: #5c4ff2;
   color: #ffffff;
@@ -77,21 +93,34 @@ const SubmitButton = styled.button`
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: auto;
+  
+  margin-top: 40px;
+  margin-left: 15px;
+  margin-right: 15px;
 
   &:hover {
     opacity: 0.9;
   }
 `;
 
-const LogoBox = styled.div`
-  width: 100%;
-  height: 100px;
+// 새 계정 만들기 버튼
+const NewLoginButton = styled.button`
+  height: 50px;
+  background-color: #ffffff;
+  color: #5c4ff2;
+  border: 1px solid #5c4ff2;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  
+  margin-top: 20px;
+  margin-left: 15px;
+  margin-right: 15px;
 
-  background-image: url('/BeneFitU로고.png');
-  background-size: 90%;
-  background-repeat: no-repeat;
-  background-position: center;
+  &:hover {
+    background-color: #f0f0f0;
+  }
 `;
 
 export default function Login() {
@@ -109,11 +138,12 @@ export default function Login() {
 
   return (
   <PageWrapper>
-    <Header color="#E9E6FF" title="로그인" onBack={() => navigate(-1)} />
+    <Header title="로그인" onBack={() => navigate(-1)} />
     <ContentWrapper>
       <LogoBox />
       <Label>아이디</Label>
       <Input
+        img="/user.png" // 나중에 이미지 변경 필요
         placeholder="아이디를 입력해주세요"
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
@@ -127,8 +157,9 @@ export default function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <SubmitButton onClick={handleLogin}>로그인</SubmitButton>
-      </ContentWrapper>
+      <LoginButton onClick={handleLogin}>로그인</LoginButton>
+      <NewLoginButton onClick={() => navigate('/signup')}>새 계정 만들기</NewLoginButton>
+    </ContentWrapper>
   </PageWrapper>
   );
 }

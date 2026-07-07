@@ -7,33 +7,55 @@ const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
   height: 100vh;
-  margin: 0 auto;
-  background-color: #ffffff;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
-  position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  margin: 0 auto;
+  background-color: #E9E6FF;  
 `;
 
 const ContentWrapper = styled.div`
+  width: 100%;
+
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px;
   box-sizing: border-box;
+  position: relative;
+
+  margin-top: 60px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+  background-color: #ffffff;
+  box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
+`;
+
+// 로고 사진
+const LogoBox = styled.div`
+  width: 100%;
+  height: 50px;
+  margin: 70px 0 30px;
+
+  background-image: url('/BeneFitU로고.png');
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const Title = styled.h1`
   font-size: 1.5rem;
   font-weight: 700;
   color: #111111;
+  margin-left: 15px;
 `;
 
 const SubTitle = styled.p`
   font-size: 0.8125rem;
   color: #5c4ff2;
-  margin: 4px 0 30px 0;
+  margin-top: 5pcx;
+  margin-bottom: 30px;
+  margin-left: 15px;
 `;
 
 const Label = styled.label`
@@ -42,46 +64,63 @@ const Label = styled.label`
   color: #111111;
   display: block;
   margin-bottom: 8px;
+  margin-left: 15px;
 `;
 
+// 입력창
 const Input = styled.input`
-  width: 100%;
-  height: 46px;
-  padding: 0 16px;
+  height: 45px;
+  padding: 0 16px 0 40px;
+
   border: 1px solid ${(props) => (props.hasError ? '#FF4D4D' : '#828282')};
   border-radius: 5px;
+
   font-size: 0.875rem;
+
   background-color: #ffffff;
+  background-image: url(${(props) => props.$icon});
+  background-repeat: no-repeat;
+  background-position: 12px center; /* 왼쪽에서 12px 떨어진 위치 */
+  background-size: 18px 18px; /* 아이콘 크기 */
+
   outline: none;
   box-sizing: border-box;
-  margin-bottom: 4px;
+
+  margin-bottom: 1px;
+  margin-left: 15px;
+  margin-right: 15px;
 
   &::placeholder {
     color: #cccccc;
   }
 
   &:focus {
-    border-color: #5c4ff2;
+  border-color: ${(props) => (props.hasError ? '#FF4D4D' : '#5c4ff2')};
   }
 `;
 
 const ErrorText = styled.p`
   color: #FF4D4D;
   font-size: 0.75rem;
-  margin: 0 0 20px 0;
+  margin: 0 0 20px 15px;
 `;
 
+// 회원가입 버튼
 const SubmitButton = styled.button`
-  width: 100%;
   height: 50px;
   background-color: #5c4ff2;
   color: #ffffff;
+
   border: none;
   border-radius: 8px;
+
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: auto;
+
+  margin-top: 40px;
+  margin-left: 15px;
+  margin-right: 15px;
 
   &:hover {
     opacity: 0.9;
@@ -112,6 +151,7 @@ export default function Signup() {
     <Header title="회원가입" onBack={() => navigate(-1)} />
 
     <ContentWrapper>
+      <LogoBox />
       <Title>회원가입</Title>
       <SubTitle>BeneFit와 함께 더 많은 혜택을 만나보세요!</SubTitle>
 
@@ -141,7 +181,7 @@ export default function Signup() {
         hasError={isPasswordMismatch}
       />
       {isPasswordMismatch && (
-        <ErrorText>입력한 비밀번호와 동일하지 않습니다.</ErrorText>
+        <ErrorText>ⓘ 입력한 비밀번호와 동일하지 않습니다.</ErrorText>
       )}
 
       <SubmitButton onClick={handleSignup}>회원가입</SubmitButton>

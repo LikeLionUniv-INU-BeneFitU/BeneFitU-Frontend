@@ -1,87 +1,126 @@
 import styled from 'styled-components';
 
-// 전체 모바일 뷰 레이아웃 (기존 디자인 톤 유지)
 export const PageWrapper = styled.div`
   max-width: 450px;
-  min-height: 100vh;
+  width: 100%;
+  height: 100dvh; /* 전체 화면 높이 꽉 채우기 */
   margin: 0 auto;
   background-color: #fafaff;
   display: flex;
   flex-direction: column;
+  justify-content: space-between; /* 상단 콘텐츠와 하단 버튼 영역 분리 */
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   position: relative;
+  box-sizing: border-box;
+  overflow: hidden; /* 화면 밖으로 튕겨 나가는 스크롤 방지 */
 `;
 
-export const ContentContainer = styled.main`
-  flex: 1;
-  padding: 20px 24px 120px 30px; /* 안내 페이지 특성에 맞춰 상단 여백을 조금 더 여유롭게 조절 */
+// ⭐️ 피그마의 402x595 박스를 고스란히 재현하는 핵심 컨테이너
+export const MainContentBox = styled.div`
+  width: 100%;
+  /* 874px 중 595px의 비율인 약 68vh를 최대 높이로 제한 (무작정 늘어나기 방지) */
+  max-height: 70vh;
+  height: 100%;
+
+  /* 피그마 상단 Status Bar 공간(9:41) 확보를 위해 상단 마진 배치 */
+  margin-top: calc(99 * (100dvh / 874));
+  padding: 0 30px;
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
+  /* 화면이 작아지면 요소들 사이의 간격이 알아서 좁혀지도록 설정 */
+  justify-content: space-between;
+
+  flex-grow: 1;
 `;
 
-// "맞춤 혜택 추천을 위해..." 상단 타이틀
-export const MainTitle = styled.span`
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1.4;
+// 타이틀
+export const MainTitle = styled.h1`
+  font-size: 1.85rem;
+  font-weight: 700;
   color: #111111;
-  margin-top: 10vh;
-  margin-bottom: 36px; /* 타이틀과 컨텐츠 사이 거리 확보 */
+  line-height: 1.4;
+  margin: 0;
+  margin-bottom: 1.5rem; /* 최소 여백 확보 */
 `;
 
-// 특장점 아이템들을 감싸는 컨테이너
+// 중앙 일러스트 영역
+export const ImageSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1; /* 남는 세로 공간을 차지 */
+  min-height: 140px; /* 화면이 엄청 작아져도 유지할 최소 높이 */
+  margin-bottom: 1.5rem;
+
+  img {
+    height: 100%;
+    max-height: 220px; /* 피그마 일러스트 높이 수준으로 제한 */
+    width: auto;
+    object-fit: contain;
+  }
+`;
+
+// 특장점 리스트 박스
 export const FeatureList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 36px; /* 와이어프레임 레이아웃 배치에 맞춘 아이템 간격 */
+  gap: 1.2rem; /* 화면이 작아져도 깨지지 않을 최적의 간격 */
+  margin-bottom: 1rem;
 `;
 
-// 개별 특장점 행 (로고 + 텍스트)
 export const FeatureItem = styled.div`
   display: flex;
-  align-items: flex-start; /* 타이틀 첫 줄에 로고 상단 정렬 맞춤 */
-  gap: 18px;
+  align-items: flex-start;
+  gap: 1rem;
 `;
 
-// 와이어프레임 속 회색 로고 이미지 들어갈 자리 (정사각형 도형)
 export const LogoPlaceholder = styled.div`
-  width: 54px;
-  height: 54px;
-  background-color: #d9d9d9; /* 와이어프레임의 연한 회색 박스 재현 */
-  border-radius: 4px; /* 미세한 라운딩 처리 */
-  flex-shrink: 0; /* 내부 텍스트가 길어져도 구겨지지 않도록 고정 */
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 `;
 
-// 텍스트 정렬 그룹
 export const TextGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.25rem;
 `;
 
-// 특장점 제목 (정확한 추천, 더 많은 혜택 등)
 export const FeatureTitle = styled.h2`
-  font-size: 1.75rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #111111;
   margin: 0;
 `;
 
-// 특장점 본문 설명
 export const FeatureDesc = styled.p`
-  font-size: 1.25rem;
-  line-height: 1.45;
-  color: #4a4a4a; /* 제목보다 살짝 연한 톤으로 시선 분산 방지 */
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #666666;
   margin: 0;
+  word-break: keep-all;
 `;
 
-// 하단 고정 버튼 배경 그라데이션 및 배치 (기존 코드 완벽 이식)
+// 하단 버튼 영역 (콘텐츠 박스와 물리적으로 분리되어 하단에 깔끔하게 안착)
 export const ButtonWrapper = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+  height: 96px;
   padding: 16px 20px 32px 20px;
-  background: linear-gradient(to top, #fafaff 80%, rgba(250, 250, 255, 0) 100%);
+  background: linear-gradient(to top, #edeaff 80%, rgba(237, 234, 255, 0) 100%);
+  /* 💡 그라데이션 배경색을 PageWrapper 배경색(#edeaff)과 통일하여 자연스럽게 매칭 */
   z-index: 10;
 `;

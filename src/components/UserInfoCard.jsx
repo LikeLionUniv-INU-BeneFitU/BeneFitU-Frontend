@@ -9,10 +9,11 @@ const PageWrapper = styled.div`
   align-items: center;
 `;
 
+// 전체 박스 (보라색)
 const Card = styled.div`
   width: 90%;
 
-  background-color: #D9D9D9;
+  background-color: #584FEA;
   
   border-radius: 12px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
@@ -33,30 +34,34 @@ const TopRow = styled.div`
 `;
 
 const NameText = styled.p`
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 15px;
+  color: #FFFFFF;
 `;
 
+// 마이페이지 이동 버튼
 const MyButton = styled.button`
-  background-color: #FFFFFF;
   border: none;
-  border-radius: 5px;
-  padding: 4px 10px;
-  font-size: 10px;
   cursor: pointer;
+  padding: 10px;
+
+  background-image: url('/user.png');
+  background-size: contain;
+  background-repeat: no-repeat;
 `;
 
+
+// 태그 관련 스타일
 const TagRow = styled.div`
   display: flex;
   gap: 5px;
 `;
 
 const Tag = styled.span`
-  font-size: 10px;
+  font-size: 8px;
   background-color: #FFFFFF;
   color: #000000;
   padding: 4px 8px;
-  border-radius: 5px;
+  border-radius: 7px;
 `;
 
 export default function UserInfoCard({ name, grade, incomeLevel, onMyClick }) {
@@ -66,7 +71,7 @@ export default function UserInfoCard({ name, grade, incomeLevel, onMyClick }) {
       <Card>
         <TopRow>
           <NameText>{name}님의 정보</NameText>
-          <MyButton onClick={() => navigate('/login-home')/*마이페이지로 바꾸기*/ }>MY Page</MyButton>
+          <MyButton onClick={() => navigate('/login-home')/*마이페이지로 바꾸기*/ }></MyButton>
         </TopRow>
         <TagRow>
           <Tag>성적 {grade}</Tag>

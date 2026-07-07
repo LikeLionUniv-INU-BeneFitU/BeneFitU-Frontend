@@ -82,7 +82,7 @@ export default function BasicInfo() {
 
   return (
     <S.PageWrapper>
-      <Header title="기본 정보 입력" />
+      <Header title="기본 정보 입력" variant="purple" />
       <S.ScrollArea>
         <S.ContentContainer>
           {/* 이름 입력 */}

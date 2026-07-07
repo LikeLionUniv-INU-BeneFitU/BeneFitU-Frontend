@@ -68,7 +68,7 @@ export default function OtherInfo() {
 
   return (
     <S.PageWrapper>
-      <Header title="기타 정보 입력" />
+      <Header title="기타 정보 입력" variant="purple" />
 
       <S.ContentContainer>
         <S.ScrollArea>

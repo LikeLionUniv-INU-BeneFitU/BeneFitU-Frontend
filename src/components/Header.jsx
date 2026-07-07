@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function Header({ title, onBack }) {
+export default function Header({ title, onBack, variant = 'defalt' }) {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
@@ -16,8 +16,12 @@ export default function Header({ title, onBack }) {
   };
 
   return (
-    <HeaderContainer>
-      <BackButton onClick={handleBackClick} aria-label="뒤로가기">
+    <HeaderContainer $variant={variant}>
+      <BackButton
+        onClick={handleBackClick}
+        aria-label="뒤로가기"
+        $variant={variant}
+      >
         {/* 와이어프레임의 < 모양 아이콘 (SVG로 깔끔하게 처리) */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +37,7 @@ export default function Header({ title, onBack }) {
           />
         </svg>
       </BackButton>
-      <Title>{title}</Title>
+      <Title $variant={variant}>{title}</Title>
       {/* 우측 공백 밸런스를 맞추기 위한 빈 더미 공간 */}
       <EmptySpace />
     </HeaderContainer>
@@ -47,13 +51,14 @@ const HeaderContainer = styled.header`
   left: 0;
   right: 0;
   height: 56px; /* 일반적인 모바일 상단 헤더 표준 높이 */
-  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-bottom: 1px solid #f0f0f0; /* 살짝 구분을 주는 밑줄 */
   z-index: 100;
+
+  background-color: ${(props) => (props.$variant === 'purple' ? '#6c63ff' : '#ffffff')};
+  border-bottom: ${(props) => (props.$variant === 'purple' ? '1px solid #6c63ff' : '1px solid #8e89e3')};
 `;
 
 const BackButton = styled.button`
@@ -64,7 +69,7 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111111;
+  color: ${(props) => (props.$variant === 'purple' ? '#ffffff' : '#111111')};
 
   svg {
     width: 24px;
@@ -78,8 +83,8 @@ const BackButton = styled.button`
 
 const Title = styled.h1`
   font-size: 1.1rem;
-  font-weight: 600;
-  color: #111111;
+  font-weight: 500;
+  color: ${(props) => (props.$variant === 'purple' ? '#ffffff' : '#111111')};
   margin: 0;
   text-align: center;
   /* 절대적인 가운데 정렬을 보장하기 위한 설정 */

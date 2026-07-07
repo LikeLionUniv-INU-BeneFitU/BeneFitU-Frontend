@@ -1,340 +1,362 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Footer from '../components/Footer';
 
-// 화면에 상시 고정되는 카테고리 및 아이콘 정적 데이터
+// 이미지 Assets (경로 절대 불변 유지)
+import SmallLogo from '../assets/images/SmallLogo.svg';
+import UserIcon from '../assets/images/user.png';
+import StateIcon from '../assets/images/state.png';
+import CorporateIcon from '../assets/images/corporate.png';
+import RegionIcon from '../assets/images/region.png';
+import RequirementIcon from '../assets/images/requirement.png';
+
 const FIXED_CATEGORIES = [
-  { id: 'scholarship', category: '장학금', icon: '🎓' },
-  { id: 'workStudy', category: '교내근로', icon: '🏫' },
-  { id: 'activity', category: '대외활동', icon: '🏛️' },
-  { id: 'youthFund', category: '청년지원금', icon: '✨' },
+  { id: 'state', category: '국가장학금', icon: StateIcon },
+  { id: 'corporate', category: '기업·재단 장학금', icon: CorporateIcon },
+  { id: 'region', category: '지역 장학금', icon: RegionIcon },
+  { id: 'requirement', category: '조건별 장학금', icon: RequirementIcon },
 ];
+
+const CATEGORY_ICONS = {
+  국가장학금: StateIcon,
+  '기업·재단 장학금': CorporateIcon,
+  '지역 장학금': RegionIcon,
+  '조건별 장학금': RequirementIcon,
+};
 
 export default function Home() {
   const navigate = useNavigate();
-  // 백엔드 연동용 동적 데이터 상태 (초기 더미 데이터)
-  const [userName, setUserName] = useState('김도현');
-  const [totalBenefitAmount, setTotalBenefitAmount] = useState(1460000);
 
-  const [benefitCounts, setBenefitCounts] = useState([
-    { id: 'scholarship', count: 12 },
-    { id: 'workStudy', count: 8 },
-    { id: 'activity', count: 15 },
-    { id: 'youthFund', count: 6 },
+  const [userName] = useState('김도현');
+  const [totalBenefitAmount] = useState(1460000);
+
+  const [benefitCounts] = useState([
+    { id: 'state', count: 12 },
+    { id: 'corporate', count: 12 },
+    { id: 'region', count: 12 },
+    { id: 'requirement', count: 12 },
   ]);
 
-  const [deadlineBenefits, setDeadlineBenefits] = useState([
-    { id: 1, title: '장학금', amount: '', dDay: 'D-1' },
-    { id: 2, title: '청년 마음건강 지원금', amount: '30만원', dDay: 'D-5' },
-    { id: 3, title: '대학생 IT 공모전', amount: '상금 300만원', dDay: 'D-8' },
+  const [deadlineBenefits] = useState([
+    {
+      id: 1,
+      category: '국가장학금',
+      title: '교내 성적우수 장학금',
+      amount: '최대 100만원',
+      dDay: 'D-1',
+    },
+    {
+      id: 2,
+      category: '조건별 장학금',
+      title: '청년 마음건강 지원금',
+      amount: '30만원',
+      dDay: 'D-5',
+    },
+    {
+      id: 3,
+      category: '기업·재단 장학금',
+      title: '대학생 IT 공모전',
+      amount: '상금 300만원',
+      dDay: 'D-8',
+    },
   ]);
 
-  // 고정 카테고리에 백엔드 count를 매칭하는 함수
   const getCountById = (id) => {
     const match = benefitCounts.find((item) => item.id === id);
     return match ? match.count : 0;
   };
 
   return (
-    <PageWrapper>
-      {/* 💡 푸터를 제외한 본문 영역만 감싸서 스크롤을 주는 컨테이너 */}
-      <ScrollContainer>
-        <ContentContainer>
-          {/* 상단 웰컴 텍스트 영역 */}
-          <WelcomeSection>
-            <WelcomeTitle>안녕하세요, {userName} 님!</WelcomeTitle>
-            <WelcomeSubtitle>
-              오늘 받을 수 있는 혜택을 확인해보세요
-            </WelcomeSubtitle>
-          </WelcomeSection>
+    <Container>
+      {/* 헤더 */}
+      <Header>
+        <img src={SmallLogo} alt="Logo" className="logo" />
+        <img src={UserIcon} alt="User" className="user-icon" />
+      </Header>
 
-          {/* 예상 혜택 금액 카드 (우측 상단 > 버튼 변경 완료) */}
-          <BenefitCard>
-            <CardHeaderRow>
-              <CardTitle>예상 혜택 금액</CardTitle>
-              <CardArrowButton>&gt;</CardArrowButton>
-            </CardHeaderRow>
-            <CardAmount>총 {totalBenefitAmount.toLocaleString()}원</CardAmount>
-            <DetailButton>상세 내역 보기</DetailButton>
-          </BenefitCard>
+      {/* 인사말 영역 */}
+      <Greeting>
+        <h1>{userName}님,</h1>
+        <p>마감 임박 혜택을 확인해 장학금을 놓치지 마세요!</p>
+      </Greeting>
 
-          {/* 맞춤 추천 혜택 섹션 (우측 전체보기 > 변경 완료) */}
-          <SectionHeaderRow>
-            <SectionTitle>🎁 맞춤 추천 혜택</SectionTitle>
-            <ViewAllButton onClick={() => navigate('/benefit-all')}>
-              전체 보기 <span className="arrow">&gt;</span>
-            </ViewAllButton>
-          </SectionHeaderRow>
+      {/* 총 예상 혜택 금액 카드 */}
+      <TotalBenefitCard>
+        <span className="label">예상 혜택 금액</span>
+        <h2 className="amount">총 {totalBenefitAmount.toLocaleString()}원</h2>
+        <button className="detail-btn">상세 내역 보기</button>
+      </TotalBenefitCard>
 
-          {/* 와이어프레임 형태의 4열 가로 정렬 Grid */}
-          <GridContainer>
-            {FIXED_CATEGORIES.map((cat) => (
-              <GridCard key={cat.id}>
-                <GridIcon>{cat.icon}</GridIcon>
-                <CategoryName>{cat.category}</CategoryName>
-                <BenefitCount>{getCountById(cat.id)}건</BenefitCount>
-              </GridCard>
-            ))}
-          </GridContainer>
+      {/* 맞춤 추천 혜택 섹션 (높이 특화) */}
+      <RecommendSection>
+        <SectionHeader>
+          <div className="title">
+            <span className="icon">✔️</span> 맞춤 추천 혜택
+          </div>
+          <span className="view-all">전체 보기 {'>'}</span>
+        </SectionHeader>
 
-          {/* 마감 임박 혜택 섹션 */}
-          <SectionTitle style={{ marginTop: '8px' }}>
-            🔥 마감 임박 혜택 TOP 3
-          </SectionTitle>
-          <ListContainer>
-            {deadlineBenefits.map((item) => (
-              <ListCard key={item.id}>
-                <ListLeftSection>
-                  <ListThumbnail />
-                  <ListInfo>
-                    <ListTitle>{item.title}</ListTitle>
-                    {item.amount && <ListAmount>{item.amount}</ListAmount>}
-                  </ListInfo>
-                </ListLeftSection>
-                <DDayBadge>{item.dDay}</DDayBadge>
-              </ListCard>
-            ))}
-          </ListContainer>
-        </ContentContainer>
-      </ScrollContainer>
+        <RecommendGrid>
+          {FIXED_CATEGORIES.map((cat) => (
+            <GridItem key={cat.id}>
+              <img src={cat.icon} alt={cat.category} className="cat-icon" />
+              <span className="cat-name">{cat.category}</span>
+              <span className="cat-count">{getCountById(cat.id)}건</span>
+            </GridItem>
+          ))}
+        </RecommendGrid>
+      </RecommendSection>
 
-      {/* 하단 탭 바 (화면 바닥에 상시 고정됨) */}
-      <Footer />
-    </PageWrapper>
+      {/* 마감 임박 혜택 섹션 */}
+      <SectionCard>
+        <SectionHeader>
+          <div className="title">
+            <span className="icon">📈</span> 마감 임박 혜택 TOP 3
+          </div>
+          <span className="view-all">전체 보기 {'>'}</span>
+        </SectionHeader>
+
+        <DeadlineList>
+          {deadlineBenefits.map((item, index) => (
+            <DeadlineItem
+              key={item.id}
+              $isLast={index === deadlineBenefits.length - 1}
+            >
+              <div className="item-icon-wrapper">
+                <img
+                  src={CATEGORY_ICONS[item.category] || SmallLogo}
+                  alt="icon"
+                />
+              </div>
+
+              <div className="item-info">
+                <h3 className="item-title">{item.title}</h3>
+                <p className="item-amount">{item.amount}</p>
+              </div>
+
+              <div className="d-day-badge">{item.dDay}</div>
+            </DeadlineItem>
+          ))}
+        </DeadlineList>
+      </SectionCard>
+    </Container>
   );
 }
 
-// ==========================================
-// ✨ 스타일 코드 (Styled Components)
-// ==========================================
+// ==============================
+// Styled Components
+// ==============================
 
-const PageWrapper = styled.div`
-  max-width: 450px;
-  height: 100vh; /* 💡 전체 껍데기는 브라우저 화면 높이에 딱 맞춤 */
-  margin: 0 auto;
-  background-color: #fafaff;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  position: relative;
-  overflow: hidden; /* 💡 껍데기 자체 바깥으로 터지는 스크롤은 막음 */
-`;
-
-const ScrollContainer = styled.div`
-  flex: 1;
-  overflow-y: auto; /* 💡 푸터 위 영역에서만 본문 내용이 길어질 때 스크롤 발생 */
-
-  /* 스크롤바가 UI를 해치지 않도록 숨김 처리 (선택) */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const ContentContainer = styled.main`
-  padding: 36px 24px 100px 24px; /* 💡 푸터에 가려지지 않게 바닥 패딩 유지 */
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* space-between을 제거하고 촘촘하고 예쁜 균일 마진 지정 */
-`;
-
-const WelcomeSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 4px;
-`;
-
-const WelcomeTitle = styled.h1`
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #111111;
-  margin: 0;
-`;
-
-const WelcomeSubtitle = styled.p`
-  font-size: 0.9rem;
-  color: #444444;
-  margin: 0;
-`;
-
-const BenefitCard = styled.div`
-  background-color: #5c4ff2;
-  padding: 24px;
-  border-radius: 20px;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 8px 20px rgba(92, 79, 242, 0.2);
-`;
-
-const CardHeaderRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const CardTitle = styled.span`
-  font-size: 0.95rem;
-  font-weight: 600;
-  opacity: 0.9;
-`;
-
-const CardArrowButton = styled.button`
-  background: none;
-  border: none;
-  color: #ffffff;
-  font-size: 1.3rem;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-`;
-
-const CardAmount = styled.div`
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-top: -4px;
-`;
-
-const DetailButton = styled.button`
+const Container = styled.div`
   width: 100%;
-  height: 40px;
-  background-color: #ffffff;
-  color: #111111;
-  border: none;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
+  max-width: 480px;
+  height: 100dvh;
+  max-height: 874px;
+  margin: 0 auto;
+  background-color: #f8f9fe;
+  padding: clamp(16px, 3vh, 24px) 20px;
+  box-sizing: border-box;
+  font-family: 'Pretendard', sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
 `;
 
-const SectionHeaderRow = styled.div`
+const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
 
-const SectionTitle = styled.h2`
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #111111;
-  margin: 0;
-`;
+  .logo {
+    height: clamp(20px, 3vh, 24px);
+  }
 
-const ViewAllButton = styled.button`
-  background: none;
-  border: none;
-  color: #777777;
-  font-size: 0.85rem;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
-  .arrow {
-    font-size: 0.9rem;
-    font-weight: bold;
-    display: inline-block;
-    transform: translateY(-0.5px); /* 꺾쇠 문자 수평 정렬 보정 */
+  .user-icon {
+    width: clamp(20px, 3vh, 24px);
+    height: clamp(20px, 3vh, 24px);
+    cursor: pointer;
   }
 `;
 
-const GridContainer = styled.div`
+const Greeting = styled.div`
+  h1 {
+    font-size: clamp(20px, 4vh, 24px);
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 4px 0;
+  }
+
+  p {
+    font-size: clamp(12px, 2vh, 14px);
+    color: #555;
+    margin: 0;
+  }
+`;
+
+const TotalBenefitCard = styled.div`
+  background-color: #5b52ef;
+  border-radius: 12px;
+  padding: clamp(16px, 3vh, 24px) 20px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(91, 82, 239, 0.15);
+
+  .label {
+    display: block;
+    font-size: clamp(12px, 2vh, 14px);
+    font-weight: 500;
+    margin-bottom: 6px;
+    opacity: 0.9;
+  }
+
+  .amount {
+    font-size: clamp(24px, 4vh, 28px);
+    font-weight: 700;
+    margin: 0 0 clamp(12px, 2.5vh, 20px) 0;
+  }
+
+  .detail-btn {
+    width: 100%;
+    background-color: white;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    padding: clamp(10px, 2vh, 14px) 0;
+    font-size: clamp(13px, 2vh, 15px);
+    font-weight: 600;
+    cursor: pointer;
+  }
+`;
+
+const SectionCard = styled.div`
+  background-color: white;
+  border-radius: 16px;
+  padding: clamp(12px, 2.5vh, 20px);
+  border: 1px solid #eaecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+`;
+
+/* 맞춤 추천 혜택 전용 스타일 (피그마 185px 맞춤) */
+const RecommendSection = styled(SectionCard)`
+  max-height: 185px; /* 피그마 수치 강제 반영 */
+  padding: clamp(12px, 2vh, 16px) 20px; /* 상하 여백을 조금 더 타이트하게 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(8px, 1.5vh, 14px);
+
+  .title {
+    font-size: clamp(14px, 2.5vh, 16px);
+    font-weight: 700;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .view-all {
+    font-size: 12px;
+    color: #888;
+    cursor: pointer;
+  }
+`;
+
+const RecommendGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 `;
 
-const GridCard = styled.div`
-  background-color: #e2e2e2;
-  padding: 12px 4px;
-  border-radius: 12px;
+/* 높이를 강제해서 내용물에 의해 뚱뚱해지는 것을 방지 */
+const GridItem = styled.div`
+  background-color: #5b52ef;
+  border-radius: 8px;
+  height: clamp(80px, 12vh, 104px); /* 피그마 비율에 맞춘 높이 설정 */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 5px;
-`;
-
-const GridIcon = styled.div`
-  width: 32px;
-  height: 32px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  color: white;
+  text-align: center;
+
+  .cat-icon {
+    width: clamp(20px, 3vh, 28px);
+    height: clamp(20px, 3vh, 28px);
+    margin-bottom: 6px;
+  }
+
+  .cat-name {
+    font-size: clamp(9px, 1.3vh, 11px);
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 2px;
+    word-break: keep-all;
+  }
+
+  .cat-count {
+    font-size: clamp(9px, 1.3vh, 11px);
+    font-weight: 400;
+    opacity: 0.8;
+  }
 `;
 
-const CategoryName = styled.span`
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #444444;
-`;
-
-const BenefitCount = styled.span`
-  font-size: 0.7rem;
-  color: #777777;
-`;
-
-const ListContainer = styled.div`
+const DeadlineList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
 `;
 
-const ListCard = styled.div`
-  background-color: #ffffff;
-  padding: 14px 16px;
-  border: 1px solid #eef0f5;
-  border-radius: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-`;
-
-const ListLeftSection = styled.div`
+const DeadlineItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-`;
+  padding: clamp(8px, 1.5vh, 14px) 0;
+  border-bottom: ${(props) => (props.$isLast ? 'none' : '1px solid #F0F2F5')};
 
-const ListThumbnail = styled.div`
-  width: 40px;
-  height: 40px;
-  background-color: #d9d9d9;
-  border-radius: 6px;
-`;
+  .item-icon-wrapper {
+    width: clamp(36px, 5.5vh, 48px);
+    height: clamp(36px, 5.5vh, 48px);
+    background-color: #f3f4fe;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
 
-const ListInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-`;
+    img {
+      width: clamp(18px, 3vh, 24px);
+      height: clamp(18px, 3vh, 24px);
+    }
+  }
 
-const ListTitle = styled.span`
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #111111;
-`;
+  .item-info {
+    flex: 1;
 
-const ListAmount = styled.span`
-  font-size: 0.8rem;
-  color: #666666;
-`;
+    .item-title {
+      font-size: clamp(13px, 2vh, 15px);
+      font-weight: 600;
+      color: #222;
+      margin: 0 0 4px 0;
+    }
 
-const DDayBadge = styled.span`
-  background-color: #ffeded;
-  color: #ff4d4d;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 6px;
+    .item-amount {
+      font-size: clamp(11px, 1.8vh, 13px);
+      color: #666;
+      margin: 0;
+    }
+  }
+
+  .d-day-badge {
+    background-color: #ffebeb;
+    color: #ff3b3b;
+    font-size: clamp(10px, 1.8vh, 12px);
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
 `;

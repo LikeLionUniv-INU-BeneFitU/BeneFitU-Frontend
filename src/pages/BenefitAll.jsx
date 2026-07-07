@@ -4,7 +4,6 @@ import BenefitDetailBox from '../components/BenefitDetailBox';
 import * as S from './BenefitAll.styles';
 import CategoryButtonBar from '../components/CategoryButtonBar';
 import UserInfoCard from '../components/UserInfoCard';
-import Footer from '../components/Footer';
 
 
 function BenefitAll() {
@@ -156,7 +155,6 @@ function BenefitAll() {
           );
         })}
       </S.ScrollArea>
-      <Footer />
     </S.PageWrapper>
   );
 }

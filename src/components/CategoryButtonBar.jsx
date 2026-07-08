@@ -27,14 +27,24 @@ const CategoryButton = styled.button`
 `;
 
   // 화면에 보여줄 카테고리 이름 4개 배열
-  const categories = ['전체', '국가장학금', '기업·재단 장학금', '지역 장학금', '조건별 장학금'];
+  const categories = [
+    { label: '전체', value: '전체' },
+    { label: '국가장학금', value: 'SCHOLARSHIP' },
+    { label: '기업·재단 장학금', value: 'FOUNDATION' },
+    { label: '지역 장학금', value: 'LOCAL' },
+    { label: '조건별 장학금', value: 'CONDITIONAL' },
+  ];
 
 export default function CategoryButtonBar({ currentCategory, setCurrentCategory }) {
   return (
     <CategoryBar>
-      {categories.map((CButton) => (
-        <CategoryButton key={CButton} active={currentCategory === CButton} onClick={() => setCurrentCategory(CButton)}>
-          {CButton}
+      {categories.map((category) => (
+        <CategoryButton
+          key={category.value}
+          active={currentCategory === category.value}
+          onClick={() => setCurrentCategory(category.value)}
+        >
+          {category.label}
         </CategoryButton>
       ))}
     </CategoryBar>

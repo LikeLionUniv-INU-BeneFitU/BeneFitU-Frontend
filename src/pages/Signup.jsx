@@ -136,13 +136,39 @@ export default function Signup() {
   // passwordConfirm에 뭔가 입력된 상태에서만 에러 체크 (빈 값일 땐 에러 안 보여줌)
   const isPasswordMismatch = passwordConfirm.length > 0 && password !== passwordConfirm;
 
-  const handleSignup = () => {
-    if (isPasswordMismatch) {
-      return; // 비밀번호가 다르면 회원가입 진행 안 함
+
+
+  const handleSignup = async () => {
+  if (isPasswordMismatch) return;
+
+  try {
+    const response = await fetch(
+      "http://43.201.77.120:8080/api/auth/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: userId,
+          password: password,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.isSuccess) {
+      alert("회원가입 성공!");
+      navigate("/login");
+    } else {
+      alert(data.message);
     }
-    // 여기에 실제 회원가입 API 요청 코드 넣을 예정
-    console.log('회원가입:', userId, password);
-  };
+  } catch (error) {
+    console.error(error);
+    alert("회원가입 실패");
+  }
+};
 
   return (
     <PageWrapper>

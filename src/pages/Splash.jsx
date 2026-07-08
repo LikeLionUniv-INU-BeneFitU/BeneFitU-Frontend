@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import splash from '../assets/images/splash.png'
 
 
 const PageWrapper = styled.div`
@@ -11,41 +12,24 @@ const PageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 80px 0 60px;
-  gap: 60px; 
-`;
-
-const LogoBoxOut = styled.div`
-  width: 70%;
-  height: 50%;
-  background-color: #D9D9D9;
-  border-radius: 10px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const LogoBoxInner = styled.div`
-  width: 80%;
-  height: 40%;
-  background-color: #FFFFFF;
-  border-radius: 30px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StartButton = styled.div`
-  width: 70%;
-  height: 7%;
-  background-color: #D9D9D9;
-  border-radius: 12px;
-  padding: 14px 40px;
   
+
+  background: linear-gradient(180deg, #2B23AA, #927BFD);
+`;
+
+// 로고 텍스트 사진
+const LogoBox = styled.div`
+  width: 75%;
+  height: 90px;
+  
+
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+`;
+
+const Subtitle = styled.div`
+  font-size: 13px;
+  color: #FFFFFF;
 `;
 
 
@@ -53,10 +37,10 @@ export default function Splash() {
   const navigate = useNavigate();
   return (
     <PageWrapper>
-      <LogoBoxOut>
-        <LogoBoxInner>BeneFitU</LogoBoxInner>
-      </LogoBoxOut>
-      <StartButton onClick={() => navigate('/login-home') }>시작하기</StartButton>
+      <LogoBox>
+        <img src={splash} />
+      </LogoBox>
+      <Subtitle>내가 맞는 혜택을 찾고, 놓치지 않도록 도와드릴게요!</Subtitle>
     </PageWrapper>
   );
 }

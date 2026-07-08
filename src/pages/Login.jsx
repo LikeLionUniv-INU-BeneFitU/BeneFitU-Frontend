@@ -129,10 +129,38 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   // 로그인 버튼 눌렀을 때 실행할 함수
-  const handleLogin = () => {
-    // TODO: 여기에 실제 로그인 API 요청 코드 넣을 예정
-    console.log('아이디:', userId, '비밀번호:', password);
-  };
+  const handleLogin = async () => {
+  try {
+    const response = await fetch(
+      "http://43.201.77.120:8080/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: userId,
+          password: password,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.isSuccess) {
+      // 토큰 저장
+      localStorage.setItem("accessToken", data.result.accessToken);
+
+      alert("로그인 성공!");
+      navigate("/home"); // 원하는 페이지로 변경 가능
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("로그인 실패");
+  }
+};
 
   return (
   <PageWrapper>

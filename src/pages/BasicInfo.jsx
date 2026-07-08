@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import * as S from './Info.styles';
 import Header from '../components/Header';
@@ -9,7 +9,10 @@ import RegionModal from '../components/modal/RegionModal';
 import BasicButton from '../components/BasicButton';
 
 export default function BasicInfo() {
-  const navigate = useNavigate(); // navigate 함수 선언
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isEdit = location.pathname.includes('edit');
 
   // 1. 로컬스토리지에 저장할 초기 폼 객체 설정
   const initialFormState = {
@@ -21,19 +24,71 @@ export default function BasicInfo() {
     residence: '',
   };
 
-  // 2. useLocalStorage 훅 적용
   const [formState, setFormState] = useLocalStorage(
-    'signUp_basicInfo',
+    isEdit ? 'edit_basicInfo' : 'signUp_basicInfo',
     initialFormState,
   );
 
-  // 3. 모달 오픈 상태 관리
+  // 백엔드에서 받아온 원본 데이터를 저장할 상태 (수정 모드에서 변경 감지용)
+  const [originalData, setOriginalData] = useState(initialFormState);
+
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isDeptModalOpen, setIsDeptModalOpen] = useState(false);
   const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
 
-  // 학년 선택 옵션 리스트
-  const grades = ['1학년', '2학년', '3학년', '4학년', '대학원'];
+  const grades = ['1학년', '2학년', '3학년', '4학년 이상', '대학원'];
+
+  // 💡 [수정 모드 전용] 마운트 시 백엔드 데이터 가져오기
+  useEffect(() => {
+    if (isEdit) {
+      const fetchUserData = async () => {
+        try {
+          // 예시 백엔드 데이터 구조 (실제 API 호출로 대체하세요)
+          const mockBackendData = {
+            name: '김지연',
+            birthDate: '2004-03-15',
+            schoolName: '인천대학교',
+            department: '컴퓨터공학부',
+            grade: '3학년',
+            residence: '인천 연수구',
+          };
+
+          setFormState(mockBackendData);
+          setOriginalData(mockBackendData); // 원본 데이터 백업
+        } catch (error) {
+          console.error('데이터를 불러오지 못했습니다.', error);
+        }
+      };
+      fetchUserData();
+    }
+  }, [isEdit]);
+
+  // 💡 [2단계] 버튼 활성화 조건 체크 로직
+  const isButtonActive = () => {
+    if (!isEdit) {
+      // 1) 정보 입력 페이지: 모든 값이 존재해야 활성화 (모든 필드 필수)
+      return (
+        formState.name.trim() !== '' &&
+        formState.birthDate !== '' &&
+        formState.schoolName.trim() !== '' &&
+        formState.department.trim() !== '' &&
+        formState.grade !== '' &&
+        formState.residence.trim() !== ''
+      );
+    } else {
+      // 2) 정보 수정 페이지: 하나라도 기존 값과 달라지면 활성화
+      return (
+        formState.name !== originalData.name ||
+        formState.birthDate !== originalData.birthDate ||
+        formState.schoolName !== originalData.schoolName ||
+        formState.department !== originalData.department ||
+        formState.grade !== originalData.grade ||
+        formState.residence !== originalData.residence
+      );
+    }
+  };
+
+  const active = isButtonActive();
 
   // 입력값 및 선택값 업데이트 핸들러
   const handleInputChange = (key, value) => {
@@ -51,7 +106,7 @@ export default function BasicInfo() {
     setFormState({
       ...formState,
       schoolName: schoolNamestr,
-      department: '',
+      department: '', //학교 바뀌면 학과 초기화
     });
     setIsSchoolModalOpen(false);
   };
@@ -76,13 +131,19 @@ export default function BasicInfo() {
   const handleNextStep = () => {
     console.log('로컬스토리지 최종본 제출:', formState);
     // 이후 페이지 라우팅 및 백엔드 전송 로직 작성 구간
-
-    navigate('/other-info');
+    if (isEdit) {
+      navigate('/edit-other');
+    } else {
+      navigate('/other-info');
+    }
   };
 
   return (
     <S.PageWrapper>
-      <Header title="기본 정보 입력" variant="purple" />
+      <Header
+        title={isEdit ? '기본 정보 수정' : '기본 정보 입력'}
+        variant="purple"
+      />
       <S.ScrollArea>
         <S.ContentContainer>
           {/* 이름 입력 */}
@@ -114,8 +175,8 @@ export default function BasicInfo() {
           <S.FormGroup>
             <S.Label>학교</S.Label>
             <S.SelectBox onClick={() => setIsSchoolModalOpen(true)}>
-              <S.SelectText isSelected={!!formState.school}>
-                {formState.school || '학교명을 검색해주세요'}
+              <S.SelectText isSelected={!!formState.schoolName}>
+                {formState.schoolName || '학교명을 검색해주세요'}
               </S.SelectText>
               <S.ArrowIcon>▼</S.ArrowIcon>
             </S.SelectBox>
@@ -127,7 +188,7 @@ export default function BasicInfo() {
             {/* 학교가 없으면 흐릿하게 비활성화된 것처럼 보이게 스타일링 제어 */}
             <S.SelectBox
               onClick={() => {
-                if (!formState.school) {
+                if (!formState.schoolName) {
                   alert('학교를 먼저 선택해주세요!');
                   return;
                 }
@@ -172,7 +233,9 @@ export default function BasicInfo() {
         </S.ContentContainer>
       </S.ScrollArea>
       <S.ButtonWrapper>
-        <BasicButton onClick={handleNextStep}>다음</BasicButton>
+        <BasicButton onClick={handleNextStep} disabled={!active}>
+          {isEdit ? '수정 완료' : '다음'}
+        </BasicButton>
       </S.ButtonWrapper>
 
       {/* 1. 학교 검색 모달 */}
@@ -186,7 +249,7 @@ export default function BasicInfo() {
       <DepartmentModal
         isOpen={isDeptModalOpen}
         onClose={() => setIsDeptModalOpen(false)}
-        selectedSchool={formState.school}
+        selectedSchool={formState.schoolName}
         onSelect={handleSelectDepartment}
       />
 

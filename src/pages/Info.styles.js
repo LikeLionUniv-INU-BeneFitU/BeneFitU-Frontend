@@ -40,8 +40,6 @@ export const ButtonWrapper = styled.div`
   right: 0;
   padding: 16px 20px 32px 20px;
   background: linear-gradient(to top, #edeaff 80%, rgba(237, 234, 255, 0) 100%);
-  /* 💡 그라데이션 배경색을 PageWrapper 배경색(#edeaff)과 통일하여 자연스럽게 매칭 */
-  /* ⭐️ 첫 번째 코드의 버튼 높이를 결정하는 핵심 속성 추가 */
   display: flex;
   flex-direction: column;
   gap: 12px;

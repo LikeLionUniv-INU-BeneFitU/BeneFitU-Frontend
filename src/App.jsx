@@ -34,6 +34,7 @@ function App() {
           <Route path="/expected-benefit" element={<Expectedbenefit />} />
           <Route path="/benefit-detail" element={<BenefitDetail />} />
           <Route path="/apply-complete" element={<ApplyComplete />} />
+          <Route path="/edit-basic" element={<BasicInfo />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

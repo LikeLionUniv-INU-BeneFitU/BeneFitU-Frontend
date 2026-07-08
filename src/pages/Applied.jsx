@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import ApplyItem from '../components/ApplyItem';
@@ -39,7 +40,11 @@ const mockData = [
 ];
 
 export default function Applied() {
-  const [activeTab, setActiveTab] = useState('ALL');
+  const location = useLocation();
+
+  const [activeTab, setActiveTab] = useState(
+    location.state?.activeTab || 'ALL',
+  );
 
   const filteredData = mockData.filter((item) => {
     if (activeTab === 'ALL') return true;

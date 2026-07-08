@@ -4,7 +4,6 @@ import BenefitDetailBox from '../components/BenefitDetailBox';
 import * as S from './BenefitAll.styles';
 import CategoryButtonBar from '../components/CategoryButtonBar';
 import UserInfoCard from '../components/UserInfoCard';
-import Footer from '../components/Footer';
 
 
 function BenefitAll() {
@@ -150,13 +149,12 @@ function BenefitAll() {
               to={`/detail/${benefit.id}`}
               tags={benefit.tags}
               > 
-              <h2>{benefit.title}</h2>
+              <p style={{ fontWeight: 'bold', fontSize: '25px' }}>{benefit.title}</p>
               <p style={{ color: '#2578B0', fontWeight: 'bold', fontSize: '20px' }}>{benefit.price}</p>
             </BenefitDetailBox>
           );
         })}
       </S.ScrollArea>
-      <Footer />
     </S.PageWrapper>
   );
 }

@@ -11,6 +11,9 @@ import Home from './pages/Home';
 import BenefitAll from './pages/BenefitAll';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Expectedbenefit from './pages/ExpectedBenefit';
+import BenefitDetail from './pages/BenefitDetail';
+import ApplyComplete from './pages/ApplyComplete';
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
           <Route path="/benefit-all" element={<BenefitAll />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/expected-benefit" element={<Expectedbenefit />} />
+          <Route path="/benefit-detail" element={<BenefitDetail />} />
+          <Route path="/apply-complete" element={<ApplyComplete />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

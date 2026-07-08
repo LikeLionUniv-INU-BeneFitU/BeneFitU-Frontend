@@ -56,14 +56,15 @@ const MoveButton = styled.button`
   width: 100%;
   height: 40px;
 
-  background-color: #DFFFFFF;
-  border: 1px solid #584FEA;
-
-  border-radius: 5px;
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   /* 선택된 항목만 보라색 배경 + 흰 글씨 */
   background-color: ${(props) => (props.$isActive ? '#584FEA' : '#ffffff')};
+  border: 1px solid #584FEA;
+  border-radius: 5px;
+
   color: ${(props) => (props.$isActive ? '#ffffff' : '#111111')};
 
   &:hover {

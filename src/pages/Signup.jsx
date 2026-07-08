@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
+import Logo from '../assets/images/Logo.png'
 
 const PageWrapper = styled.div`
   max-width: 450px;
@@ -32,15 +33,12 @@ const ContentWrapper = styled.div`
 `;
 
 // 로고 사진
-const LogoBox = styled.div`
-  width: 100%;
-  height: 50px;
-  margin: 70px 0 30px;
-
-  background-image: url('/BeneFitU로고.png');
-  background-size: 90%;
-  background-repeat: no-repeat;
-  background-position: center;
+const LogoImg = styled.img`
+  width: 80%;
+  height: auto;
+  margin: 70px 0 60px 0;
+  display: block;
+  align-self: center;
 `;
 
 const Title = styled.h1`
@@ -151,7 +149,7 @@ export default function Signup() {
     <Header title="회원가입" onBack={() => navigate(-1)} />
 
     <ContentWrapper>
-      <LogoBox />
+      <LogoImg src={Logo} alt="BeneFitU 로고" />
       <Title>회원가입</Title>
       <SubTitle>BeneFit와 함께 더 많은 혜택을 만나보세요!</SubTitle>
 

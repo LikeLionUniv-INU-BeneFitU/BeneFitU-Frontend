@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ApplicationItem = ({ title, date, status }) => {
+const BenefitApplicationItem = ({ title, date, status }) => {
   const getStatusConfig = (status) => {
     switch (status) {
       case 'SELECTED':
@@ -29,19 +29,20 @@ const ApplicationItem = ({ title, date, status }) => {
   );
 };
 
-export default ApplicationItem;
+export default BenefitApplicationItem;
 
 const CardContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 9vh;
+  max-width: 369px;
+  height: 10vh;
   padding: 0 16px;
   background-color: #ffffff;
-  border-radius: 12px;
   border: 1px solid #fafbff;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   margin: 8px auto;
 `;
@@ -49,14 +50,14 @@ const CardContainer = styled.div`
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.8vh;
   overflow: hidden;
 `;
 
 const Title = styled.h4`
   margin: 0;
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 1.05rem;
+  font-weight: 600;
   color: #111111;
   white-space: nowrap;
   overflow: hidden;
@@ -64,8 +65,9 @@ const Title = styled.h4`
 `;
 
 const DateText = styled.span`
-  font-size: 12px;
-  color: #767676;
+  font-size: 0.9rem;
+  color: #4a4a4a;
+  font-weight: 500;
 `;
 
 const StatusBadge = styled.div`
@@ -73,10 +75,10 @@ const StatusBadge = styled.div`
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  width: 58px;
-  height: 28px;
+  width: 60px;
+  height: 27px;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 0.85rem;
   font-weight: 500;
   background-color: ${(props) => props.$bgColor};
   color: ${(props) => props.$textColor};

@@ -15,6 +15,7 @@ import BenefitAll from './pages/BenefitAll';
 import Expectedbenefit from './pages/ExpectedBenefit';
 import BenefitDetail from './pages/BenefitDetail';
 import ApplyComplete from './pages/ApplyComplete';
+import Applied from './pages/Applied';
 import MyInfo from './pages/MyInfo';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/expected-benefit" element={<Expectedbenefit />} />
           <Route path="/benefit-detail" element={<BenefitDetail />} />
           <Route path="/apply-complete" element={<ApplyComplete />} />
+          <Route path="/applied" element={<Applied />} />
           <Route path="/my-info" element={<MyInfo />} />
           <Route path="/edit-basic" element={<BasicInfo />} />
           <Route path="/edit-other" element={<OtherInfo />} />

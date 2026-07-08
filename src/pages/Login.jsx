@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
+import Logo from '../assets/images/Logo.png'
 
 const PageWrapper = styled.div`
   max-width: 450px;
@@ -33,15 +34,12 @@ const ContentWrapper = styled.div`
 `;
 
 // 로고 사진
-const LogoBox = styled.div`
-  width: 100%;
-  height: 50px;
-  margin: 70px 0;
-
-  background-image: url('/BeneFitU로고.png');
-  background-size: 90%;
-  background-repeat: no-repeat;
-  background-position: center;
+const LogoImg = styled.img`
+  width: 80%;
+  height: auto;
+  margin: 70px 0 60px 0;
+  display: block;
+  align-self: center;
 `;
 
 const Label = styled.label`
@@ -140,7 +138,7 @@ export default function Login() {
   <PageWrapper>
     <Header title="로그인" onBack={() => navigate(-1)} />
     <ContentWrapper>
-      <LogoBox />
+      <LogoImg src={Logo} alt="BeneFitU 로고" />
       <Label>아이디</Label>
       <Input
         img="/user.png" // 나중에 이미지 변경 필요

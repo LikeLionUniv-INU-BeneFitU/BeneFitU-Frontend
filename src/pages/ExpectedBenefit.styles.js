@@ -10,6 +10,13 @@ export const PageWrapper = styled.div`
   padding-bottom: 40px;
 `;
 
+export const ScrollArea = styled.div`
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
 // 총 금액 텍스트
 export const TotalAmountText = styled.p`
   text-align: center;

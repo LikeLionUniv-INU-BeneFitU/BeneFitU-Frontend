@@ -43,19 +43,15 @@ export const MainContentBox = styled.div`
   }
 `;
 
-// "맞춤 추천이 완료됐어요!" 상단 타이틀
+// "신청이 완료됐어요!" 상단 타이틀
 export const MainTitle = styled.h1`
-  font-size: 1.85rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #111111;
   text-align: center;
   margin: 0;
   letter-spacing: -0.5px;
   flex-shrink: 0;
-
-  span {
-    color: #5d5fef;
-  }
 `;
 
 // 중앙 일러스트 영역: 무작정 100% 채우지 않고 피그마 원본 크기 비율 유지
@@ -66,9 +62,9 @@ export const GraphicWrapper = styled.div`
   width: 100%;
   /* 피그마 속 일러스트 비율에 맞게 구역 한계 설정 */
   height: 23vh;
-  max-height: 200px;
+  max-height: 300px;
   flex-shrink: 0;
-  margin-top: calc(56 * (100dvh / 874));
+  margin-top: calc(80 * (100dvh / 874));
   margin-bottom: calc(20 * (100dvh / 874));
 
   img {
@@ -80,18 +76,6 @@ export const GraphicWrapper = styled.div`
   @media (max-height: 680px) {
     height: 18vh;
   }
-`;
-
-// 하단 설명 안내 문구
-export const DescriptionText = styled.p`
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.5;
-  color: #444444;
-  text-align: center;
-  margin: 0;
-  word-break: keep-all;
-  flex-shrink: 0;
 `;
 
 // ⭐️ 조건 1: 원래 작성했던 하단 절대 고정 및 패딩, 그라데이션 완벽 수호

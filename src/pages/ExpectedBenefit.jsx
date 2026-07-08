@@ -42,7 +42,8 @@ export default function ExpectedBenefit() {
       <S.TotalAmountText>
         총 <S.Highlight>{totalAmount.toLocaleString()}원</S.Highlight>
       </S.TotalAmountText>
-
+      
+      <S.ScrollArea>
       {benefitList.map((benefit) => (
         <BenefitDetailBox
           key={benefit.id}
@@ -54,6 +55,7 @@ export default function ExpectedBenefit() {
           <p style={{ color: '#2578B0', fontWeight: 'bold', fontSize: '20px' }}>{benefit.price}</p>
         </BenefitDetailBox>
       ))}
+      </S.ScrollArea>
     </S.PageWrapper>
   );
 }

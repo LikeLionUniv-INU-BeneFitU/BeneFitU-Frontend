@@ -9,15 +9,37 @@ export const PageWrapper = styled.div`
 `;
 
 export const ContentWrapper = styled.div`
-  background-color: #ffffff;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
   padding: 20px;
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+// 공통 박스 스타일 (3개 박스가 다 흰색 + 둥근 모서리 + 그림자)
+export const InfoBox = styled.div`
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+`;
+
+export const ReasonBox = styled.div`
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+`;
+
+export const ProbabilityBox = styled.div`
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  cursor: ${(props) => (props.$clickable ? 'pointer' : 'default')};
 `;
 
 export const Title = styled.h1`
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
 `;
 
@@ -38,26 +60,37 @@ export const Tag = styled.span`
 export const Amount = styled.p`
   color: #2578B0;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin: 10px 0 4px;
 `;
 
 export const Deadline = styled.p`
   color: #4A4A4A;
   font-size: 0.85rem;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 `;
 
-export const RequirementBox = styled.div`
-  background-color: #F8F7FF;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 20px;
+export const RequirementList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
-export const RequirementItem = styled.p`
-  font-size: 0.85rem;
-  margin: 6px 0;
+export const RequirementItem = styled.div`
+  font-size: 0.8rem;
+  color: #333333;
+`;
+
+export const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+
+  input {
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
 `;
 
 export const ReasonTitle = styled.h3`
@@ -69,13 +102,14 @@ export const ReasonTitle = styled.h3`
 export const ReasonText = styled.p`
   font-size: 0.875rem;
   color: #4A4A4A;
-  margin-bottom: 20px;
 `;
 
 export const ProbabilityLabel = styled.p`
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 700;
   margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const ProbabilityBarBg = styled.div`
@@ -89,14 +123,20 @@ export const ProbabilityBarBg = styled.div`
 export const ProbabilityBarFill = styled.div`
   width: ${(props) => props.$percent}%;
   height: 100%;
-  background-color: #584FEA;
+  background-color: #68B978;
 `;
 
 export const ProbabilityPercent = styled.p`
   text-align: right;
   font-size: 0.85rem;
   color: #584FEA;
-  margin: 4px 0 30px;
+  margin-top: 4px;
+`;
+
+export const ProbabilityPlaceholder = styled.p`
+  text-align: center;
+  color: #828282;
+  font-size: 0.9rem;
 `;
 
 export const ButtonRow = styled.div`

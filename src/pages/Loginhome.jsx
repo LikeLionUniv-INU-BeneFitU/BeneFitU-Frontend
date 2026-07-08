@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
+import loginhome1 from '../assets/images/loginhome1.png'
+import loginhome2 from '../assets/images/loginhome2.png'
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -66,31 +68,22 @@ const SignupButton = styled.button`
 
 // 로고 텍스트 사진
 const LogoBox = styled.div`
-  width: 85%;
+  width: 75%;
   height: 90px;
   margin-top: 70px;
 
-  background-image: url('/BeneFitU로고X.png');
-  background-size: 90%;
-  background-repeat: no-repeat;
-  background-position: center;
+  display: flex;
+  flex-direction: column;
 `;
 
 // 로고 이미지
 const LogoimgBox = styled.div`
-  width: 70%;
+  width: 60%;
   height: 50%;
-  
-  margin: 60px 0;
-
-  background-image: url('/로고.png');
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
+  margin: 110px;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 `;
 
 const Subtitle = styled.div`
@@ -113,9 +106,14 @@ export default function LoginHome() {
   const navigate = useNavigate();
   return (
     <PageWrapper>
-      <LogoBox />
+      <LogoBox>
+        <img src={loginhome2} />
+      </LogoBox>
       <Subtitle>내가 맞는 혜택을 찾고, 놓치지 않도록 도와드릴게요!</ Subtitle>
-      <LogoimgBox />
+      <LogoimgBox>
+        <img src={loginhome1} />
+      </LogoimgBox>
+
       <ButtonWrapper>
         <LoginButton onClick={() => navigate('/login') }>로그인</LoginButton>
         <SignupButton onClick={() => navigate('/signup') }>회원가입</SignupButton>

@@ -31,20 +31,13 @@ export default function ApplyComplete() {
       <S.MainContentBox>
         {/* 1. 메인 타이틀 */}
         <S.MainTitle>
-          <span>맞춤 추천</span>이 완료됐어요!
+          신청이 완료됐어요!
         </S.MainTitle>
 
         {/* 2. 중앙 일러스트 이미지 */}
         <S.GraphicWrapper>
           <img src={applycomplete} alt="추천 완료 일러스트" />
         </S.GraphicWrapper>
-
-        {/* 3. 하단 설명 문구 */}
-        <S.DescriptionText>
-          입력해주신 정보를 바탕으로
-          <br />
-          {userName} 님에게 딱 맞는 혜택을 추천해드릴게요.
-        </S.DescriptionText>
       </S.MainContentBox>
 
       {/* ⭐️ 4. 원본 그대로 유지되는 하단 고정 버튼 영역 */}

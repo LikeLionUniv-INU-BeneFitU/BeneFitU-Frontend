@@ -1,19 +1,21 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AppLayout from './styles/AppLayout';
 import GlobalStyle from './styles/GlobalStyle';
+
 import Splash from './pages/Splash';
 import LoginHome from './pages/Loginhome';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 import InfoIntro from './pages/InfoIntro';
 import BasicInfo from './pages/BasicInfo';
 import OtherInfo from './pages/OtherInfo';
 import InfoComplete from './pages/InfoComplete';
 import Home from './pages/Home';
 import BenefitAll from './pages/BenefitAll';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
 import Expectedbenefit from './pages/ExpectedBenefit';
 import BenefitDetail from './pages/BenefitDetail';
 import ApplyComplete from './pages/ApplyComplete';
+import MyInfo from './pages/MyInfo';
 
 function App() {
   return (
@@ -34,7 +36,9 @@ function App() {
           <Route path="/expected-benefit" element={<Expectedbenefit />} />
           <Route path="/benefit-detail" element={<BenefitDetail />} />
           <Route path="/apply-complete" element={<ApplyComplete />} />
+          <Route path="/my-info" element={<MyInfo />} />
           <Route path="/edit-basic" element={<BasicInfo />} />
+          <Route path="/edit-other" element={<OtherInfo />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

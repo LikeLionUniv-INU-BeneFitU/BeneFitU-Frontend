@@ -9,6 +9,12 @@ import StateIcon from '../assets/images/state.png';
 import CorporateIcon from '../assets/images/corporate.png';
 import RegionIcon from '../assets/images/region.png';
 import RequirementIcon from '../assets/images/requirement.png';
+import Check from '../assets/images/check-circle.png';
+import Trending from '../assets/images/trending-up.png';
+import State from '../assets/images/state2.png';
+import Corporate from '../assets/images/corporate2.png';
+import Region from '../assets/images/region2.png';
+import Requirement from '../assets/images/requirement2.png';
 
 const FIXED_CATEGORIES = [
   { id: 'state', category: '국가장학금', icon: StateIcon },
@@ -18,10 +24,10 @@ const FIXED_CATEGORIES = [
 ];
 
 const CATEGORY_ICONS = {
-  국가장학금: StateIcon,
-  '기업·재단 장학금': CorporateIcon,
-  '지역 장학금': RegionIcon,
-  '조건별 장학금': RequirementIcon,
+  국가장학금: State,
+  '기업·재단 장학금': Corporate,
+  '지역 장학금': Region,
+  '조건별 장학금': Requirement,
 };
 
 export default function Home() {
@@ -71,7 +77,11 @@ export default function Home() {
       {/* 헤더 */}
       <Header>
         <img src={SmallLogo} alt="Logo" className="logo" />
-        <img src={UserIcon} alt="User" className="user-icon" />
+        <img
+          src={UserIcon}
+          alt="User"
+          className="user-icon" /*onClick={() => navigate('/my')}*/
+        />
       </Header>
 
       {/* 인사말 영역 */}
@@ -84,34 +94,81 @@ export default function Home() {
       <TotalBenefitCard>
         <span className="label">예상 혜택 금액</span>
         <h2 className="amount">총 {totalBenefitAmount.toLocaleString()}원</h2>
-        <button className="detail-btn">상세 내역 보기</button>
+        <button
+          className="detail-btn"
+          onClick={() => navigate('/expected-benefit')}
+        >
+          상세 내역 보기
+        </button>
       </TotalBenefitCard>
 
       {/* 맞춤 추천 혜택 섹션 (높이 특화) */}
-      <RecommendSection>
+      <SectionCard>
         <SectionHeader>
           <div className="title">
-            <span className="icon">✔️</span> 맞춤 추천 혜택
+            <img src={Check} /> <span> 맞춤 추천 혜택 </span>
           </div>
-          <span className="view-all">전체 보기 {'>'}</span>
+          <span className="view-all" onClick={() => navigate('/benefit-all')}>
+            전체 보기 {'>'}
+          </span>
         </SectionHeader>
 
         <RecommendGrid>
-          {FIXED_CATEGORIES.map((cat) => (
-            <GridItem key={cat.id}>
-              <img src={cat.icon} alt={cat.category} className="cat-icon" />
-              <span className="cat-name">{cat.category}</span>
-              <span className="cat-count">{getCountById(cat.id)}건</span>
-            </GridItem>
-          ))}
+          <GridItem onClick={() => navigate('/state')}>
+            <img src={StateIcon} alt="국가장학금" className="cat-icon" />
+            <div className="namebox">
+              <span className="cat-name">국가장학금</span>
+            </div>
+            <span className="cat-count">{getCountById('state')}건</span>
+          </GridItem>
+
+          <GridItem onClick={() => navigate('/corporate')}>
+            <img
+              src={CorporateIcon}
+              alt="기업·재단 장학금"
+              className="cat-icon"
+            />
+            <div className="namebox">
+              <span className="cat-name">
+                기업·재단
+                <br />
+                장학금
+              </span>
+            </div>
+            <span className="cat-count">{getCountById('corporate')}건</span>
+          </GridItem>
+
+          <GridItem onClick={() => navigate('/region')}>
+            <img src={RegionIcon} alt="지역 장학금" className="cat-icon" />
+            <div className="namebox">
+              <span className="cat-name">지역 장학금</span>
+            </div>
+            <span className="cat-count">{getCountById('region')}건</span>
+          </GridItem>
+
+          <GridItem onClick={() => navigate('/requirement')}>
+            <img
+              src={RequirementIcon}
+              alt="조건별 장학금"
+              className="cat-icon"
+            />
+            <div className="namebox">
+              <span className="cat-name">
+                조건별
+                <br />
+                장학금
+              </span>
+            </div>
+            <span className="cat-count">{getCountById('requirement')}건</span>
+          </GridItem>
         </RecommendGrid>
-      </RecommendSection>
+      </SectionCard>
 
       {/* 마감 임박 혜택 섹션 */}
       <SectionCard>
         <SectionHeader>
           <div className="title">
-            <span className="icon">📈</span> 마감 임박 혜택 TOP 3
+            <img src={Trending} /> <span>마감 임박 혜택 TOP 3 </span>
           </div>
           <span className="view-all">전체 보기 {'>'}</span>
         </SectionHeader>
@@ -160,7 +217,7 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 2.29vh;
   overflow: hidden;
 `;
 
@@ -170,99 +227,99 @@ const Header = styled.header`
   align-items: center;
 
   .logo {
-    height: clamp(20px, 3vh, 24px);
+    height: 2.75vh;
   }
 
   .user-icon {
-    width: clamp(20px, 3vh, 24px);
-    height: clamp(20px, 3vh, 24px);
+    width: 3.2vh;
+    height: 3.2vh;
     cursor: pointer;
   }
 `;
 
 const Greeting = styled.div`
   h1 {
-    font-size: clamp(20px, 4vh, 24px);
+    font-size: 1.7rem;
     font-weight: 700;
     color: #111;
-    margin: 0 0 4px 0;
+    margin: 12px 0 4px 0;
   }
 
   p {
-    font-size: clamp(12px, 2vh, 14px);
+    font-size: 1rem;
     color: #555;
     margin: 0;
   }
 `;
 
 const TotalBenefitCard = styled.div`
-  background-color: #5b52ef;
+  background-color: #5b4fea;
+  width: 100%;
+  height: 19.68vh;
   border-radius: 12px;
-  padding: clamp(16px, 3vh, 24px) 20px;
+  padding: 2.75vh 4vw;
   color: white;
   box-shadow: 0 4px 12px rgba(91, 82, 239, 0.15);
 
   .label {
     display: block;
-    font-size: clamp(12px, 2vh, 14px);
-    font-weight: 500;
-    margin-bottom: 6px;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 0.69vh;
     opacity: 0.9;
   }
 
   .amount {
-    font-size: clamp(24px, 4vh, 28px);
+    font-size: 1.7rem;
     font-weight: 700;
-    margin: 0 0 clamp(12px, 2.5vh, 20px) 0;
+    margin: 0 0 2.06vh 0;
   }
 
   .detail-btn {
     width: 100%;
+    height: 5vh;
     background-color: white;
     color: #333;
     border: none;
     border-radius: 8px;
-    padding: clamp(10px, 2vh, 14px) 0;
-    font-size: clamp(13px, 2vh, 15px);
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 500;
     cursor: pointer;
   }
 `;
 
 const SectionCard = styled.div`
   background-color: white;
-  border-radius: 16px;
-  padding: clamp(12px, 2.5vh, 20px);
-  border: 1px solid #eaecef;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-`;
-
-/* 맞춤 추천 혜택 전용 스타일 (피그마 185px 맞춤) */
-const RecommendSection = styled(SectionCard)`
-  max-height: 185px; /* 피그마 수치 강제 반영 */
-  padding: clamp(12px, 2vh, 16px) 20px; /* 상하 여백을 조금 더 타이트하게 */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  border-radius: 12px;
+  padding: 2.75vh 4vw;
+  border: 1px solid #c3c0fb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  height: auto;
 `;
 
 const SectionHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: clamp(8px, 1.5vh, 14px);
+  margin-bottom: 1.6vh;
 
   .title {
-    font-size: clamp(14px, 2.5vh, 16px);
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 500;
     color: #333;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+
+    img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
   }
 
   .view-all {
-    font-size: 12px;
+    font-size: 0.9rem;
     color: #888;
     cursor: pointer;
   }
@@ -271,14 +328,15 @@ const SectionHeader = styled.div`
 const RecommendGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  width: 100%;
+  gap: 9px;
 `;
 
 /* 높이를 강제해서 내용물에 의해 뚱뚱해지는 것을 방지 */
 const GridItem = styled.div`
-  background-color: #5b52ef;
-  border-radius: 8px;
-  height: clamp(80px, 12vh, 104px); /* 피그마 비율에 맞춘 높이 설정 */
+  background-color: #584fea;
+  border-radius: 6px;
+  height: 13.5vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -287,22 +345,29 @@ const GridItem = styled.div`
   text-align: center;
 
   .cat-icon {
-    width: clamp(20px, 3vh, 28px);
-    height: clamp(20px, 3vh, 28px);
-    margin-bottom: 6px;
+    height: 50%;
+  }
+
+  .namebox {
+    height: 3.51vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .cat-name {
-    font-size: clamp(9px, 1.3vh, 11px);
-    font-weight: 500;
+    font-size: 0.8rem;
+    font-weight: 300;
     line-height: 1.2;
     margin-bottom: 2px;
+    text-align: center;
     word-break: keep-all;
   }
 
   .cat-count {
-    font-size: clamp(9px, 1.3vh, 11px);
-    font-weight: 400;
+    font-size: 0.7rem;
+    font-weight: 300;
     opacity: 0.8;
   }
 `;
@@ -315,13 +380,10 @@ const DeadlineList = styled.div`
 const DeadlineItem = styled.div`
   display: flex;
   align-items: center;
-  padding: clamp(8px, 1.5vh, 14px) 0;
+  padding: 4px 0 4px 0;
   border-bottom: ${(props) => (props.$isLast ? 'none' : '1px solid #F0F2F5')};
 
   .item-icon-wrapper {
-    width: clamp(36px, 5.5vh, 48px);
-    height: clamp(36px, 5.5vh, 48px);
-    background-color: #f3f4fe;
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -329,8 +391,8 @@ const DeadlineItem = styled.div`
     margin-right: 12px;
 
     img {
-      width: clamp(18px, 3vh, 24px);
-      height: clamp(18px, 3vh, 24px);
+      width: 5.26vh;
+      height: 5.26vh;
     }
   }
 

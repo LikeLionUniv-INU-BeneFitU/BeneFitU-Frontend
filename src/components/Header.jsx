@@ -51,6 +51,7 @@ const HeaderContainer = styled.header`
   left: 0;
   right: 0;
   height: 56px; /* 일반적인 모바일 상단 헤더 표준 높이 */
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,7 +83,7 @@ const BackButton = styled.button`
 `;
 
 const Title = styled.h1`
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 500;
   color: ${(props) => (props.$variant === 'purple' ? '#ffffff' : '#111111')};
   margin: 0;

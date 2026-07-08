@@ -23,17 +23,18 @@ function App() {
         <Routes>
           <Route path="/" element={<Splash />} />
           <Route path="/login-home" element={<LoginHome />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/info-intro" element={<InfoIntro />} />
           <Route path="/basic-info" element={<BasicInfo />} />
           <Route path="/other-info" element={<OtherInfo />} />
           <Route path="/info-complete" element={<InfoComplete />} />
           <Route path="/home" element={<Home />} />
           <Route path="/benefit-all" element={<BenefitAll />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/expected-benefit" element={<Expectedbenefit />} />
           <Route path="/benefit-detail" element={<BenefitDetail />} />
           <Route path="/apply-complete" element={<ApplyComplete />} />
+          <Route path="/edit-basic" element={<BasicInfo />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

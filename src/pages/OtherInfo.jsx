@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import * as S from './Info.styles';
 import Header from '../components/Header';
@@ -7,8 +7,10 @@ import BasicButton from '../components/BasicButton';
 
 export default function OtherInfo() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // 1. 로컬스토리지 초기 상태 설정 (BasicInfo의 하나의 객체 저장 방식과 통일)
+  const isEdit = location.pathname.includes('edit');
+
   const initialFormState = {
     gpa: '',
     incomeBracket: '',
@@ -22,11 +24,67 @@ export default function OtherInfo() {
     },
   };
 
-  // 2. useLocalStorage 훅 적용 (단일 객체 키로 깔끔하게 관리)
   const [formState, setFormState] = useLocalStorage(
-    'signUp_otherInfo',
+    isEdit ? 'edit_otherInfo' : 'signUp_otherInfo',
     initialFormState,
   );
+
+  // 백엔드에서 받아온 원본 데이터를 저장할 상태 (수정 모드에서 변경 감지용)
+  const [originalData, setOriginalData] = useState(
+    JSON.parse(JSON.stringify(initialFormState)),
+  );
+
+  // 💡 [수정 모드 전용] 마운트 시 백엔드 데이터 가져오기
+  useEffect(() => {
+    if (isEdit) {
+      const fetchUserData = async () => {
+        try {
+          // 예시 백엔드 데이터 구조 (실제 API 호출로 대체하세요)
+          const mockBackendData = {
+            gpa: '3.8',
+            incomeBracket: '3',
+            isBasicLiving: false,
+            isSecondLowest: true,
+            interests: {
+              state: true,
+              corporate: false,
+              region: true,
+              requirement: false,
+            },
+          };
+
+          setFormState(mockBackendData);
+          setOriginalData(JSON.parse(JSON.stringify(mockBackendData))); // 딥카피 백업
+        } catch (error) {
+          console.error('데이터를 불러오지 못했습니다.', error);
+        }
+      };
+      fetchUserData();
+    }
+  }, [isEdit]);
+
+  // 💡 [버튼 활성화 검증]
+  const isButtonActive = () => {
+    if (!isEdit) {
+      // 1) 정보 입력 페이지(/other-info): 학점과 소득분위가 입력되어야 활성화 (관심분야는 선택이므로 제외 가능)
+      return formState.gpa.trim() !== '' && formState.incomeBracket !== '';
+    } else {
+      // 2) 정보 수정 페이지(/edit-other): 기존 값(originalData) 중 하나라도 달라지면 활성화
+      const isInterestsChanged = Object.keys(formState.interests).some(
+        (key) => formState.interests[key] !== originalData.interests?.[key],
+      );
+
+      return (
+        formState.gpa !== originalData.gpa ||
+        formState.incomeBracket !== originalData.incomeBracket ||
+        formState.isBasicLiving !== originalData.isBasicLiving ||
+        formState.isSecondLowest !== originalData.isSecondLowest ||
+        isInterestsChanged
+      );
+    }
+  };
+
+  const active = isButtonActive();
 
   // 입력값 업데이트 공통 핸들러
   const handleInputChange = (key, value) => {
@@ -53,7 +111,7 @@ export default function OtherInfo() {
     const finalData = {
       gpa: `${formState.gpaInteger}.${formState.gpaDecimal}`,
       incomeBracket: formState.incomeBracket,
-      isVulnerable: formState.isVulnerable,
+      isBasicLiving: formState.isVulnerable,
       isSecondLowest: formState.isSecondLowest,
       interests: Object.keys(formState.interests).filter(
         (key) => formState.interests[key],
@@ -62,13 +120,19 @@ export default function OtherInfo() {
 
     console.log('로컬스토리지 최종본 제출:', finalData);
     // 이후 백엔드 전송 및 라우팅 로직 작성 구간
-
-    navigate('/info-complete');
+    if (isEdit) {
+      navigate('/my-info');
+    } else {
+      navigate('/info-complete');
+    }
   };
 
   return (
     <S.PageWrapper>
-      <Header title="기타 정보 입력" variant="purple" />
+      <Header
+        title={isEdit ? '기타 정보 수정' : '기타 정보 입력'}
+        variant="purple"
+      />
 
       <S.ContentContainer>
         <S.ScrollArea>
@@ -113,7 +177,7 @@ export default function OtherInfo() {
               <S.GradeButton
                 type="button"
                 isActive={!formState.isBasicLiving}
-                onClick={() => handleInputChange('isVulnerable', false)}
+                onClick={() => handleInputChange('isBasicLiving', false)}
               >
                 해당 없음
               </S.GradeButton>
@@ -132,7 +196,7 @@ export default function OtherInfo() {
             <S.GradeSelectorContainer>
               <S.GradeButton
                 type="button"
-                isActive={!formState.isVulnerable}
+                isActive={!formState.isSecondLowest}
                 onClick={() => handleInputChange('isSecondLowest', false)}
               >
                 해당 없음
@@ -216,7 +280,9 @@ export default function OtherInfo() {
 
         {/* 하단 완료 버튼 */}
         <S.ButtonWrapper>
-          <BasicButton onClick={handleSubmit}>완료</BasicButton>
+          <BasicButton onClick={handleSubmit} disabled={!active}>
+            완료
+          </BasicButton>
         </S.ButtonWrapper>
       </S.ContentContainer>
     </S.PageWrapper>

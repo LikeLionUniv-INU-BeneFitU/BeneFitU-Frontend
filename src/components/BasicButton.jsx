@@ -10,9 +10,20 @@ const StyledBtn = styled.button`
   align-items: center;
   justify-content: center;
 
-  background-color: ${(props) => (props.$variant === 'white' ? '#ffffff' : 'rgb(88, 79, 234)')};
+  background-color: ${(props) =>
+    props.disabled
+      ? '#9d9d9d'
+      : props.$variant === 'white'
+        ? '#ffffff'
+        : 'rgb(88, 79, 234)'};
   color: ${(props) => (props.$variant === 'white' ? '#111111' : 'rgb(255, 255, 255)')};
-  border: ${(props) => (props.$variant === 'white' ? '1px solid #111111' : '1px solid rbb(88, 79, 234)')};
+  border: ${(props) =>
+    props.disabled
+      ? '1px solid #9d9d9d'
+      : props.$variant === 'white'
+        ? '1px solid #111111'
+        : '1px solid rgb(88, 79, 234)'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 
   /*transition:
     transform 0.1s ease,
@@ -22,9 +33,14 @@ const StyledBtn = styled.button`
   }*/
 `;
 
-const BasicButton = ({ onClick, children, variant }) => {
+const BasicButton = ({ onClick, children, variant, disabled, style }) => {
   return (
-    <StyledBtn onClick={onClick} $variant={variant}>
+    <StyledBtn
+      onClick={onClick}
+      $variant={variant}
+      disabled={disabled}
+      style={style}
+    >
       {children}
     </StyledBtn>
   );

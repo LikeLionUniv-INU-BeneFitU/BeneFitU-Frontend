@@ -10,7 +10,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -39,9 +39,6 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // 저장된 모든 데이터 초기화
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('isCompleted');
-      localStorage.removeItem('lastLoggedInId');
-      localStorage.removeItem('survey_data');
       // 로그인 페이지로 리다이렉트 (무한 루프 방지)
       if (window.location.pathname !== '/login') {
         window.location.href = '/login';

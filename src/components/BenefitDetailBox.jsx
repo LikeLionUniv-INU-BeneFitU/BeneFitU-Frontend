@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import state2 from '../assets/images/state2.png';
+import corporate2 from '../assets/images/corporate2.png';
+import region2 from '../assets/images/region2.png';
+import requirement2 from '../assets/images/requirement2.png';
+
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -29,16 +34,20 @@ const Rowbox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  flex-wrap: wrap;
 `;
 
 const Columnbox = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 `;
 
 // 키워드 박스 스타일
 const KwordBox = styled.div`
   padding: 2px 12px;
+  font-size: 0.8rem;
 
   background-color: #D9D9D9;
 
@@ -77,23 +86,37 @@ const MoveButton = styled.button`
 const BenefitIcon = styled.button`
   width: 75px;
   height: 75px;
-
-  background-color: #DCDAFF;
-
-  border-radius: 50%;
-  padding: 20px;
   margin-right: 15px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+
+  img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+  }
 `;
 
+  const categoryIconMap = {
+    SCHOLARSHIP: state2,
+    CAMPUS_WORK: corporate2,
+    YOUTH_SUPPORT: region2,
+    EXTERNAL_ACTIVITY: requirement2,
+  };
 
-
-export default function DetailBox({ children, buttonText, to, tags }) {
+export default function DetailBox({ children, buttonText, to, tags, category }) {
   const navigate = useNavigate();
+  const iconSrc = categoryIconMap[category];
   return (
     <PageWrapper>
       <Box>
         <Rowbox>
-          <BenefitIcon></BenefitIcon>
+          <BenefitIcon>
+            {iconSrc && <img src={iconSrc} alt={category} style={{ width: '100%', height: '100%' }} />}
+          </BenefitIcon>
           <Columnbox>
             {children}
             <Rowbox>

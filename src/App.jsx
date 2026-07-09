@@ -37,7 +37,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/benefit-all" element={<BenefitAll />} />
           <Route path="/expected-benefit" element={<Expectedbenefit />} />
-          <Route path="/benefit-detail" element={<BenefitDetail />} />
+          <Route path="/detail/:benefitId" element={<BenefitDetail />} />
           <Route path="/apply-complete" element={<ApplyComplete />} />
           <Route path="my-page" element={<MyPage />} />
           <Route path="/applied" element={<Applied />} />

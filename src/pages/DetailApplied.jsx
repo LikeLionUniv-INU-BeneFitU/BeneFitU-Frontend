@@ -117,7 +117,7 @@ export default function DetailApplied() {
 
           <AmountText>{formatAmount(benefitDetail.amount)}</AmountText>
           <DeadlineText>
-            마감일 {benefitDetail.deadline.replace(/-/g, '.')} (
+            <span>마감일</span> {benefitDetail.deadline.replace(/-/g, '.')} (
             {getDDay(benefitDetail.deadline)})
           </DeadlineText>
 
@@ -169,7 +169,7 @@ export default function DetailApplied() {
   );
 }
 
-// --- 아래 스타일 컴포넌트는 단 한 줄도 건드리지 않고 그대로 유지합니다 ---
+// 스타일 컴포넌트
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -177,23 +177,24 @@ const Container = styled.div`
   max-width: 430px;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: #ffffff; /* 기본 배경 백색 일치 */
+  background-color: #ffffff;
   position: relative;
+  overflow: hidden;
 `;
 
 const TabContainer = styled.div`
   display: flex;
-  border-bottom: 2px solid #aab3e7; /* 보더 두께 및 색상 100% 일치 */
+  border-bottom: 2px solid #aab3e7;
   margin-bottom: 5px;
   background-color: #ffffff;
 `;
 
 const TabButton = styled.button`
   flex: 1;
-  padding: 12px 0; /* 패딩 값 일치 */
-  font-size: 1rem; /* 폰트 크기 일치 */
-  font-weight: ${(props) => (props.$isActive ? '600' : '500')}; /* 웨이트 일치 */
-  color: #0c0e19; /* 텍스트 컬러 일치 */
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: ${(props) => (props.$isActive ? '600' : '500')};
+  color: #0c0e19;
   background: none;
   border: none;
   cursor: pointer;
@@ -261,10 +262,14 @@ const AmountText = styled.div`
 `;
 
 const DeadlineText = styled.div`
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: #111111;
   margin-bottom: 18px;
+
+  span {
+    font-weight: 400;
+  }
 `;
 
 const BulletList = styled.ul`
@@ -308,7 +313,7 @@ const RadioGroup = styled.div`
 
 const RadioBox = styled.div`
   flex: 1;
-  height: 6.2vh;
+  height: 8vh;
   background-color: #ffffff;
   border: 1px solid ${(props) => (props.$isSelected ? '#5c59f0' : '#e2e5ec')};
   border-radius: 8px;

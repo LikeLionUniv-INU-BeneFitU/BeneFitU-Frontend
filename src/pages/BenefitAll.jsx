@@ -5,6 +5,10 @@ import BenefitDetailBox from '../components/BenefitDetailBox';
 import * as S from './BenefitAll.styles';
 import CategoryButtonBar from '../components/CategoryButtonBar';
 import UserInfoCard from '../components/UserInfoCard';
+import state2 from '../assets/images/state2.png'
+import corporate2 from '../assets/images/corporate2.png'
+import region2 from '../assets/images/region2.png'
+import requirement2 from '../assets/images/requirement2.png'
 
 function BenefitAll() {
   const location = useLocation();
@@ -28,6 +32,13 @@ function BenefitAll() {
     grade: '',
     incomeLevel: '',
   });
+
+  const categoryCodeMap = {
+    '국가장학금': 'SCHOLARSHIP',
+    '기업·재단 장학금': 'CORPORATE',
+    '지역 장학금': 'REGION',
+    '조건별 장학금': 'YOUTH_SUPPORT',
+  };
 
   // 백엔드에 데이터를 요청하는 함수
   // 장학금 상세설명 박스 연동
@@ -90,9 +101,15 @@ function BenefitAll() {
       },
     ];
 
-    const backendUrl = 'http://43.201.77.120:8080/test'; // 실제 장학금 리스트 API 주소로 교체하기
+    const backendUrl = 'http://43.201.77.120:8080/api/benefits?category=ALL&sort=DEFAULT&page=1'; // 실제 장학금 리스트 API 주소로 교체하기
 
-    fetch(backendUrl)
+    const token = localStorage.getItem("accessToken");
+
+    fetch(backendUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }) 
       .then((res) => {
         if (!res.ok) {
           throw new Error('네트워크 응답이 올바르지 않습니다.');
@@ -100,7 +117,13 @@ function BenefitAll() {
         return res.json();
       })
       .then((data) => {
-        setBenefitList(data);
+        console.log(data);
+
+        setBenefitList(data.result.benefits);
+        console.log('전체 카테고리 목록:', data.result.benefits.map(b => ({ 이름: b.benefitName, 카테고리: b.categories })));
+
+        console.log(data.result.benefits[0]);
+        console.log(data.result.benefits[0].categories);
       })
       .catch((error) => {
         console.error('백엔드 연동 전 예비 데이터');
@@ -117,9 +140,15 @@ function BenefitAll() {
       incomeLevel: '3구간',
     };
 
-    const userUrl = 'API_주소URL'; // 실제 사용자 정보 API 주소로 교체하기
+    const userUrl = 'http://43.201.77.120:8080/api/users/info'; // 실제 사용자 정보 API 주소로 교체하기
 
-    fetch(userUrl)
+    const token = localStorage.getItem("accessToken");
+
+    fetch(userUrl,{
+      headers:{
+        Authorization:`Bearer ${token}`
+      }
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error('네트워크 응답이 올바르지 않습니다.');
@@ -127,7 +156,13 @@ function BenefitAll() {
         return res.json();
       })
       .then((data) => {
-        setUserInfo(data);
+        console.log(data);
+
+        setUserInfo({
+          name: data.result.baseInfo.schoolName,
+          grade: data.result.baseInfo.grade + "학년",
+          incomeLevel: data.result.detailInfo.incomeBracket + "구간",
+        });
       })
       .catch((error) => {
         console.error('백엔드 연동 전 예비 사용자 데이터');
@@ -139,7 +174,7 @@ function BenefitAll() {
   const filteredList =
     currentCategory === '전체'
       ? benefitList
-      : benefitList.filter((item) => item.category === currentCategory);
+      : benefitList.filter((item) => item.categories && item.categories.includes(currentCategory));
 
   const sortedList = [...filteredList].sort((a, b) => {
     if (sortType === '최신순') {
@@ -148,6 +183,8 @@ function BenefitAll() {
       return b.priceValue - a.priceValue; // 금액 높은 게 위로
     }
   });
+
+
 
   return (
     <S.PageWrapper>
@@ -206,24 +243,20 @@ function BenefitAll() {
         {sortedList.map((benefit) => {
           return (
             <BenefitDetailBox
-              key={benefit.id}
+              key={benefit.benefitId}
               buttonText="상세 보기"
-              to={`/detail/${benefit.id}`}
-              tags={benefit.tags}
+              to={`/detail/${benefit.benefitId}`}
+              category={benefit.categories[0]}
+              tags={benefit.categories}
             >
-              <p style={{ fontWeight: 'bold', fontSize: '25px' }}>
-                {benefit.title}
-              </p>
-              <p
-                style={{
-                  color: '#2578B0',
-                  fontWeight: 'bold',
-                  fontSize: '20px',
-                }}
-              >
-                {benefit.price}
-              </p>
-            </BenefitDetailBox>
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
+              {benefit.benefitName}
+            </p>
+
+            <p style={{ color: "#2578B0", fontWeight: "bold", fontSize: "17px" }}>
+              {benefit.amount.toLocaleString()}원
+            </p>
+          </BenefitDetailBox>
           );
         })}
       </S.ScrollArea>

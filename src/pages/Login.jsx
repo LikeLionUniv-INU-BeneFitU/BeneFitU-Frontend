@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import Logo from '../assets/images/Logo.png'
+import mailIcon from '../assets/images/mailIcon.png'
+import lockIcon from '../assets/images/lockIcon.png'
+
 
 const PageWrapper = styled.div`
   max-width: 450px;
@@ -129,10 +132,38 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   // 로그인 버튼 눌렀을 때 실행할 함수
-  const handleLogin = () => {
-    // TODO: 여기에 실제 로그인 API 요청 코드 넣을 예정
-    console.log('아이디:', userId, '비밀번호:', password);
-  };
+  const handleLogin = async () => {
+  try {
+    const response = await fetch(
+      "http://43.201.77.120:8080/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: userId,
+          password: password,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.isSuccess) {
+      // 토큰 저장
+      localStorage.setItem("accessToken", data.result.accessToken);
+
+      alert("로그인 성공!");
+      navigate("/home"); // 원하는 페이지로 변경 가능
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("로그인 실패");
+  }
+};
 
   return (
   <PageWrapper>
@@ -141,7 +172,7 @@ export default function Login() {
       <LogoImg src={Logo} alt="BeneFitU 로고" />
       <Label>아이디</Label>
       <Input
-        img="/user.png" // 나중에 이미지 변경 필요
+        $icon={mailIcon} // 아이디 입력창 메일 아이콘
         placeholder="아이디를 입력해주세요"
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
@@ -149,6 +180,7 @@ export default function Login() {
 
       <Label>비밀번호</Label>
       <Input
+        $icon={lockIcon} // 비번 입력창 자물쇠 아이콘
         type="password"
         placeholder="비밀번호를 입력해주세요"
         value={password}

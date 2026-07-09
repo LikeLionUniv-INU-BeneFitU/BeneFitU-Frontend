@@ -27,8 +27,9 @@ export default function ExpectedBenefit() {
         return res.json();
       })
       .then((data) => {
+        console.log('예상 혜택 응답:', data.result);
         setTotalAmount(data.result.totalAmount);
-        setBenefitList(data.result.benefits);
+        setBenefitList([]);
       })
       .catch(() => {
         setTotalAmount(dummyTotal);
@@ -44,7 +45,7 @@ export default function ExpectedBenefit() {
       </S.TotalAmountText>
       
       <S.ScrollArea>
-      {benefitList.map((benefit) => (
+      {benefitList && benefitList.map((benefit) => (
         <BenefitDetailBox
           key={benefit.id}
           buttonText="상세 보기"

@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import splash from '../assets/images/splash.png'
 
 // 1부터 16까지의 스플래시 이미지 import
 import splash1 from '../assets/images/Splash/splash1.png';

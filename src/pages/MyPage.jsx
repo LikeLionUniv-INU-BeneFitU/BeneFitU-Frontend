@@ -140,17 +140,35 @@ export default MyPage;
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
-  min-height: 100vh;
+  height: 100dvh;
+
   background-color: #f8f9fa;
   box-sizing: border-box;
+  overflow: hidden; /* 전체 화면 스크롤 절대 방지 */
 `;
 
 const ContentWrapper = styled.div`
-  padding: 2.5vh 5vw;
+  padding: 2.5vh 5vw 80px 5vw;
   display: flex;
   flex-direction: column;
   gap: 3vh;
+
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* 💡 스크롤바 투명하게 완전히 숨기기 */
+  &::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리 */
+  }
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* 파이어폭스 */
 `;
 
 /* 프로필 카드 스타일 */
@@ -281,4 +299,7 @@ const SmallArrow = styled.svg`
 const ItemList = styled.div`
   display: flex;
   flex-direction: column;
+
+  flex-shrink: 0;
+  padding-bottom: 20px;
 `;

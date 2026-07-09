@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import * as S from './Info.styles';
@@ -11,6 +11,7 @@ import BasicButton from '../components/BasicButton';
 export default function BasicInfo() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dateInputRef = useRef(null);
 
   const isEdit = location.pathname.includes('edit');
 
@@ -138,6 +139,16 @@ export default function BasicInfo() {
     }
   };
 
+  const handleDateBoxClick = () => {
+    if (dateInputRef.current) {
+      try {
+        dateInputRef.current.showPicker(); // 최신 브라우저 표준 달력 팝업 트리거
+      } catch (e) {
+        dateInputRef.current.focus();
+      }
+    }
+  };
+
   return (
     <S.PageWrapper>
       <Header
@@ -160,15 +171,26 @@ export default function BasicInfo() {
           {/* 생년월일 입력 */}
           <S.FormGroup>
             <S.Label>생년월일</S.Label>
-            <S.DateInput
-              type="date"
-              min="1900-01-01"
-              max="2026-12-31"
-              value={formState.birthDate}
-              onChange={(e) => handleInputChange('birthDate', e.target.value)}
-              hasValue={!!formState.birthDate}
-              required
-            />
+            <S.DateContainer onClick={handleDateBoxClick}>
+              {/* 화면에 보이는 예쁜 텍스트 형태 (원하시는 포맷으로 보여줄 수 있음) */}
+              <S.DateText isSelected={!!formState.birthDate}>
+                {formState.birthDate
+                  ? formState.birthDate.replaceAll('-', '. ') + '.' // '2002-07-09' -> '2002. 07. 09.' 형태로 변환
+                  : '생년월일을 선택해주세요'}
+              </S.DateText>
+              <S.CalendarIcon>📅</S.CalendarIcon>
+
+              {/* 위에 투명하게 얹어진 진짜 date 인풋 */}
+              <S.HiddenDateInput
+                ref={dateInputRef}
+                type="date"
+                min="1900-01-01"
+                max="2026-12-31"
+                value={formState.birthDate}
+                onChange={(e) => handleInputChange('birthDate', e.target.value)}
+                required
+              />
+            </S.DateContainer>
           </S.FormGroup>
 
           {/* 학교 선택 */}

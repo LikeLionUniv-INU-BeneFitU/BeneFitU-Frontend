@@ -39,7 +39,7 @@ export const ProbabilityBox = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 1.2rem;
+  font-size: 2rem;
   font-weight: 700;
 `;
 
@@ -55,19 +55,31 @@ export const Tag = styled.span`
   font-size: 13px;
   padding: 6px 12px;
   border-radius: 20px;
+  font-size: 1rem;
 `;
 
 export const Amount = styled.p`
   color: #2578B0;
   font-weight: bold;
-  font-size: 1.3rem;
-  margin: 10px 0 4px;
+  font-size: 1.5rem;
+  margin: 10px 0 10px;
+`;
+
+export const Rowbox = styled.div`
+  display: flex;
+  margin-bottom: 5px;
 `;
 
 export const Deadline = styled.p`
   color: #4A4A4A;
-  font-size: 0.85rem;
-  margin-bottom: 16px;
+  font-size: 1.2rem;
+  margin-right: 10px;
+`;
+
+export const Deadlinenum = styled.p`
+  color: #000000;
+  font-weight: bold;
+  font-size: 1.5rem;
 `;
 
 export const RequirementList = styled.div`

@@ -62,10 +62,25 @@ export default function BenefitDetail() {
         return res.json();
       })
       .then((data) => {
-        setBenefit(data.result);
+        const detail = data.result.benefitDetail;
+        const matched = data.result.matchedConditions;
+
+        const mapped = {
+          title: detail.benefitName,
+          tags: detail.categories,
+          amount: `${detail.amount.toLocaleString()}원`,
+          deadline: detail.deadline,
+          siteUrl: detail.benefitUrl,
+          probability: data.result.passProbability,
+          requirementType: 'AUTO',
+          requirements: Object.values(matched),
+          reason: `회원님은 ${Object.values(matched).join(', ')} 조건에 해당하여 지원 자격이 됩니다.`,
+        };
+
+        setBenefit(mapped);
       })
       .catch(() => {
-        setBenefit(dummyTypeB); // dummyTypeA or dummyTypeB 테스트하고 싶은 더미로 바꾸기
+        setBenefit(dummyTypeB);
       });
   }, [benefitId]);
 
@@ -99,7 +114,7 @@ export default function BenefitDetail() {
 
   const isCheckType = benefit.requirementType === 'CHECK';
   // 체크형일 때: 모든 조건에 체크했는지 확인
-  const allChecked = isCheckType && checkedItems.length === benefit.requirements.length;
+  const allChecked = isCheckType && checkedItems.length === (benefit.requirements?.length || 0);
 
   return (
     <S.PageWrapper>
@@ -110,16 +125,16 @@ export default function BenefitDetail() {
         <S.InfoBox>
           <S.Title>{benefit.title}</S.Title>
           <S.TagRow>
-            {benefit.tags.map((tag, index) => (
+            {benefit.tags && benefit.tags.map((tag, index) => (
               <S.Tag key={index}>{tag}</S.Tag>
             ))}
           </S.TagRow>
 
           <S.Amount>{benefit.amount}</S.Amount>
-          <S.Deadline>마감일 {benefit.deadline} (D-{dDay})</S.Deadline>
+          <S.Rowbox><S.Deadline>마감일</S.Deadline> <S.Deadlinenum> {benefit.deadline} (D-{dDay})</S.Deadlinenum> </S.Rowbox>
 
           <S.RequirementList>
-            {benefit.requirements.map((req, index) => (
+            {benefit.requirements && benefit.requirements.map((req, index) => (
               <S.RequirementItem key={index}>
                 {isCheckType ? (
                   // 타입 B: 체크박스 있음

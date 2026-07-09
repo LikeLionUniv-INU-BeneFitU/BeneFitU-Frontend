@@ -33,6 +33,13 @@ function BenefitAll() {
     incomeLevel: '',
   });
 
+  const categoryCodeMap = {
+    '국가장학금': 'SCHOLARSHIP',
+    '기업·재단 장학금': 'CORPORATE',
+    '지역 장학금': 'REGION',
+    '조건별 장학금': 'YOUTH_SUPPORT',
+  };
+
   // 백엔드에 데이터를 요청하는 함수
   // 장학금 상세설명 박스 연동
   useEffect(() => {
@@ -113,6 +120,7 @@ function BenefitAll() {
         console.log(data);
 
         setBenefitList(data.result.benefits);
+        console.log('전체 카테고리 목록:', data.result.benefits.map(b => ({ 이름: b.benefitName, 카테고리: b.categories })));
 
         console.log(data.result.benefits[0]);
         console.log(data.result.benefits[0].categories);
@@ -166,7 +174,7 @@ function BenefitAll() {
   const filteredList =
     currentCategory === '전체'
       ? benefitList
-      : benefitList.filter((item) => item.category === currentCategory);
+      : benefitList.filter((item) => item.categories && item.categories.includes(currentCategory));
 
   const sortedList = [...filteredList].sort((a, b) => {
     if (sortType === '최신순') {

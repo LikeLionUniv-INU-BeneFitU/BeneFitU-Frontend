@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
-  height: 100vh; /* 브라우저 화면 높이에 꽉 맞춤 */
+  height: 100dvh; /* 브라우저 화면 높이에 꽉 맞춤 */
   margin: 0 auto;
   background-color: #fbfbff;
   display: flex;
@@ -54,7 +54,7 @@ export const FormGroup = styled.div`
 `;
 
 export const Label = styled.label`
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #111111;
 `;
@@ -78,45 +78,46 @@ export const Input = styled.input`
   }
 `;
 
-export const DateInput = styled(Input)`
-  font-family: sans-serif;
+export const DateContainer = styled.div`
+  position: relative; /* 투명 인풋을 위에 얹기 위한 기준점 */
+  width: 100%;
+  height: calc(46 * (100dvh / 874));
+  border: 1px solid #828282;
+  border-radius: 5px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   cursor: pointer;
-  position: relative;
+`;
 
-  /* 💡 값이 없을 때는 텍스트 색상을 다른 placeholder와 일치하는 회색(#BBB)으로 지정 */
-  color: ${(props) => (props.hasValue ? '#000' : '#BBB')};
+// 💡 껍데기 텍스트 스타일 (학교, 학과 선택 창과 디자인 통일)
+export const DateText = styled.span`
+  font-size: 0.875rem;
+  color: ${(props) => (props.isSelected ? '#111111' : '#BBBBBB')};
+`;
 
-  /* iOS 등 일부 브라우저에서 date 인풋 서식이 깨지거나 투명해지는 현상 방지 */
-  &::-webkit-datetime-edit {
-    display: flex;
-  }
+export const CalendarIcon = styled.span`
+  font-size: 16px;
+  color: #888;
+  pointer-events: none; /* 아이콘이 클릭을 방해하지 않도록 설정 */
+  z-index: 2;
+`;
 
-  /* 년, 월, 일 글자 각각의 색상을 유기적으로 제어하기 위한 서식 (크롬/Vite 웹킷 계열 대응) */
-  &::-webkit-datetime-edit-fields-wrapper {
-    padding: 0;
-  }
+// 💡 핵심: 실제 클릭되는 date 인풋을 투명하게 만들어 전체를 덮어버림
+export const HiddenDateInput = styled.input`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* 완전히 투명하게 만듦 */
+  cursor: pointer;
 
-  &::-webkit-datetime-edit-text,
-  &::-webkit-datetime-edit-year-field,
-  &::-webkit-datetime-edit-month-field,
-  &::-webkit-datetime-edit-day-field {
-    color: ${(props) => (props.hasValue ? '#000' : '#BBB')};
-  }
-
-  /* 우측 내장 달력 아이콘 스타일 */
-  &::-webkit-calendar-picker-indicator {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0;
-    cursor: pointer;
-    opacity: 0.5;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
+  /* 투명해도 모바일에서 클릭 영역 확보를 위해 padding 등 초기화 */
+  box-sizing: border-box;
 `;
 
 export const SelectBox = styled.div`

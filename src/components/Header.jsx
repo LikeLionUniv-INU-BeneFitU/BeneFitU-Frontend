@@ -84,7 +84,7 @@ const BackButton = styled.button`
 
 const Title = styled.h1`
   font-size: 1.3rem;
-  font-weight: 500;
+  font-weight: 600;
   color: ${(props) => (props.$variant === 'purple' ? '#ffffff' : '#111111')};
   margin: 0;
   text-align: center;

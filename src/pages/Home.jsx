@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-// 이미지 Assets (경로 절대 불변 유지)
 import SmallLogo from '../assets/images/SmallLogo.svg';
 import UserIcon from '../assets/images/user.png';
 import StateIcon from '../assets/images/state.png';
@@ -80,122 +79,145 @@ export default function Home() {
         <img
           src={UserIcon}
           alt="User"
-          className="user-icon" /*onClick={() => navigate('/my')}*/
+          className="user-icon"
+          onClick={() => navigate('/my-page')}
         />
       </Header>
 
       {/* 인사말 영역 */}
-      <Greeting>
-        <h1>{userName}님,</h1>
-        <p>마감 임박 혜택을 확인해 장학금을 놓치지 마세요!</p>
-      </Greeting>
+      <ScrollArea>
+        <Greeting>
+          <h1>{userName}님,</h1>
+          <p>마감 임박 혜택을 확인해 장학금을 놓치지 마세요!</p>
+        </Greeting>
 
-      {/* 총 예상 혜택 금액 카드 */}
-      <TotalBenefitCard>
-        <span className="label">예상 혜택 금액</span>
-        <h2 className="amount">총 {totalBenefitAmount.toLocaleString()}원</h2>
-        <button
-          className="detail-btn"
-          onClick={() => navigate('/expected-benefit')}
-        >
-          상세 내역 보기
-        </button>
-      </TotalBenefitCard>
+        {/* 총 예상 혜택 금액 카드 */}
+        <TotalBenefitCard>
+          <span className="label">예상 혜택 금액</span>
+          <h2 className="amount">총 {totalBenefitAmount.toLocaleString()}원</h2>
+          <button
+            className="detail-btn"
+            onClick={() => navigate('/expected-benefit')}
+          >
+            상세 내역 보기
+          </button>
+        </TotalBenefitCard>
 
-      {/* 맞춤 추천 혜택 섹션 (높이 특화) */}
-      <SectionCard>
-        <SectionHeader>
-          <div className="title">
-            <img src={Check} /> <span> 맞춤 추천 혜택 </span>
-          </div>
-          <span className="view-all" onClick={() => navigate('/benefit-all')}>
-            전체 보기 {'>'}
-          </span>
-        </SectionHeader>
-
-        <RecommendGrid>
-          <GridItem onClick={() => navigate('/state')}>
-            <img src={StateIcon} alt="국가장학금" className="cat-icon" />
-            <div className="namebox">
-              <span className="cat-name">국가장학금</span>
+        {/* 맞춤 추천 혜택 섹션 (높이 특화) */}
+        <SectionCard>
+          <SectionHeader>
+            <div className="title">
+              <img src={Check} /> <span> 맞춤 추천 혜택 </span>
             </div>
-            <span className="cat-count">{getCountById('state')}건</span>
-          </GridItem>
+            <span className="view-all" onClick={() => navigate('/benefit-all')}>
+              전체 보기 {'>'}
+            </span>
+          </SectionHeader>
 
-          <GridItem onClick={() => navigate('/corporate')}>
-            <img
-              src={CorporateIcon}
-              alt="기업·재단 장학금"
-              className="cat-icon"
-            />
-            <div className="namebox">
-              <span className="cat-name">
-                기업·재단
-                <br />
-                장학금
-              </span>
-            </div>
-            <span className="cat-count">{getCountById('corporate')}건</span>
-          </GridItem>
-
-          <GridItem onClick={() => navigate('/region')}>
-            <img src={RegionIcon} alt="지역 장학금" className="cat-icon" />
-            <div className="namebox">
-              <span className="cat-name">지역 장학금</span>
-            </div>
-            <span className="cat-count">{getCountById('region')}건</span>
-          </GridItem>
-
-          <GridItem onClick={() => navigate('/requirement')}>
-            <img
-              src={RequirementIcon}
-              alt="조건별 장학금"
-              className="cat-icon"
-            />
-            <div className="namebox">
-              <span className="cat-name">
-                조건별
-                <br />
-                장학금
-              </span>
-            </div>
-            <span className="cat-count">{getCountById('requirement')}건</span>
-          </GridItem>
-        </RecommendGrid>
-      </SectionCard>
-
-      {/* 마감 임박 혜택 섹션 */}
-      <SectionCard>
-        <SectionHeader>
-          <div className="title">
-            <img src={Trending} /> <span>마감 임박 혜택 TOP 3 </span>
-          </div>
-          <span className="view-all">전체 보기 {'>'}</span>
-        </SectionHeader>
-
-        <DeadlineList>
-          {deadlineBenefits.map((item, index) => (
-            <DeadlineItem
-              key={item.id}
-              $isLast={index === deadlineBenefits.length - 1}
+          <RecommendGrid>
+            <GridItem
+              onClick={() =>
+                navigate('/benefit-all', { state: { category: '국가장학금' } })
+              }
             >
-              <div className="item-icon-wrapper">
-                <img
-                  src={CATEGORY_ICONS[item.category] || SmallLogo}
-                  alt="icon"
-                />
+              <img src={StateIcon} alt="국가장학금" className="cat-icon" />
+              <div className="namebox">
+                <span className="cat-name">국가장학금</span>
               </div>
+              <span className="cat-count">{getCountById('state')}건</span>
+            </GridItem>
 
-              <div className="item-info">
-                <h3 className="item-title">{item.title}</h3>
-                <p className="item-amount">{item.amount}</p>
+            <GridItem
+              onClick={() =>
+                navigate('/benefit-all', {
+                  state: { category: '기업·재단 장학금' },
+                })
+              }
+            >
+              <img
+                src={CorporateIcon}
+                alt="기업·재단 장학금"
+                className="cat-icon"
+              />
+              <div className="namebox">
+                <span className="cat-name">
+                  기업·재단
+                  <br />
+                  장학금
+                </span>
               </div>
+              <span className="cat-count">{getCountById('corporate')}건</span>
+            </GridItem>
 
-              <div className="d-day-badge">{item.dDay}</div>
-            </DeadlineItem>
-          ))}
-        </DeadlineList>
-      </SectionCard>
+            <GridItem
+              onClick={() =>
+                navigate('/benefit-all', { state: { category: '지역 장학금' } })
+              }
+            >
+              <img src={RegionIcon} alt="지역 장학금" className="cat-icon" />
+              <div className="namebox">
+                <span className="cat-name">지역 장학금</span>
+              </div>
+              <span className="cat-count">{getCountById('region')}건</span>
+            </GridItem>
+
+            <GridItem
+              onClick={() =>
+                navigate('/benefit-all', {
+                  state: { category: '조건별 장학금' },
+                })
+              }
+            >
+              <img
+                src={RequirementIcon}
+                alt="조건별 장학금"
+                className="cat-icon"
+              />
+              <div className="namebox">
+                <span className="cat-name">
+                  조건별
+                  <br />
+                  장학금
+                </span>
+              </div>
+              <span className="cat-count">{getCountById('requirement')}건</span>
+            </GridItem>
+          </RecommendGrid>
+        </SectionCard>
+
+        {/* 마감 임박 혜택 섹션 */}
+        <SectionCard>
+          <SectionHeader>
+            <div className="title">
+              <img src={Trending} /> <span>마감 임박 혜택 TOP 3 </span>
+            </div>
+            <span className="view-all">전체 보기 {'>'}</span>
+          </SectionHeader>
+
+          <DeadlineList>
+            {deadlineBenefits.map((item, index) => (
+              <DeadlineItem
+                key={item.id}
+                $isLast={index === deadlineBenefits.length - 1}
+              >
+                <div className="item-icon-wrapper">
+                  <img
+                    src={CATEGORY_ICONS[item.category] || SmallLogo}
+                    alt="icon"
+                  />
+                </div>
+
+                <div className="item-info">
+                  <h3 className="item-title">{item.title}</h3>
+                  <p className="item-amount">{item.amount}</p>
+                </div>
+
+                <div className="d-day-badge">{item.dDay}</div>
+              </DeadlineItem>
+            ))}
+          </DeadlineList>
+        </SectionCard>
+      </ScrollArea>
     </Container>
   );
 }
@@ -211,7 +233,7 @@ const Container = styled.div`
   max-height: 874px;
   margin: 0 auto;
   background-color: #f8f9fe;
-  padding: clamp(16px, 3vh, 24px) 20px;
+  padding: clamp(16px, 3vh, 24px) 20px 0 20px;
   box-sizing: border-box;
   font-family: 'Pretendard', sans-serif;
 
@@ -225,6 +247,8 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 1vh;
+  flex-shrink: 0;
 
   .logo {
     height: 2.75vh;
@@ -235,6 +259,23 @@ const Header = styled.header`
     height: 3.2vh;
     cursor: pointer;
   }
+`;
+
+const ScrollArea = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.29vh;
+  overflow-y: auto; /* 내용물이 넘치면 이 안에서 세로 스크롤 작동 */
+  -webkit-overflow-scrolling: touch; /* 모바일 관성 스크롤 대응 */
+  padding-bottom: 40px; /* 💡 최하단 마감 임박 리스트가 잘리지 않고 위로 끝까지 밀리도록 넉넉한 쿠션 확보 */
+
+  /* 💡 스크롤바 레이아웃 완벽 은닉 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 const Greeting = styled.div`

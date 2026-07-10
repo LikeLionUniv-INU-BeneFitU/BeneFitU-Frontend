@@ -68,6 +68,8 @@ export const Amount = styled.p`
 export const Rowbox = styled.div`
   display: flex;
   margin-bottom: 5px;
+
+  
 `;
 
 export const Deadline = styled.p`

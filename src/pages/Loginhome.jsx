@@ -13,7 +13,7 @@ const PageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 80px 0 60px;
-  gap: 5px; 
+  
 
   background: linear-gradient(180deg, #E0DEFF, #FFFFFF);
 `;
@@ -22,7 +22,7 @@ const ButtonWrapper = styled.div`
   width: 100%; 
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 0 20px; 
   box-sizing: border-box;
 `;
 
@@ -32,12 +32,11 @@ const LoginButton = styled.button`
   background-color: #5c4ff2;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   
-  margin-top: 20px;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -52,12 +51,12 @@ const SignupButton = styled.button`
   background-color: #ffffff;
   color: #5c4ff2;
   border: 1px solid #5c4ff2;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   
-  margin-top: 20px;
+  margin-top: 23px;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -70,7 +69,7 @@ const SignupButton = styled.button`
 const LogoBox = styled.div`
   width: 75%;
   height: 90px;
-  margin-top: 70px;
+  margin-top: 95px;
 
   display: flex;
   flex-direction: column;
@@ -80,25 +79,29 @@ const LogoBox = styled.div`
 const LogoimgBox = styled.div`
   width: 60%;
   height: 50%;
-  margin: 110px;
+  margin: 61px 0 92px;
 
   display: flex;
   flex-direction: column;
 `;
 
+// 로고 밑 텍스트
 const Subtitle = styled.div`
-  font-size: 15px;
+  font-size: clamp(0.7rem, 3vw, 1rem);
+  margin-top: 5px;
 `;
 
+// 이용약관 텍스트
 const Highlight = styled.span`
   color: #584FEA;
-  font-weight: bold;
 `;
-
 const TermsAgreement = styled.div`
   width: 50%;
-  margin: 5px 0;
+  
+  font-weight: bold;
   font-size: 10px;
+  margin-bottom: 106px;
+  margin-top: 23px;
 `;
 
 
@@ -118,7 +121,7 @@ export default function LoginHome() {
         <LoginButton onClick={() => navigate('/login') }>로그인</LoginButton>
         <SignupButton onClick={() => navigate('/signup') }>회원가입</SignupButton>
       </ButtonWrapper>
-      <TermsAgreement>로그인 또는 회원가입 시<Highlight>BeneFitU 이용약관 및 개인정보 처리 방침</Highlight>에 동의한 것으로 간주됩니다.</TermsAgreement>
+      <TermsAgreement>로그인 또는 회원가입 시 <Highlight>BeneFitU 이용약관 및 개인정보 처리 방침</Highlight>에 동의한 것으로 간주됩니다.</TermsAgreement>
     </PageWrapper>
   );
 }

@@ -38,7 +38,7 @@ const ContentWrapper = styled.div`
 const LogoImg = styled.img`
   width: 80%;
   height: auto;
-  margin: 70px 0 60px 0;
+  margin: 65px 0 65px 0;
   display: block;
   align-self: center;
 `;
@@ -52,12 +52,23 @@ const Title = styled.h1`
 
 const SubTitle = styled.p`
   font-size: 0.8125rem;
-  color: #5c4ff2;
+  color: #000000;
   margin-top: 5pcx;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   margin-left: 15px;
 `;
 
+const SubTitlehighlight = styled.span`
+  font-size: 0.8125rem;
+  color: #5c4ff2;
+`;
+
+export const Rowbox = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+// 아이디, 비밀번호, 비밀번호 확인 텍스트
 const Label = styled.label`
   font-size: 1.25rem;
   font-weight: 700;
@@ -73,7 +84,7 @@ const Input = styled.input`
   padding: 0 16px 0 40px;
 
   border: 1px solid ${(props) => (props.hasError ? '#FF4D4D' : '#828282')};
-  border-radius: 5px;
+  border-radius: 6px;
 
   font-size: 0.875rem;
 
@@ -86,7 +97,7 @@ const Input = styled.input`
   outline: none;
   box-sizing: border-box;
 
-  margin-bottom: 1px;
+  margin-bottom: 12px; // 회원가입 화면이랑 통일
   margin-left: 15px;
   margin-right: 15px;
 
@@ -112,15 +123,16 @@ const SubmitButton = styled.button`
   color: #ffffff;
 
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
 
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
 
-  margin-top: 40px;
+  margin-top: 88px;
   margin-left: 15px;
   margin-right: 15px;
+  margin-bottom: 20px;
 
   &:hover {
     opacity: 0.9;
@@ -174,13 +186,14 @@ export default function Signup() {
 
   return (
     <PageWrapper>
-    <Header title="회원가입" onBack={() => navigate(-1)} />
+    <Header color={"#E9E6FF"} onBack={() => navigate(-1)} />
 
     <ContentWrapper>
       <LogoImg src={Logo} alt="BeneFitU 로고" />
       <Title>회원가입</Title>
-      <SubTitle>BeneFit와 함께 더 많은 혜택을 만나보세요!</SubTitle>
-
+      <Rowbox>
+        <SubTitle><SubTitlehighlight>BeneFitU</SubTitlehighlight>와 함께 더 많은 혜택을 만나보세요!</SubTitle>
+      </Rowbox>
       <Label>아이디</Label>
       <Input
         $icon={mailIcon} // 아이디 입력창 메일 아이콘
@@ -188,7 +201,6 @@ export default function Signup() {
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
       />
-      <div style={{ marginBottom: '20px' }} />
 
       <Label>비밀번호</Label>
       <Input
@@ -198,7 +210,6 @@ export default function Signup() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <div style={{ marginBottom: '20px' }} />
 
       <Label>비밀번호 확인</Label>
       <Input

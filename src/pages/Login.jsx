@@ -35,7 +35,7 @@ const ContentWrapper = styled.div`
 const LogoImg = styled.img`
   width: 80%;
   height: auto;
-  margin: 70px 0 60px 0;
+  margin: 65px 0 65px 0;
   display: block;
   align-self: center;
 `;
@@ -52,12 +52,14 @@ const Label = styled.label`
 const Input = styled.input`
   height: 45px;
   padding: 0 16px 0 40px;
-  margin-bottom: 20px;
+
+  margin-bottom: 12px; // 회원가입 화면이랑 통일
   margin-left: 15px;
   margin-right: 15px;
+
   background-color: #ffffff;
   border: 1px solid #828282;
-  border-radius: 5px;
+  border-radius: 6px;
   outline: none;
   font-size: 0.875rem;
   box-sizing: border-box;
@@ -75,16 +77,17 @@ const Input = styled.input`
   }
 `;
 
+// 로그인 버튼 
 const LoginButton = styled.button`
   height: 50px;
   background-color: #5c4ff2;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 40px;
+  margin-top: 65px;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -93,18 +96,20 @@ const LoginButton = styled.button`
   }
 `;
 
+// 새로 만들기 버튼
 const NewLoginButton = styled.button`
   height: 50px;
   background-color: #ffffff;
   color: #5c4ff2;
   border: 1px solid #5c4ff2;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 13px;
   margin-left: 15px;
   margin-right: 15px;
+  margin-bottom: 152px;
 
   &:hover {
     background-color: #f0f0f0;
@@ -167,7 +172,7 @@ export default function Login() {
 
   return (
     <PageWrapper>
-      <Header title="로그인" onBack={() => navigate(-1)} />
+      <Header color={"#E9E6FF"} onBack={() => navigate(-1)} />
       <ContentWrapper>
         <LogoImg src={Logo} alt="BeneFitU 로고" />
         <Label>아이디</Label>

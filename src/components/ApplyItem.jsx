@@ -5,12 +5,12 @@ const BenefitApplicationItem = ({ title, date, status }) => {
   const getStatusConfig = (status) => {
     switch (status) {
       case 'SELECTED':
-        return { text: '선정', bg: '#EBEBEB', color: '#111111' };
+        return { text: '선정', bg: '#eaffea', color: '#178d19' };
       case 'NOT_SELECTED':
-        return { text: '미선정', bg: '#EBEBEB', color: '#767676' };
+        return { text: '미선정', bg: '#f3edff', color: '#828282' };
       case 'UNDER_REVIEW':
       default:
-        return { text: '심사 중', bg: '#EBEBEB', color: '#111111' };
+        return { text: '심사 중', bg: '#fff6e2', color: '#e49c00' };
     }
   };
 

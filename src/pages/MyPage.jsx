@@ -1,74 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import ApplyItem from '../components/ApplyItem';
 import Profile from '../assets/images/profile.png';
-
-// 1. 백엔드 연동 전 더미 데이터 정의
-const dummyUserData = {
-  baseInfo: {
-    name: '김도현',
-    schoolName: '인천대학교',
-    department: '정보통신공학과',
-    grade: '3학년',
-  },
-  totalAmount: '1,460,000원',
-
-  // 신청 현황 리스트 (가장 최근인 걸로 4개 필터링하기 위해 여러 개 배치)
-  appliedBenefits: [
-    {
-      benefitId: 1,
-      benefitName: '청년 마음건강 지원금',
-      appliedDate: '2026-10-06',
-      status: 'UNDER_REVIEW',
-    },
-    {
-      benefitId: 2,
-      benefitName: '초록사랑 지원금',
-      appliedDate: '2026-10-06',
-      status: 'UNDER_REVIEW',
-    },
-    {
-      benefitId: 3,
-      benefitName: '한국장학재단 국가장학금 1유형',
-      appliedDate: '2026-10-06',
-      status: 'SELECTED',
-    },
-    {
-      benefitId: 4,
-      benefitName: '건설근로자 자녀 장학금',
-      appliedDate: '2026-10-06',
-      status: 'NOT_SELECTED',
-    },
-    {
-      benefitId: 5,
-      benefitName: '과거 장학금 테스트',
-      appliedDate: '2026-05-01',
-      status: 'SELECTED',
-    },
-  ],
-};
-
-// API 상태 코드 매핑용 객체 (TABS 참고)
-const STATUS_MAP = {
-  UNDER_REVIEW: '심사 중',
-  SELECTED: '선정',
-  NOT_SELECTED: '미선정',
-};
+import api from '../api/axios';
 
 const MyPage = () => {
-  const { baseInfo, totalAmount, appliedBenefits } = dummyUserData;
-
   const navigate = useNavigate();
+
+  // 백엔드 명세서 데이터 구조에 대응하는 상태 관리 정의
+  const [baseInfo, setBaseInfo] = useState({
+    name: '',
+    schoolName: '',
+    department: '',
+    grade: '',
+  });
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [appliedBenefits, setAppliedBenefits] = useState([]);
+
+  // 컴포넌트 마운트 시 API 호출 수행
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const headers = { Authorization: `Bearer ${token}` };
+
+        // 사용자 정보, 총 금액, 신청 혜택 내역 전체를 병렬로 호출
+        const [userRes, amountRes, benefitsRes] = await Promise.all([
+          api.get('/api/users/info', { headers }),
+          api.get('/api/benefits/total-amount', { headers }),
+          api.get('/api/benefits/applied?page=0&applyStatus=ALL', { headers }),
+        ]);
+
+        if (userRes.data.isSuccess) {
+          setBaseInfo(userRes.data.result?.baseInfo || {});
+        }
+        if (amountRes.data.isSuccess) {
+          setTotalAmount(amountRes.data.result?.totalAmount || 0);
+        }
+        if (benefitsRes.data.isSuccess) {
+          const rawBenefits = benefitsRes.data.result?.appliedBenefits || [];
+
+          // 심사 중(UNDER_REVIEW) 상태인 혜택만 필터링
+          const reviewBenefits = rawBenefits.filter(
+            (item) => item.applyStatus === 'UNDER_REVIEW',
+          );
+
+          // 신청 처리가 빠른 순서(날짜 오름차순)로 정렬 후 상위 4개 추출
+          const sorted = reviewBenefits
+            .sort((a, b) => new Date(a.appliedDate) - new Date(b.appliedDate))
+            .slice(0, 4);
+
+          setAppliedBenefits(sorted);
+        }
+      } catch (error) {
+        console.error('마이페이지 데이터를 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchMyPageData();
+  }, []);
+
   const handleCustomBack = () => {
     navigate('/home');
   };
-
-  // 날짜 최신순 정렬 후 상위 4개 추출
-  const sortedBenefits = [...appliedBenefits]
-    .sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate))
-    .slice(0, 4);
 
   return (
     <PageContainer>
@@ -88,6 +84,7 @@ const MyPage = () => {
               </UserNameRow>
               <UserDetail>
                 {baseInfo.schoolName} {baseInfo.department} {baseInfo.grade}
+                학년
               </UserDetail>
             </UserInfo>
           </CardTop>
@@ -95,7 +92,7 @@ const MyPage = () => {
           <CardBottom>
             <AmountLabel>예상 혜택 금액</AmountLabel>
             <AmountValueRow>
-              <AmountValue>{totalAmount.toLocaleString()}</AmountValue>
+              <AmountValue>{totalAmount.toLocaleString()}원</AmountValue>
               <ArrowIcon
                 viewBox="0 0 24 24"
                 onClick={() => navigate('/expected-benefit')}
@@ -119,13 +116,22 @@ const MyPage = () => {
           </SectionHeader>
 
           <ItemList>
-            {sortedBenefits.map((item) => (
-              <ApplyItem
+            {appliedBenefits.map((item) => (
+              <div
                 key={item.benefitId}
-                title={item.benefitName}
-                date={item.appliedDate}
-                status={STATUS_MAP[item.status]} // 매핑된 한글 상태값 전달
-              />
+                onClick={() =>
+                  navigate(`/detail-applied/${item.benefitId}`, {
+                    state: { fromTab: 'UNDER_REVIEW' },
+                  })
+                }
+                style={{ cursor: 'pointer' }}
+              >
+                <ApplyItem
+                  title={item.benefitName}
+                  date={item.appliedDate}
+                  status={item.applyStatus}
+                />
+              </div>
             ))}
           </ItemList>
         </StatusSection>

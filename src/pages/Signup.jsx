@@ -52,12 +52,23 @@ const Title = styled.h1`
 
 const SubTitle = styled.p`
   font-size: 0.8125rem;
-  color: #5c4ff2;
+  color: #000000;
   margin-top: 5pcx;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   margin-left: 15px;
 `;
 
+const SubTitlehighlight = styled.span`
+  font-size: 0.8125rem;
+  color: #5c4ff2;
+`;
+
+export const Rowbox = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+// 아이디, 비밀번호, 비밀번호 확인 텍스트
 const Label = styled.label`
   font-size: 1.25rem;
   font-weight: 700;
@@ -86,7 +97,7 @@ const Input = styled.input`
   outline: none;
   box-sizing: border-box;
 
-  margin-bottom: 1px;
+  margin-bottom: 10px;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -121,6 +132,7 @@ const SubmitButton = styled.button`
   margin-top: 40px;
   margin-left: 15px;
   margin-right: 15px;
+  margin-bottom: 20px;
 
   &:hover {
     opacity: 0.9;
@@ -179,8 +191,9 @@ export default function Signup() {
     <ContentWrapper>
       <LogoImg src={Logo} alt="BeneFitU 로고" />
       <Title>회원가입</Title>
-      <SubTitle>BeneFit와 함께 더 많은 혜택을 만나보세요!</SubTitle>
-
+      <Rowbox>
+        <SubTitle><SubTitlehighlight>BeneFitU</SubTitlehighlight>와 함께 더 많은 혜택을 만나보세요!</SubTitle>
+      </Rowbox>
       <Label>아이디</Label>
       <Input
         $icon={mailIcon} // 아이디 입력창 메일 아이콘

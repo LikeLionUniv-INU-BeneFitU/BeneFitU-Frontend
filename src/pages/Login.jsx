@@ -58,7 +58,7 @@ const Label = styled.label`
 const Input = styled.input`
   height: 45px;
   padding: 0 16px 0 40px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -118,6 +118,7 @@ const NewLoginButton = styled.button`
   margin-top: 20px;
   margin-left: 15px;
   margin-right: 15px;
+  margin-bottom: 20px;
 
   &:hover {
     background-color: #f0f0f0;
@@ -172,7 +173,7 @@ export default function Login() {
       <LogoImg src={Logo} alt="BeneFitU 로고" />
       <Label>아이디</Label>
       <Input
-        $icon={mailIcon} // 아이디 입력창 메일 아이콘
+        img="/mailIcon.png" // 아이디 입력창 메일 아이콘
         placeholder="아이디를 입력해주세요"
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
@@ -180,7 +181,7 @@ export default function Login() {
 
       <Label>비밀번호</Label>
       <Input
-        $icon={lockIcon} // 비번 입력창 자물쇠 아이콘
+        img="/lockIcon.png" // 비번 입력창 자물쇠 아이콘
         type="password"
         placeholder="비밀번호를 입력해주세요"
         value={password}

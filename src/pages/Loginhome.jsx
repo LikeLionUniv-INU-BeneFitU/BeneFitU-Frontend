@@ -37,7 +37,6 @@ const LoginButton = styled.button`
   font-weight: 700;
   cursor: pointer;
   
-  margin-top: 20px;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -80,25 +79,26 @@ const LogoBox = styled.div`
 const LogoimgBox = styled.div`
   width: 60%;
   height: 50%;
-  margin: 110px;
+  margin: 80px;
 
   display: flex;
   flex-direction: column;
 `;
 
 const Subtitle = styled.div`
-  font-size: 15px;
+  font-size: clamp(1rem, 3vw, 1.5rem);
 `;
 
 const Highlight = styled.span`
   color: #584FEA;
-  font-weight: bold;
 `;
 
 const TermsAgreement = styled.div`
   width: 50%;
   margin: 5px 0;
+  font-weight: bold;
   font-size: 10px;
+  margin-bottom: 20px;
 `;
 
 
@@ -118,7 +118,7 @@ export default function LoginHome() {
         <LoginButton onClick={() => navigate('/login') }>로그인</LoginButton>
         <SignupButton onClick={() => navigate('/signup') }>회원가입</SignupButton>
       </ButtonWrapper>
-      <TermsAgreement>로그인 또는 회원가입 시<Highlight>BeneFitU 이용약관 및 개인정보 처리 방침</Highlight>에 동의한 것으로 간주됩니다.</TermsAgreement>
+      <TermsAgreement>로그인 또는 회원가입 시 <Highlight>BeneFitU 이용약관 및 개인정보 처리 방침</Highlight>에 동의한 것으로 간주됩니다.</TermsAgreement>
     </PageWrapper>
   );
 }

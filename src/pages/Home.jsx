@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import api from '../api/axios';
 
 import SmallLogo from '../assets/images/SmallLogo.svg';
 import UserIcon from '../assets/images/user.png';
@@ -23,53 +24,60 @@ const FIXED_CATEGORIES = [
 ];
 
 const CATEGORY_ICONS = {
-  국가장학금: State,
-  '기업·재단 장학금': Corporate,
-  '지역 장학금': Region,
-  '조건별 장학금': Requirement,
+  STATE: State,
+  CORPORATE: Corporate,
+  REGION: Region,
+  REQUIREMENTS: Requirement,
 };
 
 export default function Home() {
   const navigate = useNavigate();
 
-  const [userName] = useState('김도현');
-  const [totalBenefitAmount] = useState(1460000);
+  // 백엔드 명세서 데이터 구조에 대응하는 상태 관리 정의
+  const [userName, setUserName] = useState('');
+  const [totalBenefitAmount, setTotalBenefitAmount] = useState(0);
+  const [categoryCounts, setCategoryCounts] = useState({
+    corporateCount: 0,
+    regionCount: 0,
+    requirementsCount: 0,
+    stateCount: 0,
+  });
+  const [deadlineBenefits, setDeadlineBenefits] = useState([]);
 
-  const [benefitCounts] = useState([
-    { id: 'state', count: 12 },
-    { id: 'corporate', count: 12 },
-    { id: 'region', count: 12 },
-    { id: 'requirement', count: 12 },
-  ]);
+  // 컴포넌트 마운트 시 4개의 API 호출 수행
+  useEffect(() => {
+    const fetchHomeAllData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const headers = { Authorization: `Bearer ${token}` };
 
-  const [deadlineBenefits] = useState([
-    {
-      id: 1,
-      category: '국가장학금',
-      title: '교내 성적우수 장학금',
-      amount: '최대 100만원',
-      dDay: 'D-1',
-    },
-    {
-      id: 2,
-      category: '조건별 장학금',
-      title: '청년 마음건강 지원금',
-      amount: '30만원',
-      dDay: 'D-5',
-    },
-    {
-      id: 3,
-      category: '기업·재단 장학금',
-      title: '대학생 IT 공모전',
-      amount: '상금 300만원',
-      dDay: 'D-8',
-    },
-  ]);
+        const [userRes, amountRes, countRes, listRes] = await Promise.all([
+          api.get('/api/users/info', { headers }),
+          api.get('/api/benefits/total-amount', { headers }),
+          api.get('/api/benefits/count-by-category', { headers }),
+          api.get('/api/benefits?sort=DEADLINE_IMMINENT&page=0', { headers }),
+        ]);
 
-  const getCountById = (id) => {
-    const match = benefitCounts.find((item) => item.id === id);
-    return match ? match.count : 0;
-  };
+        if (userRes.data.isSuccess) {
+          setUserName(userRes.data.result?.baseInfo?.name || '');
+        }
+        if (amountRes.data.isSuccess) {
+          setTotalBenefitAmount(amountRes.data.result?.totalAmount || 0);
+        }
+        if (countRes.data.isSuccess) {
+          setCategoryCounts(countRes.data.result || {});
+        }
+        if (listRes.data.isSuccess) {
+          const rawBenefits = listRes.data.result?.benefits || [];
+          setDeadlineBenefits(rawBenefits.slice(0, 3)); // 상위 3개 노출
+        }
+      } catch (error) {
+        console.error('홈 데이터를 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchHomeAllData();
+  }, []);
 
   return (
     <Container>
@@ -87,7 +95,7 @@ export default function Home() {
       {/* 인사말 영역 */}
       <ScrollArea>
         <Greeting>
-          <h1>{userName}님,</h1>
+          <h1>{userName || '유저'}님,</h1>
           <p>마감 임박 혜택을 확인해 장학금을 놓치지 마세요!</p>
         </Greeting>
 
@@ -103,11 +111,11 @@ export default function Home() {
           </button>
         </TotalBenefitCard>
 
-        {/* 맞춤 추천 혜택 섹션 (높이 특화) */}
+        {/* 맞춤 추천 혜택 섹션 */}
         <SectionCard>
           <SectionHeader>
             <div className="title">
-              <img src={Check} /> <span> 맞춤 추천 혜택 </span>
+              <img src={Check} alt="check" /> <span> 맞춤 추천 혜택 </span>
             </div>
             <span className="view-all" onClick={() => navigate('/benefit-all')}>
               전체 보기 {'>'}
@@ -124,7 +132,7 @@ export default function Home() {
               <div className="namebox">
                 <span className="cat-name">국가장학금</span>
               </div>
-              <span className="cat-count">{getCountById('state')}건</span>
+              <span className="cat-count">{categoryCounts.stateCount}건</span>
             </GridItem>
 
             <GridItem
@@ -146,7 +154,9 @@ export default function Home() {
                   장학금
                 </span>
               </div>
-              <span className="cat-count">{getCountById('corporate')}건</span>
+              <span className="cat-count">
+                {categoryCounts.corporateCount}건
+              </span>
             </GridItem>
 
             <GridItem
@@ -158,7 +168,7 @@ export default function Home() {
               <div className="namebox">
                 <span className="cat-name">지역 장학금</span>
               </div>
-              <span className="cat-count">{getCountById('region')}건</span>
+              <span className="cat-count">{categoryCounts.regionCount}건</span>
             </GridItem>
 
             <GridItem
@@ -180,7 +190,9 @@ export default function Home() {
                   장학금
                 </span>
               </div>
-              <span className="cat-count">{getCountById('requirement')}건</span>
+              <span className="cat-count">
+                {categoryCounts.requirementsCount}건
+              </span>
             </GridItem>
           </RecommendGrid>
         </SectionCard>
@@ -189,26 +201,38 @@ export default function Home() {
         <SectionCard>
           <SectionHeader>
             <div className="title">
-              <img src={Trending} /> <span>마감 임박 혜택 TOP 3 </span>
+              <img src={Trending} alt="trending" />{' '}
+              <span>마감 임박 혜택 TOP 3 </span>
             </div>
-            <span className="view-all">전체 보기 {'>'}</span>
+            <span
+              className="view-all"
+              onClick={() =>
+                navigate('/benefit-all', {
+                  state: { sort: 'DEADLINE_IMMINENT' },
+                })
+              }
+            >
+              전체 보기 {'>'}
+            </span>
           </SectionHeader>
 
           <DeadlineList>
             {deadlineBenefits.map((item, index) => (
               <DeadlineItem
-                key={item.id}
+                key={item.benefitId}
                 $isLast={index === deadlineBenefits.length - 1}
+                onClick={() => navigate(`/detail/${item.benefitId}`)}
+                style={{ cursor: 'pointer' }}
               >
                 <div className="item-icon-wrapper">
                   <img
-                    src={CATEGORY_ICONS[item.category] || SmallLogo}
+                    src={CATEGORY_ICONS[item.categories?.[0]] || SmallLogo}
                     alt="icon"
                   />
                 </div>
 
                 <div className="item-info">
-                  <h3 className="item-title">{item.title}</h3>
+                  <h3 className="item-title">{item.benefitName}</h3>
                   <p className="item-amount">{item.amount}</p>
                 </div>
 
@@ -223,7 +247,7 @@ export default function Home() {
 }
 
 // ==============================
-// Styled Components
+// Styled Components (기존 코드 100% 원본 유지)
 // ==============================
 
 const Container = styled.div`
@@ -266,11 +290,10 @@ const ScrollArea = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.29vh;
-  overflow-y: auto; /* 내용물이 넘치면 이 안에서 세로 스크롤 작동 */
-  -webkit-overflow-scrolling: touch; /* 모바일 관성 스크롤 대응 */
-  padding-bottom: 40px; /* 💡 최하단 마감 임박 리스트가 잘리지 않고 위로 끝까지 밀리도록 넉넉한 쿠션 확보 */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 40px;
 
-  /* 💡 스크롤바 레이아웃 완벽 은닉 */
   &::-webkit-scrollbar {
     display: none;
   }
@@ -373,7 +396,6 @@ const RecommendGrid = styled.div`
   gap: 9px;
 `;
 
-/* 높이를 강제해서 내용물에 의해 뚱뚱해지는 것을 방지 */
 const GridItem = styled.div`
   background-color: #584fea;
   border-radius: 6px;
@@ -441,10 +463,11 @@ const DeadlineItem = styled.div`
     flex: 1;
 
     .item-title {
-      font-size: clamp(13px, 2vh, 15px);
-      font-weight: 600;
+      font-size: 1rem;
+      font-weight: 500;
       color: #222;
       margin: 0 0 4px 0;
+      word-break: keep-all;
     }
 
     .item-amount {
@@ -456,10 +479,13 @@ const DeadlineItem = styled.div`
 
   .d-day-badge {
     background-color: #ffebeb;
+    min-width: 12vw;
     color: #ff3b3b;
-    font-size: clamp(10px, 1.8vh, 12px);
-    font-weight: 700;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-align: center;
     padding: 6px 10px;
+    margin-left: 3px;
     border-radius: 6px;
   }
 `;

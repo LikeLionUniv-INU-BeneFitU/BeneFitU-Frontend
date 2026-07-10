@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import ApplyItem from '../components/ApplyItem';
+import Profile from '../assets/images/profile.png';
 
 // 1. 백엔드 연동 전 더미 데이터 정의
 const dummyUserData = {
@@ -12,7 +13,7 @@ const dummyUserData = {
     department: '정보통신공학과',
     grade: '3학년',
   },
-  totalAmount: 1460000,
+  totalAmount: '1,460,000원',
 
   // 신청 현황 리스트 (가장 최근인 걸로 4개 필터링하기 위해 여러 개 배치)
   appliedBenefits: [
@@ -77,7 +78,7 @@ const MyPage = () => {
         {/* 상단 프로필 및 예상 혜택 금액 카드 */}
         <ProfileCard>
           <CardTop>
-            <Avatar />
+            <Avatar src={Profile} />
             <UserInfo>
               <UserNameRow>
                 <UserName>{baseInfo.name}님</UserName>
@@ -94,7 +95,7 @@ const MyPage = () => {
           <CardBottom>
             <AmountLabel>예상 혜택 금액</AmountLabel>
             <AmountValueRow>
-              <AmountValue>{totalAmount.toLocaleString()}원</AmountValue>
+              <AmountValue>{totalAmount.toLocaleString()}</AmountValue>
               <ArrowIcon
                 viewBox="0 0 24 24"
                 onClick={() => navigate('/expected-benefit')}
@@ -142,15 +143,22 @@ const PageContainer = styled.div`
   flex-direction: column;
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 50%; /* 화면 중앙 정렬을 위한 설정 */
+  transform: translateX(-50%); /* 화면 중앙 정렬을 위한 설정 */
+
+  /* 모바일 화면 규격 고정 (일반적인 모바일 앱 뷰 규격) */
   width: 100vw;
+  max-width: 430px; /* 아이폰 14/15 프로 맥스 등 대형 모바일 기준 너비 제한 */
   height: 100dvh;
 
   background-color: #f8f9fa;
   box-sizing: border-box;
   overflow: hidden; /* 전체 화면 스크롤 절대 방지 */
+
+  /* 데스크톱 화면에서 모바일 얇은 테두리나 그림자 효과를 주고 싶다면 추가 (선택사항) */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  border-left: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
 `;
 
 const ContentWrapper = styled.div`
@@ -182,17 +190,15 @@ const ProfileCard = styled.div`
 const CardTop = styled.div`
   display: flex;
   align-items: center;
-  gap: 4vw;
+  gap: 2vw;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 1vh;
   position: relative;
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.img`
   width: 4rem;
   height: 4rem;
-  background-color: #d9d9d9;
-  border-radius: 50%;
   flex-shrink: 0;
 `;
 
@@ -210,7 +216,7 @@ const UserNameRow = styled.div`
 `;
 
 const UserName = styled.span`
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 600;
 `;
 
@@ -225,7 +231,7 @@ const EditButton = styled.button`
 `;
 
 const UserDetail = styled.span`
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.9);
 `;
 

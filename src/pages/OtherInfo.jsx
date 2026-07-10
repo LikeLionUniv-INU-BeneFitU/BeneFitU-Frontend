@@ -65,23 +65,27 @@ export default function OtherInfo() {
 
   // 💡 [버튼 활성화 검증]
   const isButtonActive = () => {
+    // 1) 정보 입력 페이지(/other-info): 학점과 소득분위가 입력되어야 활성화
     if (!isEdit) {
-      // 1) 정보 입력 페이지(/other-info): 학점과 소득분위가 입력되어야 활성화 (관심분야는 선택이므로 제외 가능)
-      return formState.gpa.trim() !== '' && formState.incomeBracket !== '';
-    } else {
-      // 2) 정보 수정 페이지(/edit-other): 기존 값(originalData) 중 하나라도 달라지면 활성화
-      const isInterestsChanged = Object.keys(formState.interests).some(
-        (key) => formState.interests[key] !== originalData.interests?.[key],
-      );
-
-      return (
-        formState.gpa !== originalData.gpa ||
-        formState.incomeBracket !== originalData.incomeBracket ||
-        formState.isBasicLiving !== originalData.isBasicLiving ||
-        formState.isSecondLowest !== originalData.isSecondLowest ||
-        isInterestsChanged
-      );
+      return formState?.gpa?.trim() !== '' && formState?.incomeBracket !== '';
     }
+
+    // 2) 정보 수정 페이지(/edit-other): 기존 값(originalData) 중 하나라도 달라지면 활성화
+    // 주석: originalData나 formState 내부의 interests가 없을 경우를 대비해 기본값 {} 지정
+    const currentInterests = formState?.interests || {};
+    const prevInterests = originalData?.interests || {};
+
+    const isInterestsChanged = Object.keys(currentInterests).some(
+      (key) => currentInterests[key] !== prevInterests[key],
+    );
+
+    return (
+      formState?.gpa !== originalData?.gpa ||
+      formState?.incomeBracket !== originalData?.incomeBracket ||
+      formState?.isBasicLiving !== originalData?.isBasicLiving ||
+      formState?.isSecondLowest !== originalData?.isSecondLowest ||
+      isInterestsChanged
+    );
   };
 
   const active = isButtonActive();
@@ -109,9 +113,9 @@ export default function OtherInfo() {
   // 완료 버튼 클릭 시 (백엔드로 전송하거나 가공 처리)
   const handleSubmit = () => {
     const finalData = {
-      gpa: `${formState.gpaInteger}.${formState.gpaDecimal}`,
+      gpa: formState.gpa,
       incomeBracket: formState.incomeBracket,
-      isBasicLiving: formState.isVulnerable,
+      isBasicLiving: formState.isBasicLiving,
       isSecondLowest: formState.isSecondLowest,
       interests: Object.keys(formState.interests).filter(
         (key) => formState.interests[key],
@@ -217,12 +221,12 @@ export default function OtherInfo() {
             <S.GridContainer>
               <S.InterestButton
                 type="button"
-                isActive={formState.interests.state}
+                isActive={formState?.interests?.state}
                 onClick={() =>
                   handleInterestChange({
                     target: {
                       name: 'state',
-                      checked: !formState.interests.state,
+                      checked: !formState?.interests?.state,
                     },
                   })
                 }
@@ -232,12 +236,12 @@ export default function OtherInfo() {
 
               <S.InterestButton
                 type="button"
-                isActive={formState.interests.corporate}
+                isActive={formState?.interests?.corporate}
                 onClick={() =>
                   handleInterestChange({
                     target: {
                       name: 'corporate',
-                      checked: !formState.interests.corporate,
+                      checked: !formState?.interests?.corporate,
                     },
                   })
                 }
@@ -247,12 +251,12 @@ export default function OtherInfo() {
 
               <S.InterestButton
                 type="button"
-                isActive={formState.interests.region}
+                isActive={formState?.interests?.region}
                 onClick={() =>
                   handleInterestChange({
                     target: {
                       name: 'region',
-                      checked: !formState.interests.region,
+                      checked: !formState?.interests?.region,
                     },
                   })
                 }
@@ -262,12 +266,12 @@ export default function OtherInfo() {
 
               <S.InterestButton
                 type="button"
-                isActive={formState.interests.requirement}
+                isActive={formState?.interests?.requirement}
                 onClick={() =>
                   handleInterestChange({
                     target: {
                       name: 'requirement',
-                      checked: !formState.interests.requirement,
+                      checked: !formState?.interests?.requirement,
                     },
                   })
                 }

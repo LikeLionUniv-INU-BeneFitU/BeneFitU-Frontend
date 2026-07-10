@@ -1,73 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import ApplyItem from '../components/ApplyItem';
-
-// 1. 백엔드 연동 전 더미 데이터 정의
-const dummyUserData = {
-  baseInfo: {
-    name: '김도현',
-    schoolName: '인천대학교',
-    department: '정보통신공학과',
-    grade: '3학년',
-  },
-  totalAmount: 1460000,
-
-  // 신청 현황 리스트 (가장 최근인 걸로 4개 필터링하기 위해 여러 개 배치)
-  appliedBenefits: [
-    {
-      benefitId: 1,
-      benefitName: '청년 마음건강 지원금',
-      appliedDate: '2026-10-06',
-      status: 'UNDER_REVIEW',
-    },
-    {
-      benefitId: 2,
-      benefitName: '초록사랑 지원금',
-      appliedDate: '2026-10-06',
-      status: 'UNDER_REVIEW',
-    },
-    {
-      benefitId: 3,
-      benefitName: '한국장학재단 국가장학금 1유형',
-      appliedDate: '2026-10-06',
-      status: 'SELECTED',
-    },
-    {
-      benefitId: 4,
-      benefitName: '건설근로자 자녀 장학금',
-      appliedDate: '2026-10-06',
-      status: 'NOT_SELECTED',
-    },
-    {
-      benefitId: 5,
-      benefitName: '과거 장학금 테스트',
-      appliedDate: '2026-05-01',
-      status: 'SELECTED',
-    },
-  ],
-};
-
-// API 상태 코드 매핑용 객체 (TABS 참고)
-const STATUS_MAP = {
-  UNDER_REVIEW: '심사 중',
-  SELECTED: '선정',
-  NOT_SELECTED: '미선정',
-};
+import Profile from '../assets/images/profile.png';
+import api from '../api/axios';
 
 const MyPage = () => {
-  const { baseInfo, totalAmount, appliedBenefits } = dummyUserData;
-
   const navigate = useNavigate();
+
+  // 백엔드 명세서 데이터 구조에 대응하는 상태 관리 정의
+  const [baseInfo, setBaseInfo] = useState({
+    name: '',
+    schoolName: '',
+    department: '',
+    grade: '',
+  });
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [appliedBenefits, setAppliedBenefits] = useState([]);
+
+  // 컴포넌트 마운트 시 API 호출 수행
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const headers = { Authorization: `Bearer ${token}` };
+
+        // 사용자 정보, 총 금액, 신청 혜택 내역 전체를 병렬로 호출
+        const [userRes, amountRes, benefitsRes] = await Promise.all([
+          api.get('/api/users/info', { headers }),
+          api.get('/api/benefits/total-amount', { headers }),
+          api.get('/api/benefits/applied?page=0&applyStatus=ALL', { headers }),
+        ]);
+
+        if (userRes.data.isSuccess) {
+          setBaseInfo(userRes.data.result?.baseInfo || {});
+        }
+        if (amountRes.data.isSuccess) {
+          setTotalAmount(amountRes.data.result?.totalAmount || 0);
+        }
+        if (benefitsRes.data.isSuccess) {
+          const rawBenefits = benefitsRes.data.result?.appliedBenefits || [];
+
+          // 심사 중(UNDER_REVIEW) 상태인 혜택만 필터링
+          const reviewBenefits = rawBenefits.filter(
+            (item) => item.applyStatus === 'UNDER_REVIEW',
+          );
+
+          // 신청 처리가 빠른 순서(날짜 오름차순)로 정렬 후 상위 4개 추출
+          const sorted = reviewBenefits
+            .sort((a, b) => new Date(a.appliedDate) - new Date(b.appliedDate))
+            .slice(0, 4);
+
+          setAppliedBenefits(sorted);
+        }
+      } catch (error) {
+        console.error('마이페이지 데이터를 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchMyPageData();
+  }, []);
+
   const handleCustomBack = () => {
     navigate('/home');
   };
-
-  // 날짜 최신순 정렬 후 상위 4개 추출
-  const sortedBenefits = [...appliedBenefits]
-    .sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate))
-    .slice(0, 4);
 
   return (
     <PageContainer>
@@ -77,7 +74,7 @@ const MyPage = () => {
         {/* 상단 프로필 및 예상 혜택 금액 카드 */}
         <ProfileCard>
           <CardTop>
-            <Avatar />
+            <Avatar src={Profile} />
             <UserInfo>
               <UserNameRow>
                 <UserName>{baseInfo.name}님</UserName>
@@ -87,6 +84,7 @@ const MyPage = () => {
               </UserNameRow>
               <UserDetail>
                 {baseInfo.schoolName} {baseInfo.department} {baseInfo.grade}
+                학년
               </UserDetail>
             </UserInfo>
           </CardTop>
@@ -118,13 +116,22 @@ const MyPage = () => {
           </SectionHeader>
 
           <ItemList>
-            {sortedBenefits.map((item) => (
-              <ApplyItem
+            {appliedBenefits.map((item) => (
+              <div
                 key={item.benefitId}
-                title={item.benefitName}
-                date={item.appliedDate}
-                status={STATUS_MAP[item.status]} // 매핑된 한글 상태값 전달
-              />
+                onClick={() =>
+                  navigate(`/detail-applied/${item.benefitId}`, {
+                    state: { fromTab: 'UNDER_REVIEW' },
+                  })
+                }
+                style={{ cursor: 'pointer' }}
+              >
+                <ApplyItem
+                  title={item.benefitName}
+                  date={item.appliedDate}
+                  status={item.applyStatus}
+                />
+              </div>
             ))}
           </ItemList>
         </StatusSection>
@@ -142,15 +149,22 @@ const PageContainer = styled.div`
   flex-direction: column;
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 50%; /* 화면 중앙 정렬을 위한 설정 */
+  transform: translateX(-50%); /* 화면 중앙 정렬을 위한 설정 */
+
+  /* 모바일 화면 규격 고정 (일반적인 모바일 앱 뷰 규격) */
   width: 100vw;
+  max-width: 430px; /* 아이폰 14/15 프로 맥스 등 대형 모바일 기준 너비 제한 */
   height: 100dvh;
 
   background-color: #f8f9fa;
   box-sizing: border-box;
   overflow: hidden; /* 전체 화면 스크롤 절대 방지 */
+
+  /* 데스크톱 화면에서 모바일 얇은 테두리나 그림자 효과를 주고 싶다면 추가 (선택사항) */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  border-left: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
 `;
 
 const ContentWrapper = styled.div`
@@ -182,17 +196,15 @@ const ProfileCard = styled.div`
 const CardTop = styled.div`
   display: flex;
   align-items: center;
-  gap: 4vw;
+  gap: 2vw;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 1vh;
   position: relative;
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.img`
   width: 4rem;
   height: 4rem;
-  background-color: #d9d9d9;
-  border-radius: 50%;
   flex-shrink: 0;
 `;
 
@@ -210,7 +222,7 @@ const UserNameRow = styled.div`
 `;
 
 const UserName = styled.span`
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 600;
 `;
 
@@ -225,7 +237,7 @@ const EditButton = styled.button`
 `;
 
 const UserDetail = styled.span`
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.9);
 `;
 

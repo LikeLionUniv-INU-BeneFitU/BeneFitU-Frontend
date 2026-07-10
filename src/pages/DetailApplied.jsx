@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import BasicButton from '../components/BasicButton';
+import api from '../api/axios';
 
-// Applied.jsx와 100% 동일한 TABS 구조 및 라벨링
 const TABS = [
   { id: 'ALL', label: '전체' },
   { id: 'UNDER_REVIEW', label: '심사 중' },
@@ -12,51 +12,52 @@ const TABS = [
   { id: 'NOT_SELECTED', label: '미선정' },
 ];
 
-// 백엔드 데이터 포맷을 반영한 초기 더미 데이터
-const dummyData = {
-  benefitDetail: {
-    benefitId: 3,
-    benefitName: '한국장학재단 국가장학금 1유형',
-    category: '국가장학금',
-    amount: 2500000,
-    deadline: '2026-08-20',
-    benefitUrl: 'https://www.kosaf.go.kr',
-    notes: [
-      '학자금 지원 9구간 이하',
-      '성적 및 이수학점 기준 충족',
-      '한국 장학재단 신청 및 가구원 동의 완료',
-      '소득구간에 따라 등록금 차등 지원',
-    ],
-  },
-  matchedConditions: {
-    gpa: '학점 3.0 이상',
-    incomeBracket: '소득분위 8분위 이하',
-    isBasicLiving: '기초생활수급자 아님',
-    isSecondLowest: '차상위계층 아님',
-  },
-  passProbability: 85,
-};
-
 export default function DetailApplied() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('UNDER_REVIEW');
-  const [reviewStatus, setReviewStatus] = useState('SELECTED'); // 라디오 버튼 상태 ('SELECTED' 또는 'NOT_SELECTED')
-  const [originalStatus, setOriginalStatus] = useState('SELECTED');
+  const { benefitId } = useParams();
+  const location = useLocation();
 
-  const { benefitDetail } = dummyData;
+  // 이전 목록 페이지에서 넘어온 탭 활성화 상태 유지
+  const [activeTab, setActiveTab] = useState(location.state?.fromTab || 'ALL');
 
-  // 💡 상단 카테고리 탭 클릭 시 목록 페이지(Applied)로 누른 탭 state 전달하며 이동
+  // 심사 상태 변경 라디오 및 상세 데이터 조회를 위한 상태 정의
+  const [reviewStatus, setReviewStatus] = useState('UNDER_REVIEW');
+  const [benefitDetail, setBenefitDetail] = useState(null);
+
+  // 컴포넌트 마운트 시 URL 파라미터의 고유 ID 기반으로 상세 정보 로드
+  useEffect(() => {
+    const fetchDetailData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const headers = { Authorization: `Bearer ${token}` };
+
+        const response = await api.get(`/api/benefits/${benefitId}`, {
+          headers,
+        });
+
+        if (response.data.isSuccess) {
+          const detail = response.data.result?.benefitDetail || {};
+          setBenefitDetail(detail);
+        }
+      } catch (error) {
+        console.error('혜택 상세 조회 중 오류 발생:', error);
+      }
+    };
+
+    if (benefitId) {
+      fetchDetailData();
+    }
+  }, [benefitId]);
+
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
     navigate('/applied', { state: { activeTab: tabId } });
   };
 
-  // 하단 라디오 버튼 클릭 시 탭 연동 없이 라디오 상태만 순수하게 변경
   const handleRadioClick = (statusId) => {
     setReviewStatus(statusId);
   };
 
-  // 디데이 계산 함수
   const getDDay = (deadlineStr) => {
     if (!deadlineStr) return '';
     const targetDate = new Date(deadlineStr);
@@ -71,27 +72,50 @@ export default function DetailApplied() {
     return diffDays > 0 ? `D-${diffDays}` : `만료됨`;
   };
 
-  // 금액 포맷팅 (원화 기준 만원 단위 변환)
+  // 백엔드 명세서 예외 조항 조건 반영
   const formatAmount = (amount) => {
-    if (!amount) return '금액 정보 없음';
-    if (amount >= 10000) return `최대 ${(amount / 10000).toLocaleString()}만원`;
-    return `${amount.toLocaleString()}원`;
+    if (!amount || amount === '0' || amount === 0) {
+      return '자세한 사항은 사이트 참고 바랍니다';
+    }
+    return amount;
   };
 
-  const handleSave = () => {
-    console.log('최종본 제출 상태:', reviewStatus);
-    setOriginalStatus(reviewStatus); // 저장이 완료되면 현재 상태를 새로운 원본으로 동기화
-    alert(
-      `현황이 저장되었습니다. (최종 상태: ${reviewStatus === 'SELECTED' ? '선정' : '미선정'})`,
-    );
-    // 백엔드 PATCH/POST API 연동 공간
+  // 하단 현황 저장하기 클릭 시 상태 변경 API 호출 수행
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const headers = { Authorization: `Bearer ${token}` };
+
+      const response = await api.post(
+        `/api/benefits/${benefitId}/apply`,
+        { applyStatus: reviewStatus },
+        { headers },
+      );
+
+      if (response.data.isSuccess) {
+        const displayStatus =
+          reviewStatus === 'SELECTED'
+            ? '선정'
+            : reviewStatus === 'NOT_SELECTED'
+              ? '미선정'
+              : '심사 중';
+        alert(`현황이 저장되었습니다. (최종 상태: ${displayStatus})`);
+
+        // 저장이 완료된 후 이전에 보고 있던 상태 탭을 보존하며 목록으로 복귀
+        navigate('/applied', { state: { activeTab } });
+      }
+    } catch (error) {
+      console.error('신청 상태 변경 중 오류 발생:', error);
+      alert('상태 변경 처리에 실패했습니다.');
+    }
   };
+
+  if (!benefitDetail) return null;
 
   return (
     <Container>
       <Header title="신청 현황 상세" />
 
-      {/* Applied.jsx와 완벽히 동일한 스타일과 구조의 탭바 */}
       <TabContainer>
         {TABS.map((tab) => (
           <TabButton
@@ -104,9 +128,7 @@ export default function DetailApplied() {
         ))}
       </TabContainer>
 
-      {/* 컨텐츠 바디 영역 */}
       <ContentList>
-        {/* 상세 혜택 카드 */}
         <CardBox>
           <CardTitle>{benefitDetail.benefitName}</CardTitle>
 
@@ -117,18 +139,17 @@ export default function DetailApplied() {
 
           <AmountText>{formatAmount(benefitDetail.amount)}</AmountText>
           <DeadlineText>
-            <span>마감일</span> {benefitDetail.deadline.replace(/-/g, '.')} (
+            <span>마감일</span> {benefitDetail.deadline?.replace(/-/g, '.')} (
             {getDDay(benefitDetail.deadline)})
           </DeadlineText>
 
           <BulletList>
-            {benefitDetail.notes.map((note, index) => (
+            {benefitDetail.notes?.map((note, index) => (
               <li key={index}>{note}</li>
             ))}
           </BulletList>
         </CardBox>
 
-        {/* 심사 상태 변경 라디오 영역 */}
         <ReviewSection>
           <SectionTitle>심사 상태 변경</SectionTitle>
           <SectionSubTitle>심사 결과를 선택하고 저장해주세요</SectionSubTitle>
@@ -151,7 +172,6 @@ export default function DetailApplied() {
           </RadioGroup>
         </ReviewSection>
 
-        {/* 안내사항 블록 */}
         <NoticeBox>
           <NoticeTitle>⚠️ 안내사항</NoticeTitle>
           <NoticeContent>
@@ -160,9 +180,7 @@ export default function DetailApplied() {
         </NoticeBox>
       </ContentList>
 
-      {/* 하단 저장 버튼 */}
       <ButtonWrapper>
-        {/* 💡 조건 없이 항상 상시 활성화(disabled 속성 제거) */}
         <BasicButton onClick={handleSave}>현황 저장하기</BasicButton>
       </ButtonWrapper>
     </Container>

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import ApplyItem from '../components/ApplyItem';
+import api from '../api/axios';
 
 const TABS = [
   { id: 'ALL', label: '전체' },
@@ -11,52 +12,47 @@ const TABS = [
   { id: 'NOT_SELECTED', label: '미선정' },
 ];
 
-// 와이어프레임 기준 더미 데이터
-const mockData = [
-  {
-    id: 1,
-    title: '청년 마음건강 지원금',
-    date: '2026.10.01',
-    status: 'UNDER_REVIEW',
-  },
-  {
-    id: 2,
-    title: '초록사랑 지원금',
-    date: '2026.10.05',
-    status: 'UNDER_REVIEW',
-  },
-  {
-    id: 3,
-    title: '한국장학재단 국가장학금 1유형',
-    date: '2026.09.30',
-    status: 'SELECTED',
-  },
-  {
-    id: 4,
-    title: '건설근로자 자녀 장학금',
-    date: '2026.08.12',
-    status: 'NOT_SELECTED',
-  },
-];
-
 export default function Applied() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(
     location.state?.activeTab || 'ALL',
   );
+  const [benefitsList, setBenefitsList] = useState([]);
 
-  const filteredData = mockData.filter((item) => {
-    if (activeTab === 'ALL') return true;
-    return item.status === activeTab;
-  });
+  // 탭 상태가 변경될 때마다 백엔드 API 호출하여 목록 업데이트
+  useEffect(() => {
+    const fetchAppliedBenefits = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const headers = { Authorization: `Bearer ${token}` };
 
-  const sortedData = [...filteredData].sort((a, b) => {
-    // '2026.10.06' 형식을 '2026-10-06'으로 바꿔서 Date 객체로 비교
-    const dateA = new Date(a.date.replace(/\./g, '-'));
-    const dateB = new Date(b.date.replace(/\./g, '-'));
-    return dateB - dateA; // b - a 구조가 내림차순(최신순)입니다.
-  });
+        // 명세서에 맞춰 선택한 탭 파라미터와 페이지 번호 전달
+        const response = await api.get(
+          `/api/benefits/applied?page=0&applyStatus=${activeTab}`,
+          { headers },
+        );
+
+        if (response.data.isSuccess) {
+          const rawBenefits = response.data.result?.appliedBenefits || [];
+
+          // 받은 데이터를 신청 처리 날짜 최신순(내림차순)으로 정렬
+          const sorted = [...rawBenefits].sort((a, b) => {
+            const dateA = new Date(a.appliedDate.replace(/\./g, '-'));
+            const dateB = new Date(b.appliedDate.replace(/\./g, '-'));
+            return dateB - dateA;
+          });
+
+          setBenefitsList(sorted);
+        }
+      } catch (error) {
+        console.error('신청 내역 조회 중 오류 발생:', error);
+      }
+    };
+
+    fetchAppliedBenefits();
+  }, [activeTab]);
 
   return (
     <Container>
@@ -75,14 +71,23 @@ export default function Applied() {
       </TabContainer>
 
       <ContentList>
-        {filteredData.length > 0 ? (
-          filteredData.map((item) => (
-            <ApplyItem
-              key={item.id}
-              title={item.title}
-              date={item.date}
-              status={item.status}
-            />
+        {benefitsList.length > 0 ? (
+          benefitsList.map((item) => (
+            <div
+              key={item.benefitId}
+              onClick={() =>
+                navigate(`/detail-applied/${item.benefitId}`, {
+                  state: { fromTab: activeTab },
+                })
+              }
+              style={{ cursor: 'pointer' }}
+            >
+              <ApplyItem
+                title={item.benefitName}
+                date={item.appliedDate}
+                status={item.applyStatus}
+              />
+            </div>
           ))
         ) : (
           <EmptyMessage>신청 내역이 없습니다.</EmptyMessage>

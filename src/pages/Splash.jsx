@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import splash from '../assets/images/splash.png'
+import { useNavigate } from 'react-router-dom';
 
 // 1부터 16까지의 스플래시 이미지 import
 import splash1 from '../assets/images/Splash/splash1.png';
@@ -41,7 +39,9 @@ const frames = [
 ];
 
 const Splash = ({ onAnimationEnd }) => {
+  const navigate = useNavigate();
   const [currentFrame, setCurrentFrame] = useState(0);
+  const [showText, setShowText] = useState(false); // 텍스트 표시 및 터치 활성화 여부
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -50,42 +50,68 @@ const Splash = ({ onAnimationEnd }) => {
           return prev + 1;
         } else {
           clearInterval(interval);
+
           setTimeout(() => {
-            if (onAnimationEnd) onAnimationEnd();
-          }, 400);
+            setShowText(true);
+          }, 700);
+
           return prev;
         }
       });
     }, 40);
 
     return () => clearInterval(interval);
-  }, [onAnimationEnd]);
+  }, []);
 
-  // 에러 없는 깔끔한 인라인 스타일 객체
+  // 클릭/터치 이벤트 핸들러
+  const handleScreenClick = () => {
+    // 텍스트가 뜨기 전에는 클릭해도 아무 동작도 하지 않음
+    if (!showText) return;
+
+    navigate('/login-home');
+  };
+
+  // 인라인 스타일 객체
   const styles = {
     container: {
-      width: '100vw',
+      position: 'relative',
+      width: '420px',
       height: '100dvh',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       background: 'linear-gradient(180deg, #4d44e4 0%, #7c5cfc 100%)',
       overflow: 'hidden',
+      cursor: showText ? 'pointer' : 'default',
     },
     image: {
       width: '100%',
       height: '100%',
       objectFit: 'cover',
     },
+    touchText: {
+      position: 'absolute',
+      bottom: '15dvh',
+      color: '#FFFFFF',
+      fontSize: '18px',
+      fontWeight: '300',
+      letterSpacing: '-0.5px',
+      opacity: showText ? 1 : 0,
+      transition: 'opacity 0.6s ease-in-out',
+      pointerEvents: 'none',
+      textAlign: 'center',
+    },
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} onClick={handleScreenClick}>
       <img
         src={frames[currentFrame]}
         alt={`Splash Screen Frame ${currentFrame + 1}`}
         style={styles.image}
       />
+      {/* 화면 터치 안내 텍스트 */}
+      <div style={styles.touchText}>화면 터치하여 시작하기</div>
     </div>
   );
 };

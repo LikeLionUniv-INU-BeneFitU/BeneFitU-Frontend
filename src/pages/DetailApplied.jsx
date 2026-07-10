@@ -114,7 +114,7 @@ export default function DetailApplied() {
 
   return (
     <Container>
-      <Header title="신청 현황 상세" />
+      <Header title="신청 현황 상세" variant="white" />
 
       <TabContainer>
         {TABS.map((tab) => (

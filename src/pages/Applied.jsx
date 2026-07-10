@@ -56,7 +56,7 @@ export default function Applied() {
 
   return (
     <Container>
-      <Header title="신청 현황" />
+      <Header title="신청 현황" variant="white" />
 
       <TabContainer>
         {TABS.map((tab) => (

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function Header({ title, onBack, variant = 'defalt' }) {
+export default function Header({ title, onBack, variant = 'default' }) {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
@@ -38,7 +38,6 @@ export default function Header({ title, onBack, variant = 'defalt' }) {
         </svg>
       </BackButton>
       <Title $variant={variant}>{title}</Title>
-      {/* 우측 공백 밸런스를 맞추기 위한 빈 더미 공간 */}
       <EmptySpace />
     </HeaderContainer>
   );
@@ -59,7 +58,7 @@ const HeaderContainer = styled.header`
   z-index: 100;
 
   background-color: ${(props) => (props.$variant === 'purple' ? '#6c63ff' : '#ffffff')};
-  border-bottom: ${(props) => (props.$variant === 'purple' ? '1px solid #6c63ff' : '1px solid #8e89e3')};
+  border-bottom: ${(props) => (props.$variant === 'purple' ? '1px solid #6c63ff' : props.$variant === 'white' ? '1px solid #fff' : '1px solid #8e89e3')};
 `;
 
 const BackButton = styled.button`

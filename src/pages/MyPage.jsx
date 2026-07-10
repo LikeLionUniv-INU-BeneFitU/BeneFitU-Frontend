@@ -68,7 +68,7 @@ const MyPage = () => {
 
   return (
     <PageContainer>
-      <Header title="MY" onBack={handleCustomBack} varient="purple" />
+      <Header title="MY" onBack={handleCustomBack} variant="purple" />
 
       <ContentWrapper>
         {/* 상단 프로필 및 예상 혜택 금액 카드 */}
@@ -79,7 +79,7 @@ const MyPage = () => {
               <UserNameRow>
                 <UserName>{baseInfo.name}님</UserName>
                 <EditButton onClick={() => navigate('/my-info')}>
-                  수정하기
+                  내 정보
                 </EditButton>
               </UserNameRow>
               <UserDetail>

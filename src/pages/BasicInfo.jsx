@@ -7,15 +7,42 @@ import SchoolModal from '../components/modal/SchoolModal';
 import DepartmentModal from '../components/modal/DepartmentModal';
 import RegionModal from '../components/modal/RegionModal';
 import BasicButton from '../components/BasicButton';
-import api from '../api/axios'; // 백엔드 API 통신용 Axios 인스턴스
+import api from '../api/axios';
 
 export default function BasicInfo() {
   const navigate = useNavigate();
   const location = useLocation();
   const dateInputRef = useRef(null);
 
-  // 현재 페이지가 수정 모드인지 확인
   const isEdit = location.pathname.includes('edit');
+
+  // MyInfo 페이지에서 전달한 라우터 최신 상태 정보 확인
+  const passedUserInfo = location.state?.userInfo;
+
+  // 학년 표시 문자열을 정수형 코드로 변경하는 헬퍼 함수
+  const convertGradeToInteger = (gradeStr) => {
+    switch (gradeStr) {
+      case '1학년':
+        return 1;
+      case '2학년':
+        return 2;
+      case '3학년':
+        return 3;
+      case '4학년 이상':
+        return 4;
+      case '대학원':
+        return 5;
+      default:
+        return 1;
+    }
+  };
+
+  // 정수형 코드를 학년 표시 문자열로 변경하는 헬퍼 함수
+  const convertGradeToString = (gradeNum) => {
+    if (gradeNum >= 5) return '대학원';
+    if (gradeNum === 4) return '4학년 이상';
+    return `${gradeNum}학년`;
+  };
 
   const initialFormState = {
     name: '',
@@ -26,25 +53,20 @@ export default function BasicInfo() {
     residence: '',
   };
 
-  // 모드별로 로컬스토리지 키 분기 저장
   const [formState, setFormState] = useLocalStorage(
     isEdit ? 'edit_basicInfo' : 'signUp_basicInfo',
     initialFormState,
   );
 
-  // 수정 모드에서 변경 감지용 원본 데이터 백업 상태
   const [originalData, setOriginalData] = useState(initialFormState);
-
-  // 백엔드에서 받아온 메타데이터(학교, 지역 등) 저장 상태
   const [metaData, setMetaData] = useState({ schools: [], residences: [] });
-
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isDeptModalOpen, setIsDeptModalOpen] = useState(false);
   const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
 
   const grades = ['1학년', '2학년', '3학년', '4학년 이상', '대학원'];
 
-  // 마운트 시 기본 정보 선택 범위(메타데이터) 조회
+  // 기본 정보 선택 범위(메타데이터) 조회
   useEffect(() => {
     const fetchMetaData = async () => {
       try {
@@ -59,35 +81,31 @@ export default function BasicInfo() {
     fetchMetaData();
   }, []);
 
-  // [수정 모드] 기존 유저 데이터 불러오기
+  // [수정 모드] MyInfo에서 넘겨받은 기존 데이터를 입력 폼 초기값으로 파싱하여 세팅
   useEffect(() => {
-    if (isEdit) {
-      const fetchUserData = async () => {
-        try {
-          // 필요 시 실제 회원 정보 조회 API 연동 구간
-          const mockBackendData = {
-            name: '김지연',
-            birthDate: '2004-03-15',
-            schoolName: '인천대학교',
-            department: '컴퓨터공학부',
-            grade: '3학년',
-            residence: '인천광역시',
-          };
+    if (isEdit && passedUserInfo) {
+      // 날짜 점(.) 형태 포맷 대응 교정 처리
+      const formattedDate =
+        passedUserInfo.baseInfo.birthDate
+          ?.replaceAll('. ', '-')
+          .replaceAll('.', '') || '';
 
-          setFormState(mockBackendData);
-          setOriginalData(mockBackendData);
-        } catch (error) {
-          console.error('데이터를 불러오지 못했습니다.', error);
-        }
+      const parsedData = {
+        name: passedUserInfo.baseInfo.name || '',
+        birthDate: formattedDate,
+        schoolName: passedUserInfo.baseInfo.schoolName || '',
+        department: passedUserInfo.baseInfo.department || '',
+        grade: convertGradeToString(passedUserInfo.baseInfo.grade),
+        residence: passedUserInfo.baseInfo.residence || '',
       };
-      fetchUserData();
-    }
-  }, [isEdit]);
 
-  // 하단 버튼 활성화 조건 체크
+      setFormState(parsedData);
+      setOriginalData(parsedData);
+    }
+  }, [isEdit, passedUserInfo]);
+
   const isButtonActive = () => {
     if (!isEdit) {
-      // 입력 모드: 모든 필드 필수 입력
       return (
         formState.name.trim() !== '' &&
         formState.birthDate !== '' &&
@@ -97,7 +115,6 @@ export default function BasicInfo() {
         formState.residence.trim() !== ''
       );
     } else {
-      // 수정 모드: 기존 값과 하나라도 다르면 활성화
       return (
         formState.name !== originalData.name ||
         formState.birthDate !== originalData.birthDate ||
@@ -111,28 +128,17 @@ export default function BasicInfo() {
 
   const active = isButtonActive();
 
-  // 입력값 변경 핸들러
   const handleInputChange = (key, value) => {
-    setFormState({
-      ...formState,
-      [key]: value,
-    });
+    setFormState({ ...formState, [key]: value });
   };
 
-  // 학교 선택 시 학과 초기화 및 모달 닫기
   const handleSelectSchool = (selectedSchool) => {
     const schoolNamestr =
       typeof selectedSchool === 'object' ? selectedSchool.name : selectedSchool;
-
-    setFormState({
-      ...formState,
-      schoolName: schoolNamestr,
-      department: '',
-    });
+    setFormState({ ...formState, schoolName: schoolNamestr, department: '' });
     setIsSchoolModalOpen(false);
   };
 
-  // 학과 선택 핸들러
   const handleSelectDepartment = (selectedDept) => {
     const deptName =
       typeof selectedDept === 'object' ? selectedDept.name : selectedDept;
@@ -140,7 +146,6 @@ export default function BasicInfo() {
     setIsDeptModalOpen(false);
   };
 
-  // 거주 지역 선택 핸들러
   const handleSelectRegion = (selectedRegion) => {
     const regionName =
       typeof selectedRegion === 'object' ? selectedRegion.name : selectedRegion;
@@ -148,16 +153,69 @@ export default function BasicInfo() {
     setIsRegionModalOpen(false);
   };
 
-  // 다음 단계 이동 핸들러
-  const handleNextStep = () => {
-    if (isEdit) {
-      navigate('/edit-other');
-    } else {
+  // [수정 모드 완료] 기존 기타 정보를 유지한 상태에서 기본 정보 필드만 업데이트하여 PATCH 호출
+  const handleNextStep = async () => {
+    if (!isEdit) {
       navigate('/other-info');
+      return;
+    }
+
+    // 명세서 규격에 대응하는 DTO 데이터 조합
+    const requestBody = {
+      baseInfo: {
+        schoolName: formState.schoolName,
+        department: formState.department,
+        grade: convertGradeToInteger(formState.grade),
+        residence: formState.residence,
+        birthDate: formState.birthDate,
+      },
+      // 핵심 요구사항: 기존에 함께 넘어왔던 기타 정보(detailInfo) 스펙을 그대로 유지하여 전송
+      detailInfo: {
+        gpa: parseFloat(passedUserInfo?.detailInfo?.gpa || 0),
+        incomeBracket: parseInt(
+          passedUserInfo?.detailInfo?.incomeBracket || 1,
+          10,
+        ),
+        isBasicLiving: !!passedUserInfo?.detailInfo?.isBasicLiving,
+        isSecondLowest: !!passedUserInfo?.detailInfo?.isSecondLowest,
+        interests: {
+          corporate:
+            passedUserInfo?.detailInfo?.interests?.includes(
+              '기업·재단 장학금',
+            ) || false,
+          region:
+            passedUserInfo?.detailInfo?.interests?.includes('지역 장학금') ||
+            false,
+          requirements:
+            passedUserInfo?.detailInfo?.interests?.includes('조건별 장학금') ||
+            false,
+          state:
+            passedUserInfo?.detailInfo?.interests?.includes('국가장학금') ||
+            false,
+        },
+      },
+    };
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await api.patch('/api/users/info', requestBody, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.isSuccess) {
+        localStorage.removeItem('edit_basicInfo');
+        navigate('/my-info'); // 수정 완료 시 내 정보로 리다이렉트
+      }
+    } catch (error) {
+      if (error.response?.status === 400 && error.response?.data?.result) {
+        alert(Object.values(error.response.data.result).join('\n'));
+      } else {
+        alert(error.message || '정보 수정에 실패했습니다.');
+      }
     }
   };
 
-  // 캘린더 팝업 트리거
   const handleDateBoxClick = () => {
     if (dateInputRef.current) {
       try {
@@ -183,6 +241,7 @@ export default function BasicInfo() {
               placeholder="이름을 입력해주세요"
               value={formState.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
+              disabled={isEdit} // 내 정보 명세서 기준 이름 수정 필드는 PATCH 바디에 제외되므로 수정 모드 시 비활성 처리
             />
           </S.FormGroup>
 
@@ -274,7 +333,6 @@ export default function BasicInfo() {
         onSelect={handleSelectSchool}
         schools={metaData.schools}
       />
-
       <DepartmentModal
         isOpen={isDeptModalOpen}
         onClose={() => setIsDeptModalOpen(false)}
@@ -282,7 +340,6 @@ export default function BasicInfo() {
         onSelect={handleSelectDepartment}
         schools={metaData.schools}
       />
-
       <RegionModal
         isOpen={isRegionModalOpen}
         onClose={() => setIsRegionModalOpen(false)}

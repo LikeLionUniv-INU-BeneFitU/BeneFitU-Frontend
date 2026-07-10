@@ -3,42 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import ApplyItem from '../components/ApplyItem';
-
-const dummyData = {
-  isSuccess: true,
-  code: 'COMMON_200',
-  message: '요청에 성공했습니다.',
-  result: {
-    baseInfo: {
-      name: '김도현',
-      schoolName: '인천대학교',
-      department: '정보통신공학과',
-      grade: 3,
-      residence: '서울특별시',
-      birthDate: '2004.08.20',
-    },
-    detailInfo: {
-      gpa: 4.1,
-      incomeBracket: 3,
-      isBasicLiving: false,
-      isSecondLowest: false,
-      interests: ['국가장학금', '지역 장학금'],
-    },
-  },
-};
+import api from '../api/axios'; // 백엔드 API 통신용 Axios 인스턴스
 
 const MyInfo = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // 마운트 시 사용자 정보 조회 API 호출
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        setUserInfo(dummyData.result);
+        const response = await api.get('/api/users/info');
+        if (response.data.isSuccess) {
+          setUserInfo(response.data.result);
+        }
       } catch (err) {
-        alert(err.message);
+        alert(err.message || '유저 정보를 불러오지 못했습니다.');
       } finally {
         setLoading(false);
       }
@@ -52,14 +33,19 @@ const MyInfo = () => {
 
   const { baseInfo, detailInfo } = userInfo;
 
+  // 학년 정수형 데이터를 화면 표시용 문자열로 변환
+  const getGradeString = (gradeNum) => {
+    if (gradeNum >= 5) return '대학원';
+    if (gradeNum === 4) return '4학년 이상';
+    return `${gradeNum}학년`;
+  };
+
   const getSocialSupportStatus = () => {
     if (!detailInfo.isBasicLiving && !detailInfo.isSecondLowest) {
       return '해당없음';
     }
-
     const basic = detailInfo.isBasicLiving ? '해당' : '해당없음';
     const second = detailInfo.isSecondLowest ? '해당' : '해당없음';
-
     return `${basic}/${second}`;
   };
 
@@ -92,11 +78,15 @@ const MyInfo = () => {
           <h2>{baseInfo.name}님</h2>
         </NameSection>
 
-        {/* 기본 정보 섹션 */}
+        {/* 기본 정보 섹션: 수정 이동 시 기존 전체 유저 데이터를 state로 전달 */}
         <Section>
           <SectionHeader>
             <h3>기본 정보</h3>
-            <button onClick={() => navigate('/edit-basic')}>수정</button>
+            <button
+              onClick={() => navigate('/edit-basic', { state: { userInfo } })}
+            >
+              수정
+            </button>
           </SectionHeader>
           <InfoRow>
             <span>이름</span>
@@ -116,7 +106,7 @@ const MyInfo = () => {
           </InfoRow>
           <InfoRow>
             <span>학년</span>
-            <span>{baseInfo.grade}학년</span>
+            <span>{getGradeString(baseInfo.grade)}</span>
           </InfoRow>
           <InfoRow>
             <span>거주지역</span>
@@ -124,11 +114,15 @@ const MyInfo = () => {
           </InfoRow>
         </Section>
 
-        {/* 기타 정보 섹션 */}
+        {/* 기타 정보 섹션: 수정 이동 시 기존 전체 유저 데이터를 state로 전달 */}
         <Section>
           <SectionHeader>
             <h3>기타 정보</h3>
-            <button onClick={() => navigate('/edit-other')}>수정</button>
+            <button
+              onClick={() => navigate('/edit-other', { state: { userInfo } })}
+            >
+              수정
+            </button>
           </SectionHeader>
           <InfoRow>
             <span>학점</span>
@@ -154,24 +148,21 @@ const MyInfo = () => {
 
 export default MyInfo;
 
-// --- 스타일 컴포넌트 (rem & vh 단위 적용) ---
+// 스타일 컴포넌트 생략 (기존 코드와 100% 동일)
 const Container = styled.div`
-  max-width: 420px; /* 대화면 양옆 여백 고정을 위한 모바일 Max-Width 규격 */
+  max-width: 420px;
   margin: 0 auto;
   background-color: #fff;
   min-height: 100vh;
   font-family: sans-serif;
 `;
-
 const Body = styled.div`
-  padding: 3vh 30px; /* 세로 여백은 기기 높이에 반응하도록 vh 배정 */
+  padding: 3vh 30px;
 `;
-
 const NameSection = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 4vh; /* 높이에 맞춘 마진 배치 */
-
+  margin-bottom: 4vh;
   h2 {
     font-size: 1.5rem;
     margin: 0;
@@ -179,11 +170,9 @@ const NameSection = styled.div`
     color: #000;
   }
 `;
-
 const Section = styled.section`
   margin-bottom: 4.5vh;
 `;
-
 const SectionHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -191,14 +180,12 @@ const SectionHeader = styled.div`
   border-bottom: 0.063rem solid #828282;
   padding-bottom: 2vh;
   margin-bottom: 2vh;
-
   h3 {
     font-size: 1.3rem;
     margin: 0;
     font-weight: bold;
     color: #000;
   }
-
   button {
     background: #fff;
     border: 0.063rem solid #d1d1d1;
@@ -209,14 +196,12 @@ const SectionHeader = styled.div`
     cursor: pointer;
   }
 `;
-
 const InfoRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.8vh; /* 줄 간격 유연성 보장 */
-  font-size: 1rem; /* 14px 변환 */
-
+  margin-bottom: 1.8vh;
+  font-size: 1rem;
   span:first-child {
     color: #5f5f5f;
   }
@@ -225,7 +210,6 @@ const InfoRow = styled.div`
     font-weight: 500;
   }
 `;
-
 const LoadingMessage = styled.div`
   display: flex;
   justify-content: center;

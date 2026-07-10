@@ -4,6 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import * as S from './Info.styles';
 import Header from '../components/Header';
 import BasicButton from '../components/BasicButton';
+import api from '../api/axios';
 
 export default function OtherInfo() {
   const navigate = useNavigate();
@@ -11,16 +12,19 @@ export default function OtherInfo() {
 
   const isEdit = location.pathname.includes('edit');
 
+  // MyInfo 페이지에서 전달한 라우터 최신 상태 정보 확인
+  const passedUserInfo = location.state?.userInfo;
+
   const initialFormState = {
     gpa: '',
     incomeBracket: '',
-    isBasicLiving: false, //기초생활수급자 여부 (false: 해당 없음, true: 해당)
-    isSecondLowest: false, //차상위계층 여부
+    isBasicLiving: false,
+    isSecondLowest: false,
     interests: {
-      state: false, // 국가 장학금
-      corporate: false, // 기업, 재단 장학금
-      region: false, // 지역 장학금
-      requirement: false, // 조건별 장학금
+      state: false,
+      corporate: false,
+      region: false,
+      requirement: false,
     },
   };
 
@@ -29,101 +33,173 @@ export default function OtherInfo() {
     initialFormState,
   );
 
-  // 백엔드에서 받아온 원본 데이터를 저장할 상태 (수정 모드에서 변경 감지용)
   const [originalData, setOriginalData] = useState(
     JSON.parse(JSON.stringify(initialFormState)),
   );
 
-  // 💡 [수정 모드 전용] 마운트 시 백엔드 데이터 가져오기
+  // [수정 모드] MyInfo에서 넘겨받은 기존 데이터를 입력 폼 초기값으로 파싱하여 세팅
   useEffect(() => {
-    if (isEdit) {
-      const fetchUserData = async () => {
-        try {
-          // 예시 백엔드 데이터 구조 (실제 API 호출로 대체하세요)
-          const mockBackendData = {
-            gpa: '3.8',
-            incomeBracket: '3',
-            isBasicLiving: false,
-            isSecondLowest: true,
-            interests: {
-              state: true,
-              corporate: false,
-              region: true,
-              requirement: false,
-            },
-          };
-
-          setFormState(mockBackendData);
-          setOriginalData(JSON.parse(JSON.stringify(mockBackendData))); // 딥카피 백업
-        } catch (error) {
-          console.error('데이터를 불러오지 못했습니다.', error);
-        }
+    if (isEdit && passedUserInfo) {
+      const parsedData = {
+        gpa: String(passedUserInfo.detailInfo?.gpa || ''),
+        incomeBracket: String(passedUserInfo.detailInfo?.incomeBracket || ''),
+        isBasicLiving: !!passedUserInfo.detailInfo?.isBasicLiving,
+        isSecondLowest: !!passedUserInfo.detailInfo?.isSecondLowest,
+        interests: {
+          state:
+            passedUserInfo.detailInfo?.interests?.includes('국가장학금') ||
+            false,
+          corporate:
+            passedUserInfo.detailInfo?.interests?.includes(
+              '기업·재단 장학금',
+            ) || false,
+          region:
+            passedUserInfo.detailInfo?.interests?.includes('지역 장학금') ||
+            false,
+          requirement:
+            passedUserInfo.detailInfo?.interests?.includes('조건별 장학금') ||
+            false,
+        },
       };
-      fetchUserData();
-    }
-  }, [isEdit]);
 
-  // 💡 [버튼 활성화 검증]
+      setFormState(parsedData);
+      setOriginalData(JSON.parse(JSON.stringify(parsedData)));
+    }
+  }, [isEdit, passedUserInfo]);
+
   const isButtonActive = () => {
     if (!isEdit) {
-      // 1) 정보 입력 페이지(/other-info): 학점과 소득분위가 입력되어야 활성화 (관심분야는 선택이므로 제외 가능)
-      return formState.gpa.trim() !== '' && formState.incomeBracket !== '';
-    } else {
-      // 2) 정보 수정 페이지(/edit-other): 기존 값(originalData) 중 하나라도 달라지면 활성화
-      const isInterestsChanged = Object.keys(formState.interests).some(
-        (key) => formState.interests[key] !== originalData.interests?.[key],
-      );
-
-      return (
-        formState.gpa !== originalData.gpa ||
-        formState.incomeBracket !== originalData.incomeBracket ||
-        formState.isBasicLiving !== originalData.isBasicLiving ||
-        formState.isSecondLowest !== originalData.isSecondLowest ||
-        isInterestsChanged
-      );
+      return formState?.gpa?.trim() !== '' && formState?.incomeBracket !== '';
     }
+
+    const currentInterests = formState?.interests || {};
+    const prevInterests = originalData?.interests || {};
+
+    const isInterestsChanged = Object.keys(currentInterests).some(
+      (key) => currentInterests[key] !== prevInterests[key],
+    );
+
+    return (
+      formState?.gpa !== originalData?.gpa ||
+      formState?.incomeBracket !== originalData?.incomeBracket ||
+      formState?.isBasicLiving !== originalData?.isBasicLiving ||
+      formState?.isSecondLowest !== originalData?.isSecondLowest ||
+      isInterestsChanged
+    );
   };
 
   const active = isButtonActive();
 
-  // 입력값 업데이트 공통 핸들러
   const handleInputChange = (key, value) => {
-    setFormState({
-      ...formState,
-      [key]: value,
-    });
+    setFormState({ ...formState, [key]: value });
   };
 
-  // 관심 분야 체크박스 핸들러
   const handleInterestChange = (e) => {
     const { name, checked } = e.target;
     setFormState({
       ...formState,
-      interests: {
-        ...formState.interests,
-        [name]: checked,
-      },
+      interests: { ...formState.interests, [name]: checked },
     });
   };
 
-  // 완료 버튼 클릭 시 (백엔드로 전송하거나 가공 처리)
-  const handleSubmit = () => {
-    const finalData = {
-      gpa: `${formState.gpaInteger}.${formState.gpaDecimal}`,
-      incomeBracket: formState.incomeBracket,
-      isBasicLiving: formState.isVulnerable,
-      isSecondLowest: formState.isSecondLowest,
-      interests: Object.keys(formState.interests).filter(
-        (key) => formState.interests[key],
-      ),
+  // [최종 완료 제출 핸들러] 가입 시에는 POST를 처리하고, 수정 모드 시에는 기존 기본 정보를 유지한 뒤 PATCH 호출
+  const handleSubmit = async () => {
+    const isSignUp = !isEdit;
+
+    // 최초 회원가입 단계일 때는 로컬스토리지의 signUp_basicInfo 데이터를 정확히 타겟팅하여 파싱
+    const savedBasicInfo =
+      JSON.parse(
+        localStorage.getItem(isSignUp ? 'signUp_basicInfo' : 'edit_basicInfo'),
+      ) || {};
+
+    // 생년월일 포맷 정규화 교정용 내부 함수
+    const cleanBirthDate = (dateStr) =>
+      dateStr?.replaceAll('. ', '-').replaceAll('.', '') || '';
+
+    const convertGradeToInteger = (gradeStr) => {
+      switch (gradeStr) {
+        case '1학년':
+          return 1;
+        case '2학년':
+          return 2;
+        case '3학년':
+          return 3;
+        case '4학년 이상':
+          return 4;
+        case '대학원':
+          return 5;
+        default:
+          return 1;
+      }
     };
 
-    console.log('로컬스토리지 최종본 제출:', finalData);
-    // 이후 백엔드 전송 및 라우팅 로직 작성 구간
-    if (isEdit) {
-      navigate('/my-info');
-    } else {
-      navigate('/info-complete');
+    // 가입 유형에 맞춰 이름 데이터 소스를 유연하게 분기 결합
+    const finalName = isSignUp
+      ? savedBasicInfo.name || ''
+      : passedUserInfo?.baseInfo?.name || savedBasicInfo.name || '';
+
+    // 공통 구조 DTO 조합 정의 및 name 누락 결함 수정 완료
+    const requestBody = {
+      baseInfo: {
+        name: finalName,
+        schoolName: isSignUp
+          ? savedBasicInfo.schoolName || ''
+          : passedUserInfo?.baseInfo?.schoolName || '',
+        department: isSignUp
+          ? savedBasicInfo.department || ''
+          : passedUserInfo?.baseInfo?.department || '',
+        grade: isSignUp
+          ? convertGradeToInteger(savedBasicInfo.grade)
+          : parseInt(passedUserInfo?.baseInfo?.grade || 1, 10),
+        residence: isSignUp
+          ? savedBasicInfo.residence || ''
+          : passedUserInfo?.baseInfo?.residence || '',
+        birthDate: isSignUp
+          ? savedBasicInfo.birthDate || ''
+          : cleanBirthDate(passedUserInfo?.baseInfo?.birthDate),
+      },
+      detailInfo: {
+        gpa: parseFloat(formState.gpa),
+        incomeBracket: parseInt(formState.incomeBracket, 10),
+        isBasicLiving: formState.isBasicLiving,
+        isSecondLowest: formState.isSecondLowest,
+        interests: {
+          corporate: !!formState.interests?.corporate,
+          region: !!formState.interests?.region,
+          requirements: !!formState.interests?.requirement,
+          state: !!formState.interests?.state,
+        },
+      },
+    };
+
+    try {
+      if (isSignUp) {
+        // 회원가입 단계 최종 등록 제출
+        const response = await api.post('/api/users/info', requestBody);
+        if (response.data.isSuccess) {
+          localStorage.removeItem('signUp_basicInfo');
+          localStorage.removeItem('signUp_otherInfo');
+          navigate('/info-complete');
+        }
+      } else {
+        // [기타 정보 수정 완료] PATCH 요청 실행
+        const token = localStorage.getItem('accessToken');
+        const response = await api.patch('/api/users/info', requestBody, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.data.isSuccess) {
+          localStorage.removeItem('edit_otherInfo');
+          navigate('/my-info');
+        }
+      }
+    } catch (error) {
+      if (error.response?.status === 400 && error.response?.data?.result) {
+        alert(Object.values(error.response.data.result).join('\n'));
+      } else {
+        alert(error.message || '정보 처리에 실패했습니다.');
+      }
     }
   };
 
@@ -133,10 +209,8 @@ export default function OtherInfo() {
         title={isEdit ? '기타 정보 수정' : '기타 정보 입력'}
         variant="purple"
       />
-
       <S.ContentContainer>
         <S.ScrollArea>
-          {/* 학점 입력 */}
           <S.FormGroup>
             <S.Label>학점(4.5 만점 기준)</S.Label>
             <S.GpaContainer>
@@ -149,7 +223,6 @@ export default function OtherInfo() {
             </S.GpaContainer>
           </S.FormGroup>
 
-          {/* 소득 분위 */}
           <S.FormGroup>
             <S.Label>소득분위</S.Label>
             <S.SelectStyle
@@ -170,7 +243,6 @@ export default function OtherInfo() {
             </S.SelectStyle>
           </S.FormGroup>
 
-          {/* 기초생활수급자 / 차상위계층 여부 (세그먼트 탭 스타일 매칭) */}
           <S.FormGroup>
             <S.Label>기초생활수급자 여부</S.Label>
             <S.GradeSelectorContainer>
@@ -211,63 +283,59 @@ export default function OtherInfo() {
             </S.GradeSelectorContainer>
           </S.FormGroup>
 
-          {/* 관심 분야 */}
           <S.FormGroup>
             <S.Label>관심 분야(선택)</S.Label>
             <S.GridContainer>
               <S.InterestButton
                 type="button"
-                isActive={formState.interests.state}
+                isActive={formState?.interests?.state}
                 onClick={() =>
                   handleInterestChange({
                     target: {
                       name: 'state',
-                      checked: !formState.interests.state,
+                      checked: !formState?.interests?.state,
                     },
                   })
                 }
               >
                 국가장학금
               </S.InterestButton>
-
               <S.InterestButton
                 type="button"
-                isActive={formState.interests.corporate}
+                isActive={formState?.interests?.corporate}
                 onClick={() =>
                   handleInterestChange({
                     target: {
                       name: 'corporate',
-                      checked: !formState.interests.corporate,
+                      checked: !formState?.interests?.corporate,
                     },
                   })
                 }
               >
                 기업·재단 장학금
               </S.InterestButton>
-
               <S.InterestButton
                 type="button"
-                isActive={formState.interests.region}
+                isActive={formState?.interests?.region}
                 onClick={() =>
                   handleInterestChange({
                     target: {
                       name: 'region',
-                      checked: !formState.interests.region,
+                      checked: !formState?.interests?.region,
                     },
                   })
                 }
               >
                 지역 장학금
               </S.InterestButton>
-
               <S.InterestButton
                 type="button"
-                isActive={formState.interests.requirement}
+                isActive={formState?.interests?.requirement}
                 onClick={() =>
                   handleInterestChange({
                     target: {
                       name: 'requirement',
-                      checked: !formState.interests.requirement,
+                      checked: !formState?.interests?.requirement,
                     },
                   })
                 }
@@ -278,7 +346,6 @@ export default function OtherInfo() {
           </S.FormGroup>
         </S.ScrollArea>
 
-        {/* 하단 완료 버튼 */}
         <S.ButtonWrapper>
           <BasicButton onClick={handleSubmit} disabled={!active}>
             완료

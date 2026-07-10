@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
-import Logo from '../assets/images/Logo.png'
-import mailIcon from '../assets/images/mailIcon.png'
-import lockIcon from '../assets/images/lockIcon.png'
-
+import Logo from '../assets/images/Logo.png';
+import mailIcon from '../assets/images/mailIcon.png';
+import lockIcon from '../assets/images/lockIcon.png';
+import api from '../api/axios';
 
 const PageWrapper = styled.div`
   max-width: 450px;
@@ -14,29 +14,24 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  background-color: #E9E6FF;  
+  background-color: #e9e6ff;
 `;
 
-// 전체 박스 (흰색)
 const ContentWrapper = styled.div`
   width: 100%;
-
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px;
   box-sizing: border-box;
   position: relative;
-
   margin-top: 60px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-
   background-color: #ffffff;
   box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
 `;
 
-// 로고 사진
 const LogoImg = styled.img`
   width: 80%;
   height: auto;
@@ -54,26 +49,22 @@ const Label = styled.label`
   margin-left: 15px;
 `;
 
-// 입력창
 const Input = styled.input`
   height: 45px;
   padding: 0 16px 0 40px;
   margin-bottom: 10px;
   margin-left: 15px;
   margin-right: 15px;
-
   background-color: #ffffff;
   border: 1px solid #828282;
   border-radius: 5px;
-  
   outline: none;
   font-size: 0.875rem;
   box-sizing: border-box;
-  
   background-image: url(${(props) => props.$icon});
   background-repeat: no-repeat;
-  background-position: 12px center; /* 왼쪽에서 12px 떨어진 위치 */
-  background-size: 18px 18px; /* 아이콘 크기 */
+  background-position: 12px center;
+  background-size: 18px 18px;
 
   &::placeholder {
     color: #cccccc;
@@ -84,7 +75,6 @@ const Input = styled.input`
   }
 `;
 
-// 로그인 버튼
 const LoginButton = styled.button`
   height: 50px;
   background-color: #5c4ff2;
@@ -94,7 +84,6 @@ const LoginButton = styled.button`
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  
   margin-top: 40px;
   margin-left: 15px;
   margin-right: 15px;
@@ -104,7 +93,6 @@ const LoginButton = styled.button`
   }
 `;
 
-// 새 계정 만들기 버튼
 const NewLoginButton = styled.button`
   height: 50px;
   background-color: #ffffff;
@@ -114,7 +102,6 @@ const NewLoginButton = styled.button`
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  
   margin-top: 20px;
   margin-left: 15px;
   margin-right: 15px;
@@ -127,70 +114,85 @@ const NewLoginButton = styled.button`
 
 export default function Login() {
   const navigate = useNavigate();
-
-  // 아이디, 비밀번호를 각각 기억하는 상자
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
-  // 로그인 버튼 눌렀을 때 실행할 함수
   const handleLogin = async () => {
-  try {
-    const response = await fetch(
-      "http://43.201.77.120:8080/api/auth/login",
-      {
-        method: "POST",
+    try {
+      const response = await fetch('http://43.201.77.120:8080/api/auth/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           username: userId,
           password: password,
         }),
+      });
+
+      const data = await response.json();
+
+      if (data.isSuccess) {
+        const newAccessToken = data.result.accessToken;
+
+        // 1. 로컬스토리지에 새 토큰 저장
+        localStorage.setItem('accessToken', newAccessToken);
+
+        // 2. Axios 인스턴스의 인증 헤더를 새 토큰으로 즉시 갱신
+        api.defaults.headers.common['Authorization'] =
+          `Bearer ${newAccessToken}`;
+
+        try {
+          const userCheckResponse = await api.get('/api/users/info');
+          const userInfo = userCheckResponse.data?.result;
+
+          if (!userInfo?.baseInfo?.schoolName) {
+            alert('로그인 성공! 필수 정보 입력 페이지로 이동합니다.');
+            navigate('/info-intro');
+          } else {
+            alert('로그인 성공!');
+            navigate('/home');
+          }
+        } catch (infoError) {
+          console.error(infoError);
+          navigate('/info-intro');
+        }
+      } else {
+        alert(data.message);
       }
-    );
-
-    const data = await response.json();
-
-    if (data.isSuccess) {
-      // 토큰 저장
-      localStorage.setItem("accessToken", data.result.accessToken);
-
-      alert("로그인 성공!");
-      navigate("/home"); // 원하는 페이지로 변경 가능
-    } else {
-      alert(data.message);
+    } catch (error) {
+      console.error(error);
+      alert('로그인 실패');
     }
-  } catch (error) {
-    console.error(error);
-    alert("로그인 실패");
-  }
-};
+  };
 
   return (
-  <PageWrapper>
-    <Header title="로그인" onBack={() => navigate(-1)} />
-    <ContentWrapper>
-      <LogoImg src={Logo} alt="BeneFitU 로고" />
-      <Label>아이디</Label>
-      <Input
-        img="/mailIcon.png" // 아이디 입력창 메일 아이콘
-        placeholder="아이디를 입력해주세요"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-      />
+    <PageWrapper>
+      <Header title="로그인" onBack={() => navigate(-1)} />
+      <ContentWrapper>
+        <LogoImg src={Logo} alt="BeneFitU 로고" />
+        <Label>아이디</Label>
+        <Input
+          $icon={mailIcon}
+          placeholder="아이디를 입력해주세요"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+        />
 
-      <Label>비밀번호</Label>
-      <Input
-        img="/lockIcon.png" // 비번 입력창 자물쇠 아이콘
-        type="password"
-        placeholder="비밀번호를 입력해주세요"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <Label>비밀번호</Label>
+        <Input
+          $icon={lockIcon}
+          type="password"
+          placeholder="비밀번호를 입력해주세요"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <LoginButton onClick={handleLogin}>로그인</LoginButton>
-      <NewLoginButton onClick={() => navigate('/signup')}>새 계정 만들기</NewLoginButton>
-    </ContentWrapper>
-  </PageWrapper>
+        <LoginButton onClick={handleLogin}>로그인</LoginButton>
+        <NewLoginButton onClick={() => navigate('/signup')}>
+          새 계정 만들기
+        </NewLoginButton>
+      </ContentWrapper>
+    </PageWrapper>
   );
 }

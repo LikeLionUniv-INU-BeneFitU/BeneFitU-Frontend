@@ -479,7 +479,7 @@ const DeadlineItem = styled.div`
 
   .d-day-badge {
     background-color: #ffebeb;
-    min-width: 12vw;
+    min-width: 48px;
     color: #ff3b3b;
     font-size: 0.7rem;
     font-weight: 600;

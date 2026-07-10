@@ -148,7 +148,6 @@ const MyInfo = () => {
 
 export default MyInfo;
 
-// 스타일 컴포넌트 생략 (기존 코드와 100% 동일)
 const Container = styled.div`
   max-width: 420px;
   margin: 0 auto;

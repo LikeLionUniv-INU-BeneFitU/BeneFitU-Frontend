@@ -163,6 +163,7 @@ export default function BasicInfo() {
     // 명세서 규격에 대응하는 DTO 데이터 조합
     const requestBody = {
       baseInfo: {
+        name: formState.name,
         schoolName: formState.schoolName,
         department: formState.department,
         grade: convertGradeToInteger(formState.grade),

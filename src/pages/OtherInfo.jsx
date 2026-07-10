@@ -105,6 +105,8 @@ export default function OtherInfo() {
   // [최종 완료 제출 핸들러] 가입 시에는 POST를 처리하고, 수정 모드 시에는 기존 기본 정보를 유지한 뒤 PATCH 호출
   const handleSubmit = async () => {
     const isSignUp = !isEdit;
+
+    // 최초 회원가입 단계일 때는 로컬스토리지의 signUp_basicInfo 데이터를 정확히 타겟팅하여 파싱
     const savedBasicInfo =
       JSON.parse(
         localStorage.getItem(isSignUp ? 'signUp_basicInfo' : 'edit_basicInfo'),
@@ -131,9 +133,15 @@ export default function OtherInfo() {
       }
     };
 
-    // 공통 구조 DTO 조합 정의
+    // 가입 유형에 맞춰 이름 데이터 소스를 유연하게 분기 결합
+    const finalName = isSignUp
+      ? savedBasicInfo.name || ''
+      : passedUserInfo?.baseInfo?.name || savedBasicInfo.name || '';
+
+    // 공통 구조 DTO 조합 정의 및 name 누락 결함 수정 완료
     const requestBody = {
       baseInfo: {
+        name: finalName,
         schoolName: isSignUp
           ? savedBasicInfo.schoolName || ''
           : passedUserInfo?.baseInfo?.schoolName || '',

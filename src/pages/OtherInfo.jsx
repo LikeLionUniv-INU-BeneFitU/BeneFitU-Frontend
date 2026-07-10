@@ -4,6 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import * as S from './Info.styles';
 import Header from '../components/Header';
 import BasicButton from '../components/BasicButton';
+import api from '../api/axios'; // 백엔드 API 통신용 Axios 인스턴스
 
 export default function OtherInfo() {
   const navigate = useNavigate();
@@ -14,13 +15,13 @@ export default function OtherInfo() {
   const initialFormState = {
     gpa: '',
     incomeBracket: '',
-    isBasicLiving: false, //기초생활수급자 여부 (false: 해당 없음, true: 해당)
-    isSecondLowest: false, //차상위계층 여부
+    isBasicLiving: false,
+    isSecondLowest: false,
     interests: {
-      state: false, // 국가 장학금
-      corporate: false, // 기업, 재단 장학금
-      region: false, // 지역 장학금
-      requirement: false, // 조건별 장학금
+      state: false,
+      corporate: false,
+      region: false,
+      requirement: false,
     },
   };
 
@@ -29,17 +30,33 @@ export default function OtherInfo() {
     initialFormState,
   );
 
-  // 백엔드에서 받아온 원본 데이터를 저장할 상태 (수정 모드에서 변경 감지용)
   const [originalData, setOriginalData] = useState(
     JSON.parse(JSON.stringify(initialFormState)),
   );
 
-  // 💡 [수정 모드 전용] 마운트 시 백엔드 데이터 가져오기
+  // 학년 문자열 데이터를 백엔드 정수형 스펙(1~5)으로 매핑
+  const convertGradeToInteger = (gradeStr) => {
+    switch (gradeStr) {
+      case '1학년':
+        return 1;
+      case '2학년':
+        return 2;
+      case '3학년':
+        return 3;
+      case '4학년 이상':
+        return 4;
+      case '대학원':
+        return 5;
+      default:
+        return 1;
+    }
+  };
+
+  // [수정 모드] 기존 유저 데이터 불러오기
   useEffect(() => {
     if (isEdit) {
       const fetchUserData = async () => {
         try {
-          // 예시 백엔드 데이터 구조 (실제 API 호출로 대체하세요)
           const mockBackendData = {
             gpa: '3.8',
             incomeBracket: '3',
@@ -54,7 +71,7 @@ export default function OtherInfo() {
           };
 
           setFormState(mockBackendData);
-          setOriginalData(JSON.parse(JSON.stringify(mockBackendData))); // 딥카피 백업
+          setOriginalData(JSON.parse(JSON.stringify(mockBackendData)));
         } catch (error) {
           console.error('데이터를 불러오지 못했습니다.', error);
         }
@@ -63,15 +80,12 @@ export default function OtherInfo() {
     }
   }, [isEdit]);
 
-  // 💡 [버튼 활성화 검증]
+  // 버튼 활성화 조건 체크
   const isButtonActive = () => {
-    // 1) 정보 입력 페이지(/other-info): 학점과 소득분위가 입력되어야 활성화
     if (!isEdit) {
       return formState?.gpa?.trim() !== '' && formState?.incomeBracket !== '';
     }
 
-    // 2) 정보 수정 페이지(/edit-other): 기존 값(originalData) 중 하나라도 달라지면 활성화
-    // 주석: originalData나 formState 내부의 interests가 없을 경우를 대비해 기본값 {} 지정
     const currentInterests = formState?.interests || {};
     const prevInterests = originalData?.interests || {};
 
@@ -90,7 +104,6 @@ export default function OtherInfo() {
 
   const active = isButtonActive();
 
-  // 입력값 업데이트 공통 핸들러
   const handleInputChange = (key, value) => {
     setFormState({
       ...formState,
@@ -98,7 +111,6 @@ export default function OtherInfo() {
     });
   };
 
-  // 관심 분야 체크박스 핸들러
   const handleInterestChange = (e) => {
     const { name, checked } = e.target;
     setFormState({
@@ -110,24 +122,60 @@ export default function OtherInfo() {
     });
   };
 
-  // 완료 버튼 클릭 시 (백엔드로 전송하거나 가공 처리)
-  const handleSubmit = () => {
-    const finalData = {
-      gpa: formState.gpa,
-      incomeBracket: formState.incomeBracket,
-      isBasicLiving: formState.isBasicLiving,
-      isSecondLowest: formState.isSecondLowest,
-      interests: Object.keys(formState.interests).filter(
-        (key) => formState.interests[key],
-      ),
+  // 백엔드로 전체 취합 데이터 최종 제출 처리
+  const handleSubmit = async () => {
+    // 1단계에서 스토리지에 보관해 둔 기본 정보 로드
+    const savedBasicInfo =
+      JSON.parse(
+        localStorage.getItem(isEdit ? 'edit_basicInfo' : 'signUp_basicInfo'),
+      ) || {};
+
+    // API 명세서 구조 스펙에 맞추어 데이터 가공(DTO 파싱)
+    const requestBody = {
+      baseInfo: {
+        schoolName: savedBasicInfo.schoolName || '',
+        department: savedBasicInfo.department || '',
+        grade: convertGradeToInteger(savedBasicInfo.grade),
+        residence: savedBasicInfo.residence || '',
+        birthDate: savedBasicInfo.birthDate || '',
+      },
+      detailInfo: {
+        gpa: parseFloat(formState.gpa),
+        incomeBracket: parseInt(formState.incomeBracket, 10),
+        isBasicLiving: formState.isBasicLiving,
+        isSecondLowest: formState.isSecondLowest,
+        interests: {
+          corporate: !!formState.interests?.corporate,
+          region: !!formState.interests?.region,
+          requirements: !!formState.interests?.requirement,
+          state: !!formState.interests?.state,
+        },
+      },
     };
 
-    console.log('로컬스토리지 최종본 제출:', finalData);
-    // 이후 백엔드 전송 및 라우팅 로직 작성 구간
-    if (isEdit) {
-      navigate('/my-info');
-    } else {
-      navigate('/info-complete');
+    try {
+      const response = await api.post('/api/users/info', requestBody);
+      if (response.data.isSuccess) {
+        // 성공 시 사용이 끝난 임시 로컬스토리지 정리 및 이동
+        if (isEdit) {
+          localStorage.removeItem('edit_basicInfo');
+          localStorage.removeItem('edit_otherInfo');
+          navigate('/my-info');
+        } else {
+          localStorage.removeItem('signUp_basicInfo');
+          localStorage.removeItem('signUp_otherInfo');
+          navigate('/info-complete');
+        }
+      }
+    } catch (error) {
+      // 400 Bad Request 발생 시 에러 메시지 리스트 파싱 및 얼럿 노출
+      if (error.response?.status === 400 && error.response?.data?.result) {
+        const errorList = error.response.data.result;
+        const errorMsg = Object.values(errorList).join('\n');
+        alert(`입력 정보를 확인해 주세요:\n${errorMsg}`);
+      } else {
+        alert(error.message || '정보 제출에 실패했습니다.');
+      }
     }
   };
 
@@ -140,7 +188,6 @@ export default function OtherInfo() {
 
       <S.ContentContainer>
         <S.ScrollArea>
-          {/* 학점 입력 */}
           <S.FormGroup>
             <S.Label>학점(4.5 만점 기준)</S.Label>
             <S.GpaContainer>
@@ -153,7 +200,6 @@ export default function OtherInfo() {
             </S.GpaContainer>
           </S.FormGroup>
 
-          {/* 소득 분위 */}
           <S.FormGroup>
             <S.Label>소득분위</S.Label>
             <S.SelectStyle
@@ -174,7 +220,6 @@ export default function OtherInfo() {
             </S.SelectStyle>
           </S.FormGroup>
 
-          {/* 기초생활수급자 / 차상위계층 여부 (세그먼트 탭 스타일 매칭) */}
           <S.FormGroup>
             <S.Label>기초생활수급자 여부</S.Label>
             <S.GradeSelectorContainer>
@@ -215,7 +260,6 @@ export default function OtherInfo() {
             </S.GradeSelectorContainer>
           </S.FormGroup>
 
-          {/* 관심 분야 */}
           <S.FormGroup>
             <S.Label>관심 분야(선택)</S.Label>
             <S.GridContainer>
@@ -282,7 +326,6 @@ export default function OtherInfo() {
           </S.FormGroup>
         </S.ScrollArea>
 
-        {/* 하단 완료 버튼 */}
         <S.ButtonWrapper>
           <BasicButton onClick={handleSubmit} disabled={!active}>
             완료

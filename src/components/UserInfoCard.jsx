@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import userIcon from '../assets/images/user.png';
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -18,7 +19,7 @@ const Card = styled.div`
   border-radius: 12px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
 
-  padding: 15px;
+  padding: 16px 20px;
   margin: 15px;
   gap: 10px;
 
@@ -34,33 +35,37 @@ const TopRow = styled.div`
 `;
 
 const NameText = styled.p`
-  font-size: 15px;
+  font-size: 20px;
   color: #FFFFFF;
 `;
 
 // 마이페이지 이동 버튼
 const MyButton = styled.button`
+  width: 32px;
+  height: 32px;
   border: none;
   cursor: pointer;
-  padding: 10px;
+  padding: 0;
 
-  background-image: url('/user.png');
+  background-image: url(${userIcon});
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
 `;
 
 
 // 태그 관련 스타일
 const TagRow = styled.div`
   display: flex;
-  gap: 5px;
+  gap: 0 5px;
 `;
 
 const Tag = styled.span`
-  font-size: 8px;
+  font-size: 12px;
   background-color: #FFFFFF;
   color: #000000;
   padding: 4px 8px;
+  margin-top: 24px;
   border-radius: 7px;
 `;
 
@@ -71,7 +76,7 @@ export default function UserInfoCard({ name, grade, incomeLevel, onMyClick }) {
       <Card>
         <TopRow>
           <NameText>{name}님의 정보</NameText>
-          <MyButton onClick={() => navigate('/login-home')/*마이페이지로 바꾸기*/ }></MyButton>
+          <MyButton onClick={() => navigate('/my-page')/*마이페이지로 바꾸기*/ }></MyButton>
         </TopRow>
         <TagRow>
           <Tag>성적 {grade}</Tag>

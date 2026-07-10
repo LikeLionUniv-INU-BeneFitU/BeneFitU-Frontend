@@ -38,7 +38,7 @@ const ContentWrapper = styled.div`
 const LogoImg = styled.img`
   width: 80%;
   height: auto;
-  margin: 70px 0 60px 0;
+  margin: 65px 0 65px 0;
   display: block;
   align-self: center;
 `;
@@ -54,7 +54,7 @@ const SubTitle = styled.p`
   font-size: 0.8125rem;
   color: #000000;
   margin-top: 5pcx;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   margin-left: 15px;
 `;
 
@@ -84,7 +84,7 @@ const Input = styled.input`
   padding: 0 16px 0 40px;
 
   border: 1px solid ${(props) => (props.hasError ? '#FF4D4D' : '#828282')};
-  border-radius: 5px;
+  border-radius: 6px;
 
   font-size: 0.875rem;
 
@@ -97,7 +97,7 @@ const Input = styled.input`
   outline: none;
   box-sizing: border-box;
 
-  margin-bottom: 10px;
+  margin-bottom: 12px; // 회원가입 화면이랑 통일
   margin-left: 15px;
   margin-right: 15px;
 
@@ -123,13 +123,13 @@ const SubmitButton = styled.button`
   color: #ffffff;
 
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
 
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
 
-  margin-top: 40px;
+  margin-top: 88px;
   margin-left: 15px;
   margin-right: 15px;
   margin-bottom: 20px;
@@ -186,7 +186,7 @@ export default function Signup() {
 
   return (
     <PageWrapper>
-    <Header title="회원가입" onBack={() => navigate(-1)} />
+    <Header color={"#E9E6FF"} onBack={() => navigate(-1)} />
 
     <ContentWrapper>
       <LogoImg src={Logo} alt="BeneFitU 로고" />
@@ -201,7 +201,6 @@ export default function Signup() {
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
       />
-      <div style={{ marginBottom: '20px' }} />
 
       <Label>비밀번호</Label>
       <Input
@@ -211,7 +210,6 @@ export default function Signup() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <div style={{ marginBottom: '20px' }} />
 
       <Label>비밀번호 확인</Label>
       <Input

@@ -254,7 +254,7 @@ function BenefitAll() {
             </p>
 
             <p style={{ color: "#2578B0", fontWeight: "bold", fontSize: "17px" }}>
-              {benefit.amount.toLocaleString()}원
+              {benefit.amount.toLocaleString()}
             </p>
           </BenefitDetailBox>
           );

@@ -4,14 +4,13 @@ export const PageWrapper = styled.div`
   width: 100%;
   height: 100vh;
   
-  background-color: #EEEEFF;
+  background-color: #F7F6FF;
 
   display: flex;
   flex-direction: column;
 `;
 
 export const Rowbox = styled.div`
-  
   display: flex;
   justify-content: space-between;
 `;
@@ -19,8 +18,12 @@ export const Rowbox = styled.div`
 export const SubTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
-  span {color: #584FEA;}
+  span {
+  color: #584FEA;
+  font-Size: 22px
+  }
 `;
+
 
 export const ScrollArea = styled.div`
   flex: 1;              /* 헤더를 제외한 나머지 화면 높이를 다 차지 */
@@ -29,7 +32,7 @@ export const ScrollArea = styled.div`
 
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
 `;
 
 
@@ -40,7 +43,7 @@ export const SortWrapper = styled.div`
 `;
 
 export const SortButton = styled.button`
-  background-color: #EEEEFF;
+  background-color: #F7F6FF;
   border: 1px solid #4A4A4A;
 
   display: flex;
@@ -60,8 +63,6 @@ export const SortDropdown = styled.div`
   top: 100%;
   width: 100%;
 
-
-
   overflow: hidden; /* 안쪽 모서리도 둥글게 잘리도록 */
   border-radius: 5px;  
 `;
@@ -75,11 +76,11 @@ export const SortOption = styled.div`
   border-radius: 5px; 
 
   /* 선택된 항목만 보라색 배경 + 흰 글씨 */
-  background-color: ${(props) => (props.$isActive ? '#584FEA' : '#EEEEFF')};
+  background-color: ${(props) => (props.$isActive ? '#584FEA' : '#F7F6FF')};
   color: ${(props) => (props.$isActive ? '#ffffff' : '#111111')};
 
   &:hover {
     background-color: #584FEA;
-    color: #EEEEFF;
+    color: #F7F6FF;
   }
 `;

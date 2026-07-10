@@ -51,10 +51,10 @@ const KwordBox = styled.div`
 
   background-color: #D9D9D9;
 
-  border-radius: 15px;
+  border-radius: 12px;
   
   margin-right: 5px;
-  margin-top: 5px;
+  margin-top: 8px;
 
   white-space: nowrap;     // 글자가 두 줄로 안 꺾이게
   display: inline-block;   // 내용 크기만큼만 차지하도록
@@ -65,6 +65,7 @@ const MoveButton = styled.button`
   width: 100%;
   height: 40px;
 
+  margin-top: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -72,7 +73,7 @@ const MoveButton = styled.button`
   /* 선택된 항목만 보라색 배경 + 흰 글씨 */
   background-color: ${(props) => (props.$isActive ? '#584FEA' : '#ffffff')};
   border: 1px solid #584FEA;
-  border-radius: 5px;
+  border-radius: 12px;
 
   color: ${(props) => (props.$isActive ? '#ffffff' : '#111111')};
 
@@ -84,9 +85,9 @@ const MoveButton = styled.button`
 
 // 혜택 아이콘 스타일
 const BenefitIcon = styled.button`
-  width: 75px;
-  height: 75px;
-  margin-right: 15px;
+  width: 72px;
+  height: 72px;
+  margin-right: 8px;
 
   display: flex;
   justify-content: center;
@@ -101,10 +102,10 @@ const BenefitIcon = styled.button`
 `;
 
   const categoryIconMap = {
-    SCHOLARSHIP: state2,
-    CAMPUS_WORK: corporate2,
-    YOUTH_SUPPORT: region2,
-    EXTERNAL_ACTIVITY: requirement2,
+    STATE: state2,
+    CORPORATE: corporate2,
+    REGION: region2,
+    REQUIREMENTS: requirement2,
   };
 
 export default function DetailBox({ children, buttonText, to, tags, category }) {

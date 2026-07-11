@@ -21,14 +21,30 @@ export default function Applied() {
   );
   const [benefitsList, setBenefitsList] = useState([]);
 
-  // 탭 상태가 변경될 때마다 백엔드 API 호출하여 목록 업데이트
+  // 현재 가리키고 있는 페이지 상태 관리
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // 총 페이지 수 임시 정의
+  const totalPages = 20;
+
+  // 10단위 묶음 처리를 위한 현재 블록 계산 (0층: 1~10, 1층: 11~20)
+  const currentBlock = Math.floor(currentPage / 10);
+  const startPage = currentBlock * 10;
+  const endPage = Math.min(startPage + 9, totalPages - 1);
+
+  // 동적 숫자 버튼 배열 구성
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+
   useEffect(() => {
     const fetchAppliedBenefits = async () => {
       try {
         const token = localStorage.getItem('accessToken');
         const headers = { Authorization: `Bearer ${token}` };
 
-        // 명세서에 맞춰 선택한 탭 파라미터와 페이지 번호 전달
+        // 쿼리 스트링 파라미터에 고정된 0 대신 currentPage 상태값을 연동
         const response = await api.get(
           `/api/benefits/applied?page=0&applyStatus=${activeTab}`,
           { headers },
@@ -53,6 +69,27 @@ export default function Applied() {
 
     fetchAppliedBenefits();
   }, [activeTab]);
+
+  const handleTabchange = (tabId) => {
+    setActiveTab(tabId);
+    setCurrentPage(0);
+  };
+
+  // 다음 10개 묶음 블록으로 건너뛰기 처리
+  const handleNextBlock = () => {
+    const nextBlockStart = (currentBlock + 1) * 10;
+    if (nextBlockStart < totalPages) {
+      setCurrentPage(nextBlockStart);
+    }
+  };
+
+  // 이전 10개 묶음 블록으로 되돌아가기 처리
+  const handlePrevBlock = () => {
+    const prevBlockStart = (currentBlock - 1) * 10;
+    if (prevBlockStart >= 0) {
+      setCurrentPage(prevBlockStart + 9);
+    }
+  };
 
   return (
     <Container>
@@ -93,6 +130,33 @@ export default function Applied() {
           <EmptyMessage>신청 내역이 없습니다.</EmptyMessage>
         )}
       </ContentList>
+      {benefitsList.length > 0 && (
+        <PaginationContainer>
+          <BlockArrowBtn
+            disabled={currentBlock === 0}
+            onClick={handlePrevBlock}
+          >
+            &lt;
+          </BlockArrowBtn>
+
+          {pageNumbers.map((num) => (
+            <NumButton
+              key={num}
+              $isCurrent={currentPage === num}
+              onClick={() => setCurrentPage(num)}
+            >
+              {num + 1}
+            </NumButton>
+          ))}
+
+          <BlockArrowBtn
+            disabled={(currentBlock + 1) * 10 >= totalPages}
+            onClick={handleNextBlock}
+          >
+            &gt;
+          </BlockArrowBtn>
+        </PaginationContainer>
+      )}
     </Container>
   );
 }
@@ -153,4 +217,41 @@ const EmptyMessage = styled.div`
   padding: 40px 0;
   color: #767676;
   font-size: 14px;
+`;
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2vw;
+  padding: 15px 0 25px 0;
+  background-color: #ffffff;
+`;
+
+const BlockArrowBtn = styled.button`
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #5c59f0;
+  cursor: pointer;
+  padding: 0 6px;
+
+  &:disabled {
+    color: #e0e0e0;
+    cursor: not-allowed;
+  }
+`;
+
+const NumButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: ${(props) => (props.$isCurrent ? '700' : '400')};
+  color: ${(props) => (props.$isCurrent ? '#5c59f0' : '#888888')};
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

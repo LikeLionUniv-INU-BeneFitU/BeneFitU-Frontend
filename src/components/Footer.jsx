@@ -6,13 +6,13 @@ const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 현재 경로가 '/benefit-all'인지 확인하여 활성화 스타일 적용
-  const isBenefitActive = location.pathname === '/benefit-all';
+  // 현재 경로가 '/benefit'인지 확인하여 활성화 스타일 적용
+  const isBenefitActive = location.pathname === '/benefit';
 
   return (
     <FooterContainer>
       <NavItem
-        onClick={() => navigate('/benefit-all')}
+        onClick={() => navigate('/benefit')}
         $active={isBenefitActive}
       >
         <IconBox $active={isBenefitActive} />

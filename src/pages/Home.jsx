@@ -117,7 +117,7 @@ export default function Home() {
             <div className="title">
               <img src={Check} alt="check" /> <span> 맞춤 추천 혜택 </span>
             </div>
-            <span className="view-all" onClick={() => navigate('/benefit-all')}>
+            <span className="view-all" onClick={() => navigate('/benefit')}>
               전체 보기 {'>'}
             </span>
           </SectionHeader>
@@ -125,7 +125,7 @@ export default function Home() {
           <RecommendGrid>
             <GridItem
               onClick={() =>
-                navigate('/benefit-all', { state: { category: '국가장학금' } })
+                navigate('/benefit', { state: { category: '국가장학금' } })
               }
             >
               <img src={StateIcon} alt="국가장학금" className="cat-icon" />
@@ -137,7 +137,7 @@ export default function Home() {
 
             <GridItem
               onClick={() =>
-                navigate('/benefit-all', {
+                navigate('/benefit', {
                   state: { category: '기업·재단 장학금' },
                 })
               }
@@ -161,7 +161,7 @@ export default function Home() {
 
             <GridItem
               onClick={() =>
-                navigate('/benefit-all', { state: { category: '지역 장학금' } })
+                navigate('/benefit', { state: { category: '지역 장학금' } })
               }
             >
               <img src={RegionIcon} alt="지역 장학금" className="cat-icon" />
@@ -173,7 +173,7 @@ export default function Home() {
 
             <GridItem
               onClick={() =>
-                navigate('/benefit-all', {
+                navigate('/benefit', {
                   state: { category: '조건별 장학금' },
                 })
               }
@@ -207,7 +207,7 @@ export default function Home() {
             <span
               className="view-all"
               onClick={() =>
-                navigate('/benefit-all', {
+                navigate('/benefit', {
                   state: { sort: 'DEADLINE_IMMINENT' },
                 })
               }

@@ -108,6 +108,13 @@ const BenefitIcon = styled.button`
     REQUIREMENTS: requirement2,
   };
 
+  const categoryLabelMap = {
+    STATE: '국가장학금',
+    CORPORATE: '기업·재단 장학금',
+    REGION: '지역 장학금',
+    REQUIREMENTS: '조건별 장학금',
+  };
+
 export default function DetailBox({ children, buttonText, to, tags, category }) {
   const navigate = useNavigate();
   const iconSrc = categoryIconMap[category];
@@ -122,7 +129,7 @@ export default function DetailBox({ children, buttonText, to, tags, category }) 
             {children}
             <Rowbox>
               {tags && tags.map((tag, index) => (
-              <KwordBox key={index}>{tag}</KwordBox>
+              <KwordBox key={index}>{categoryLabelMap[tag] || tag}</KwordBox>
               ))}
             </Rowbox>
           </Columnbox>

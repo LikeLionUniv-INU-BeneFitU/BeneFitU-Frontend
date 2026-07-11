@@ -118,12 +118,17 @@ export const ReasonText = styled.p`
   color: #4A4A4A;
 `;
 
-export const ProbabilityLabel = styled.p`
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin-bottom: 8px;
+export const ProbabilityTopRow = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+export const ProbabilityLabel = styled.p`
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4A4A4A;
 `;
 
 export const ProbabilityBarBg = styled.div`
@@ -132,6 +137,7 @@ export const ProbabilityBarBg = styled.div`
   background-color: #EEEEEF;
   border-radius: 10px;
   overflow: hidden;
+  margin-top: 18px;
 `;
 
 export const ProbabilityBarFill = styled.div`
@@ -141,10 +147,9 @@ export const ProbabilityBarFill = styled.div`
 `;
 
 export const ProbabilityPercent = styled.p`
-  text-align: right;
-  font-size: 0.85rem;
-  color: #584FEA;
-  margin-top: 4px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #000000;
 `;
 
 export const ProbabilityPlaceholder = styled.p`

@@ -45,61 +45,13 @@ function BenefitAll() {
   useEffect(() => {
     // 예시 데이터
     const dummyData = [
-      {
-        id: 1,
-        title: 'A장학금',
-        price: '최대 100만원',
-        priceValue: 1000000,
-        category: '국가장학금',
-        date: '2026-06-15',
-        tags: ['교내장학금', '성적우수'],
-      },
-      {
-        id: 2,
-        title: 'B장학금',
-        price: '최대 120만원',
-        priceValue: 1200000,
-        category: '기업·재단 장학금',
-        date: '2026-06-20',
-        tags: ['교내장학금', '성적우수'],
-      },
-      {
-        id: 3,
-        title: 'C장학금',
-        price: '200만원',
-        priceValue: 2000000,
-        category: '국가장학금',
-        date: '2026-05-10',
-        tags: ['교내장학금', '성적우수'],
-      },
-      {
-        id: 4,
-        title: 'D장학금',
-        price: '최대 120만원',
-        priceValue: 1200000,
-        category: '국가장학금',
-        date: '2026-06-01',
-        tags: ['교내장학금', '성적우수'],
-      },
-      {
-        id: 5,
-        title: 'E장학금',
-        price: '20만원',
-        priceValue: 200000,
-        category: '조건별 장학금',
-        date: '2026-06-25',
-        tags: ['교내장학금', '성적우수'],
-      },
-      {
-        id: 6,
-        title: 'F장학금',
-        price: '최대 15만원',
-        priceValue: 150000,
-        category: '지역 장학금',
-        date: '2026-04-30',
-        tags: ['교내장학금', '성적우수'],
-      },
-    ];
+  { benefitId: 1, benefitName: 'A장학금', amount: '최대 100만원', priceValue: 1000000, categories: ['STATE'], date: '2026-06-15' },
+  { benefitId: 2, benefitName: 'B장학금', amount: '최대 120만원', priceValue: 1200000, categories: ['CORPORATE'], date: '2026-06-20' },
+  { benefitId: 3, benefitName: 'C장학금', amount: '200만원', priceValue: 2000000, categories: ['STATE'], date: '2026-05-10' },
+  { benefitId: 4, benefitName: 'D장학금', amount: '최대 120만원', priceValue: 1200000, categories: ['STATE'], date: '2026-06-01' },
+  { benefitId: 5, benefitName: 'E장학금', amount: '20만원', priceValue: 200000, categories: ['REQUIREMENTS'], date: '2026-06-25' },
+  { benefitId: 6, benefitName: 'F장학금', amount: '최대 15만원', priceValue: 150000, categories: ['REGION'], date: '2026-04-30' },
+];
 
     const backendUrl = 'http://43.201.77.120:8080/api/benefits?category=ALL&sort=DEFAULT&page=1'; // 실제 장학금 리스트 API 주소로 교체하기
 

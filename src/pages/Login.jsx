@@ -139,26 +139,14 @@ export default function Login() {
       if (data.isSuccess) {
         const newAccessToken = data.result.accessToken;
 
-        // 1. 로컬스토리지에 새 토큰 저장
         localStorage.setItem('accessToken', newAccessToken);
+        api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
 
-        // 2. Axios 인스턴스의 인증 헤더를 새 토큰으로 즉시 갱신
-        api.defaults.headers.common['Authorization'] =
-          `Bearer ${newAccessToken}`;
-
-        try {
-          const userCheckResponse = await api.get('/api/users/info');
-          const userInfo = userCheckResponse.data?.result;
-
-          if (!userInfo?.baseInfo?.schoolName) {
-            alert('로그인 성공! 필수 정보 입력 페이지로 이동합니다.');
-            navigate('/info-intro');
-          } else {
-            alert('로그인 성공!');
-            navigate('/home');
-          }
-        } catch (infoError) {
-          console.error(infoError);
+        if (data.result.hasDetails) {
+          alert('로그인 성공!');
+          navigate('/home');
+        } else {
+          alert('로그인 성공! 필수 정보 입력 페이지로 이동합니다.');
           navigate('/info-intro');
         }
       } else {

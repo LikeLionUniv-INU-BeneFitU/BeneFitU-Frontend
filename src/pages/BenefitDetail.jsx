@@ -175,13 +175,14 @@ export default function BenefitDetail() {
           }}
         >
           {!isCheckType || showProbability ? (
-            // 타입 A는 항상 보임 / 타입 B는 클릭 후에만 보임
             <>
-              <S.ProbabilityLabel>지원 가능성</S.ProbabilityLabel>
+              <S.ProbabilityTopRow>
+                <S.ProbabilityLabel>지원 가능성</S.ProbabilityLabel>
+                <S.ProbabilityPercent>{benefit.probability}%</S.ProbabilityPercent>
+              </S.ProbabilityTopRow>
               <S.ProbabilityBarBg>
                 <S.ProbabilityBarFill $percent={benefit.probability} />
               </S.ProbabilityBarBg>
-              <S.ProbabilityPercent>{benefit.probability}%</S.ProbabilityPercent>
             </>
           ) : (
             // 타입 B에서 아직 클릭 전 상태
@@ -193,7 +194,7 @@ export default function BenefitDetail() {
           <BasicButton variant="white" onClick={() => window.open(benefit.siteUrl, '_blank')}>
             사이트로이동
           </BasicButton>
-          <BasicButton onClick={handleApply}>신청 완료</BasicButton>
+          <BasicButton onClick={() => navigate('/apply-complete')}>신청 완료</BasicButton>
         </S.ButtonRow>
       </S.ContentWrapper>
     </S.PageWrapper>

@@ -49,7 +49,7 @@ export default function InfoComplete() {
 
       {/* ⭐️ 4. 원본 그대로 유지되는 하단 고정 버튼 영역 */}
       <S.ButtonContainer>
-        <BasicButton onClick={() => navigate('/benefit-all')}>
+        <BasicButton onClick={() => navigate('/benefit')}>
           맞춤 혜택 보러가기
         </BasicButton>
 

@@ -58,7 +58,7 @@ const Splash = ({ onAnimationEnd }) => {
           return prev;
         }
       });
-    }, 40);
+    }, 50);
 
     return () => clearInterval(interval);
   }, []);

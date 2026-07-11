@@ -51,7 +51,11 @@ const MyInfo = () => {
 
   return (
     <Container>
-      <Header title="내 정보" variant="purple" />
+      <Header
+        title="내 정보"
+        onBack={() => navigate('/my-page')}
+        variant="purple"
+      />
 
       <Body>
         {/* 이름 섹션 */}
@@ -156,14 +160,14 @@ const Container = styled.div`
   font-family: sans-serif;
 `;
 const Body = styled.div`
-  padding: 3vh 30px;
+  padding: 3vh 40px;
 `;
 const NameSection = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 4vh;
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     margin: 0;
     font-weight: bold;
     color: #000;
@@ -180,7 +184,7 @@ const SectionHeader = styled.div`
   padding-bottom: 2vh;
   margin-bottom: 2vh;
   h3 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     margin: 0;
     font-weight: bold;
     color: #000;
@@ -195,20 +199,28 @@ const SectionHeader = styled.div`
     cursor: pointer;
   }
 `;
+
 const InfoRow = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start; /* 글자가 두 줄 이상이 될 때 세로 정렬 기준을 상단으로 맞춰 정돈 */
   margin-bottom: 1.8vh;
   font-size: 1rem;
+  gap: 15px; /* 왼쪽 라벨과 오른쪽 데이터 사이의 최소 안전 마진 확보 */
+
   span:first-child {
     color: #5f5f5f;
+    flex-shrink: 0; /* 관심 분야 텍스트 영역이 공간 압박으로 인해 찌그러지는 현상 차단 */
   }
+
   span:last-child {
     color: #000;
     font-weight: 500;
+    text-align: right; /* 내용물이 길어질 때 오른쪽 벽에 달라붙도록 유지 */
+    word-break: keep-all; /* 단어가 도중에 뜬금없이 잘리지 않고 어절 단위로 행바꿈 처리 */
   }
 `;
+
 const LoadingMessage = styled.div`
   display: flex;
   justify-content: center;

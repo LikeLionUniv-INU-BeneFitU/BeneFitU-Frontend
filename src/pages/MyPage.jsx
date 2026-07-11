@@ -92,7 +92,7 @@ const MyPage = () => {
           <CardBottom>
             <AmountLabel>예상 혜택 금액</AmountLabel>
             <AmountValueRow>
-              <AmountValue>{totalAmount.toLocaleString()}원</AmountValue>
+              <AmountValue>{totalAmount.toLocaleString()}</AmountValue>
               <ArrowIcon
                 viewBox="0 0 24 24"
                 onClick={() => navigate('/expected-benefit')}
@@ -230,14 +230,14 @@ const EditButton = styled.button`
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   cursor: pointer;
   text-decoration: underline;
   padding: 0;
 `;
 
 const UserDetail = styled.span`
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.9);
 `;
 

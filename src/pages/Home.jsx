@@ -23,11 +23,13 @@ const FIXED_CATEGORIES = [
   { id: 'requirement', category: '조건별 장학금', icon: RequirementIcon },
 ];
 
+// 백엔드에서 내려주는 한글 카테고리 명칭 규격에 맞춰 Key 매핑 구조 전면 수정
 const CATEGORY_ICONS = {
-  STATE: State,
-  CORPORATE: Corporate,
-  REGION: Region,
-  REQUIREMENTS: Requirement,
+  국가장학금: State,
+  '기업·재단장학금': Corporate,
+  '기업·재단장학금': Corporate, // 띄어쓰기 혼용 대응용 이중 배치
+  지역장학금: Region,
+  조건별장학금: Requirement,
 };
 
 export default function Home() {
@@ -102,7 +104,7 @@ export default function Home() {
         {/* 총 예상 혜택 금액 카드 */}
         <TotalBenefitCard>
           <span className="label">예상 혜택 금액</span>
-          <h2 className="amount">총 {totalBenefitAmount.toLocaleString()}원</h2>
+          <h2 className="amount">총 {totalBenefitAmount.toLocaleString()}</h2>
           <button
             className="detail-btn"
             onClick={() => navigate('/expected-benefit')}
@@ -217,28 +219,33 @@ export default function Home() {
           </SectionHeader>
 
           <DeadlineList>
-            {deadlineBenefits.map((item, index) => (
-              <DeadlineItem
-                key={item.benefitId}
-                $isLast={index === deadlineBenefits.length - 1}
-                onClick={() => navigate(`/detail/${item.benefitId}`)}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="item-icon-wrapper">
-                  <img
-                    src={CATEGORY_ICONS[item.categories?.[0]] || SmallLogo}
-                    alt="icon"
-                  />
-                </div>
+            {deadlineBenefits.map((item, index) => {
+              const rawCategory = item.categories?.[0] || '';
 
-                <div className="item-info">
-                  <h3 className="item-title">{item.benefitName}</h3>
-                  <p className="item-amount">{item.amount}</p>
-                </div>
+              const normalizedKey = rawCategory.replace(/\s/g, '');
 
-                <div className="d-day-badge">{item.dDay}</div>
-              </DeadlineItem>
-            ))}
+              const matchedIcon = CATEGORY_ICONS[normalizedKey] || SmallLogo;
+
+              return (
+                <DeadlineItem
+                  key={item.benefitId}
+                  $isLast={index === deadlineBenefits.length - 1}
+                  onClick={() => navigate(`/detail/${item.benefitId}`)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="item-icon-wrapper">
+                    <img src={matchedIcon} alt="category-icon" />
+                  </div>
+
+                  <div className="item-info">
+                    <h3 className="item-title">{item.benefitName}</h3>
+                    <p className="item-amount">{item.amount}</p>
+                  </div>
+
+                  <div className="d-day-badge">{item.dDay}</div>
+                </DeadlineItem>
+              );
+            })}
           </DeadlineList>
         </SectionCard>
       </ScrollArea>

@@ -3,14 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import * as S from './InfoComplete.styles';
 import BasicButton from '../components/BasicButton';
 import Infocomplete from '../assets/images/infocomplete.png';
+import api from '../api/axios';
 
 export default function InfoComplete() {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('김도현');
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     const fetchUserName = async () => {
       try {
+        const token = localStorage.getItem('accessToken');
+        const headers = { Authorization: `Bearer ${token}` };
+
+        // 사용자 정보 조회 API 호출
+        const response = await api.get('/api/users/info', { headers });
+
+        if (response.data.isSuccess) {
+          const name = response.data.result?.baseInfo?.name;
+          if (name) {
+            setUserName(name);
+          }
+        }
+      } catch (error) {
+        console.error('사용자 이름을 불러오는 중 오류 발생:', error);
+
+        // 백엔드 연동 실패 시 서비스 연속성을 위해 로컬스토리지 백업 데이터 탐색
         const savedData = localStorage.getItem('signUp_basicInfo');
         if (savedData) {
           const parsed = JSON.parse(savedData);
@@ -18,8 +35,6 @@ export default function InfoComplete() {
             setUserName(parsed.name);
           }
         }
-      } catch (error) {
-        console.error('사용자 이름을 불러오는 중 오류 발생:', error);
       }
     };
     fetchUserName();
@@ -27,7 +42,7 @@ export default function InfoComplete() {
 
   return (
     <S.PageWrapper>
-      {/* ⭐️ 타이틀부터 하단 설명글까지 묶어 60vh로 제한하는 반응형 박스 */}
+      {/* 타이틀부터 하단 설명글까지 묶어 60vh로 제한하는 반응형 박스 */}
       <S.MainContentBox>
         {/* 1. 메인 타이틀 */}
         <S.MainTitle>
@@ -47,7 +62,7 @@ export default function InfoComplete() {
         </S.DescriptionText>
       </S.MainContentBox>
 
-      {/* ⭐️ 4. 원본 그대로 유지되는 하단 고정 버튼 영역 */}
+      {/* 4. 하단 고정 버튼 영역 */}
       <S.ButtonContainer>
         <BasicButton onClick={() => navigate('/benefit')}>
           맞춤 혜택 보러가기

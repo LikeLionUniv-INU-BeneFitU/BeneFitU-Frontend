@@ -104,24 +104,27 @@ export default function BasicInfo() {
     }
   }, [isEdit, passedUserInfo]);
 
+  // 서버 에러나 인증 실패로 인해 데이터가 유실(undefined)되더라도 trim() 오류로 크래시가 나지 않도록 차단 가드 처리 완료
   const isButtonActive = () => {
+    if (!formState) return false;
+
     if (!isEdit) {
       return (
-        formState.name.trim() !== '' &&
-        formState.birthDate !== '' &&
-        formState.schoolName.trim() !== '' &&
-        formState.department.trim() !== '' &&
-        formState.grade !== '' &&
-        formState.residence.trim() !== ''
+        (formState.name || '').trim() !== '' &&
+        (formState.birthDate || '') !== '' &&
+        (formState.schoolName || '').trim() !== '' &&
+        (formState.department || '').trim() !== '' &&
+        (formState.grade || '') !== '' &&
+        (formState.residence || '').trim() !== ''
       );
     } else {
       return (
-        formState.name !== originalData.name ||
-        formState.birthDate !== originalData.birthDate ||
-        formState.schoolName !== originalData.schoolName ||
-        formState.department !== originalData.department ||
-        formState.grade !== originalData.grade ||
-        formState.residence !== originalData.residence
+        formState.name !== originalData?.name ||
+        formState.birthDate !== originalData?.birthDate ||
+        formState.schoolName !== originalData?.schoolName ||
+        formState.department !== originalData?.department ||
+        formState.grade !== originalData?.grade ||
+        formState.residence !== originalData?.residence
       );
     }
   };
@@ -160,17 +163,15 @@ export default function BasicInfo() {
       return;
     }
 
-    // 명세서 규격에 대응하는 DTO 데이터 조합
     const requestBody = {
       baseInfo: {
-        name: formState.name,
-        schoolName: formState.schoolName,
-        department: formState.department,
-        grade: convertGradeToInteger(formState.grade),
-        residence: formState.residence,
-        birthDate: formState.birthDate,
+        name: formState?.name || '',
+        schoolName: formState?.schoolName || '',
+        department: formState?.department || '',
+        grade: convertGradeToInteger(formState?.grade),
+        residence: formState?.residence || '',
+        birthDate: formState?.birthDate || '',
       },
-      // 핵심 요구사항: 기존에 함께 넘어왔던 기타 정보(detailInfo) 스펙을 그대로 유지하여 전송
       detailInfo: {
         gpa: parseFloat(passedUserInfo?.detailInfo?.gpa || 0),
         incomeBracket: parseInt(
@@ -181,18 +182,15 @@ export default function BasicInfo() {
         isSecondLowest: !!passedUserInfo?.detailInfo?.isSecondLowest,
         interests: {
           corporate:
-            passedUserInfo?.detailInfo?.interests?.includes(
-              '기업·재단 장학금',
-            ) || false,
-          region:
-            passedUserInfo?.detailInfo?.interests?.includes('지역 장학금') ||
+            passedUserInfo?.detailInfo?.interests?.interests?.corporate ||
             false,
+          region:
+            passedUserInfo?.detailInfo?.interests?.interests?.region || false,
           requirements:
-            passedUserInfo?.detailInfo?.interests?.includes('조건별 장학금') ||
+            passedUserInfo?.detailInfo?.interests?.interests?.requirements ||
             false,
           state:
-            passedUserInfo?.detailInfo?.interests?.includes('국가장학금') ||
-            false,
+            passedUserInfo?.detailInfo?.interests?.interests?.state || false,
         },
       },
     };
@@ -206,7 +204,7 @@ export default function BasicInfo() {
       });
       if (response.data.isSuccess) {
         localStorage.removeItem('edit_basicInfo');
-        navigate('/my-info'); // 수정 완료 시 내 정보로 리다이렉트
+        navigate('/my-info');
       }
     } catch (error) {
       if (error.response?.status === 400 && error.response?.data?.result) {
@@ -240,17 +238,17 @@ export default function BasicInfo() {
             <S.Input
               type="text"
               placeholder="이름을 입력해주세요"
-              value={formState.name}
+              value={formState?.name || ''}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              disabled={isEdit} // 내 정보 명세서 기준 이름 수정 필드는 PATCH 바디에 제외되므로 수정 모드 시 비활성 처리
+              disabled={isEdit}
             />
           </S.FormGroup>
 
           <S.FormGroup>
             <S.Label>생년월일</S.Label>
             <S.DateContainer onClick={handleDateBoxClick}>
-              <S.DateText isSelected={!!formState.birthDate}>
-                {formState.birthDate
+              <S.DateText isSelected={!!formState?.birthDate}>
+                {formState?.birthDate
                   ? formState.birthDate.replaceAll('-', '. ') + '.'
                   : '생년월일을 선택해주세요'}
               </S.DateText>
@@ -260,7 +258,7 @@ export default function BasicInfo() {
                 type="date"
                 min="1900-01-01"
                 max="2026-12-31"
-                value={formState.birthDate}
+                value={formState?.birthDate || ''}
                 onChange={(e) => handleInputChange('birthDate', e.target.value)}
                 required
               />
@@ -270,8 +268,8 @@ export default function BasicInfo() {
           <S.FormGroup>
             <S.Label>학교</S.Label>
             <S.SelectBox onClick={() => setIsSchoolModalOpen(true)}>
-              <S.SelectText isSelected={!!formState.schoolName}>
-                {formState.schoolName || '학교명을 검색해주세요'}
+              <S.SelectText isSelected={!!formState?.schoolName}>
+                {formState?.schoolName || '학교명을 검색해주세요'}
               </S.SelectText>
               <S.ArrowIcon>▼</S.ArrowIcon>
             </S.SelectBox>
@@ -281,15 +279,15 @@ export default function BasicInfo() {
             <S.Label>학과</S.Label>
             <S.SelectBox
               onClick={() => {
-                if (!formState.schoolName) {
+                if (!formState?.schoolName) {
                   alert('학교를 먼저 선택해주세요!');
                   return;
                 }
                 setIsDeptModalOpen(true);
               }}
             >
-              <S.SelectText isSelected={!!formState.department}>
-                {formState.department || '학과를 선택해주세요'}
+              <S.SelectText isSelected={!!formState?.department}>
+                {formState?.department || '학과를 선택해주세요'}
               </S.SelectText>
               <S.ArrowIcon>▼</S.ArrowIcon>
             </S.SelectBox>
@@ -302,7 +300,7 @@ export default function BasicInfo() {
                 <S.GradeButton
                   key={g}
                   type="button"
-                  isActive={formState.grade === g}
+                  isActive={formState?.grade === g}
                   onClick={() => handleInputChange('grade', g)}
                 >
                   {g}
@@ -314,8 +312,8 @@ export default function BasicInfo() {
           <S.FormGroup>
             <S.Label>거주 지역</S.Label>
             <S.SelectBox onClick={() => setIsRegionModalOpen(true)}>
-              <S.SelectText isSelected={!!formState.residence}>
-                {formState.residence || '거주 지역을 선택해주세요'}
+              <S.SelectText isSelected={!!formState?.residence}>
+                {formState?.residence || '거주 지역을 선택해주세요'}
               </S.SelectText>
               <S.ArrowIcon>▼</S.ArrowIcon>
             </S.SelectBox>
@@ -337,7 +335,7 @@ export default function BasicInfo() {
       <DepartmentModal
         isOpen={isDeptModalOpen}
         onClose={() => setIsDeptModalOpen(false)}
-        selectedSchool={formState.schoolName}
+        selectedSchool={formState?.schoolName}
         onSelect={handleSelectDepartment}
         schools={metaData.schools}
       />

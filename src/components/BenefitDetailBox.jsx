@@ -96,19 +96,12 @@ const BenefitIcon = styled.button`
   }
 `;
 
-  const categoryIconMap = {
-    SCHOLARSHIP: state2,
-    CAMPUS_WORK: corporate2,
-    EXTERNAL_ACTIVITY: requirement2,
-    YOUTH_SUPPORT: region2,
-  };
-
-  const categoryLabelMap = {
-    SCHOLARSHIP: '장학금',
-    CAMPUS_WORK: '교내 근로',
-    EXTERNAL_ACTIVITY: '대외 활동',
-    YOUTH_SUPPORT: '청년 지원금',
-  };
+const categoryIconMap = {
+  '국가장학금': state2,
+  '기업·재단 장학금': corporate2,
+  '지역 장학금': region2,
+  '조건별장학금': requirement2,
+};
 
 export default function DetailBox({ children, buttonText, to, tags, category }) {
   const navigate = useNavigate();

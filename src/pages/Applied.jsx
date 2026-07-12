@@ -174,7 +174,7 @@ const Container = styled.div`
 
 const TabContainer = styled.div`
   display: flex;
-  border-bottom: 2px solid #aab3e7;
+  border-bottom: 1px solid #aab3e7;
   margin-bottom: 5px;
 `;
 
@@ -198,7 +198,7 @@ const TabButton = styled.button`
     left: 0;
     right: 0;
     height: 2px;
-    background-color: #5c59f0; /* 와이어프레임에 어울리는 포인트 블루 컬러 */
+    background-color: #423bb3; /* 와이어프레임에 어울리는 포인트 블루 컬러 */
   }
 `;
 
@@ -218,6 +218,7 @@ const EmptyMessage = styled.div`
   color: #767676;
   font-size: 14px;
 `;
+
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;

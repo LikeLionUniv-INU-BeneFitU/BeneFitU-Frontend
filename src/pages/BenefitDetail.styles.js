@@ -25,15 +25,16 @@ export const InfoBox = styled.div`
 // 장학금이름
 export const Title = styled.h1`
   font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 20px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  word-break: keep-all;
 `;
-// 장학금 금액
+
 export const Amount = styled.p`
-  color: #2578B0;
+  color: #2578b0;
   font-weight: bold;
   font-size: 20px;
-  margin-bottom: 20px;
+  margin: 16px 0 20px 0;
 `;
 
 export const Rowbox = styled.div`
@@ -43,10 +44,9 @@ export const Rowbox = styled.div`
 
 // 마감기한
 export const Deadline = styled.p`
-  color: #4A4A4A;
+  color: #4a4a4a;
   font-size: 18px;
-  margin-right: 10px;
-  margin-bottom: 20px;
+  margin: 0 10px 20px 0;
 `;
 export const Deadlinenum = styled.p`
   color: #000000;
@@ -112,12 +112,12 @@ export const ProbabilityTopRow = styled.div`
 export const ProbabilityLabel = styled.p`
   font-size: 20px;
   font-weight: 700;
-  color: #4A4A4A;
+  color: #4a4a4a;
 `;
 export const ProbabilityBarBg = styled.div`
   width: 100%;
   height: 10px;
-  background-color: #EEEEEF;
+  background-color: #eeeeef;
   border-radius: 10px;
   overflow: hidden;
   margin-top: 18px;
@@ -125,7 +125,7 @@ export const ProbabilityBarBg = styled.div`
 export const ProbabilityBarFill = styled.div`
   width: ${(props) => props.$percent}%;
   height: 100%;
-  background-color: #68B978;
+  background-color: #68b978;
 `;
 export const ProbabilityPercent = styled.p`
   font-size: 18px;

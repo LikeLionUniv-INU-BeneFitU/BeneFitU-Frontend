@@ -30,14 +30,14 @@ export default function BenefitDetail() {
         const mapped = {
           title: detail.benefitName,
           tags: [detail.category],
-          amount: `${detail.amount?.toLocaleString?.() || detail.amount}원`,
+          amount: `${detail.amount?.toLocaleString?.() || detail.amount}`,
           deadline: detail.deadLine,
           siteUrl: detail.benefitUrl,
           probability: parseInt(data.result.passProbability, 10) || 0,
           requirementType: 'AUTO',
           requirements: matched ? Object.values(matched) : [],
           reason: matched
-            ? `회원님은 ${Object.values(matched).join(', ')} 조건에 해당하여 지원 자격이 됩니다.`
+            ? `회원님은 ${Object.values(matched).join(', ')}와 같은 조건에 해당하여 지원 자격이 됩니다.`
             : '',
         };
 
@@ -73,10 +73,11 @@ export default function BenefitDetail() {
 
   // 체크박스 하나 클릭했을 때
   const handleCheck = (index) => {
-    setCheckedItems((prev) =>
-      prev.includes(index)
-        ? prev.filter((item) => item !== index) // 이미 체크됐으면 해제
-        : [...prev, index] // 안 됐으면 추가
+    setCheckedItems(
+      (prev) =>
+        prev.includes(index)
+          ? prev.filter((item) => item !== index) // 이미 체크됐으면 해제
+          : [...prev, index], // 안 됐으면 추가
     );
   };
 
@@ -91,7 +92,8 @@ export default function BenefitDetail() {
 
   const isCheckType = benefit.requirementType === 'CHECK';
   // 체크형일 때: 모든 조건에 체크했는지 확인
-  const allChecked = isCheckType && checkedItems.length === (benefit.requirements?.length || 0);
+  const allChecked =
+    isCheckType && checkedItems.length === (benefit.requirements?.length || 0);
 
   return (
     <S.PageWrapper>
@@ -103,27 +105,34 @@ export default function BenefitDetail() {
           <S.Title>{benefit.title}</S.Title>
 
           <S.Amount>{benefit.amount}</S.Amount>
-          <S.Rowbox><S.Deadline>마감일</S.Deadline> <S.Deadlinenum> {benefit.deadline} (D-{dDay})</S.Deadlinenum> </S.Rowbox>
+          <S.Rowbox>
+            <S.Deadline>마감일</S.Deadline>{' '}
+            <S.Deadlinenum>
+              {' '}
+              {benefit.deadline} (D-{dDay})
+            </S.Deadlinenum>{' '}
+          </S.Rowbox>
 
           <S.RequirementList>
-            {benefit.requirements && benefit.requirements.map((req, index) => (
-              <S.RequirementItem key={index}>
-                {isCheckType ? (
-                  // 타입 B: 체크박스 있음
-                  <S.CheckboxLabel>
-                    <input
-                      type="checkbox"
-                      checked={checkedItems.includes(index)}
-                      onChange={() => handleCheck(index)}
-                    />
-                    {req}
-                  </S.CheckboxLabel>
-                ) : (
-                  // 타입 A: 그냥 •만 표시
-                  <span>• {req}</span>
-                )}
-              </S.RequirementItem>
-            ))}
+            {benefit.requirements &&
+              benefit.requirements.map((req, index) => (
+                <S.RequirementItem key={index}>
+                  {isCheckType ? (
+                    // 타입 B: 체크박스 있음
+                    <S.CheckboxLabel>
+                      <input
+                        type="checkbox"
+                        checked={checkedItems.includes(index)}
+                        onChange={() => handleCheck(index)}
+                      />
+                      {req}
+                    </S.CheckboxLabel>
+                  ) : (
+                    // 타입 A: 그냥 •만 표시
+                    <span>• {req}</span>
+                  )}
+                </S.RequirementItem>
+              ))}
           </S.RequirementList>
         </S.InfoBox>
 
@@ -150,7 +159,9 @@ export default function BenefitDetail() {
             <>
               <S.ProbabilityTopRow>
                 <S.ProbabilityLabel>지원 가능성</S.ProbabilityLabel>
-                <S.ProbabilityPercent>{benefit.probability}%</S.ProbabilityPercent>
+                <S.ProbabilityPercent>
+                  {benefit.probability}%
+                </S.ProbabilityPercent>
               </S.ProbabilityTopRow>
               <S.ProbabilityBarBg>
                 <S.ProbabilityBarFill $percent={benefit.probability} />
@@ -158,7 +169,9 @@ export default function BenefitDetail() {
             </>
           ) : (
             // 타입 B에서 아직 클릭 전 상태
-            <S.ProbabilityPlaceholder>지원 가능성 분석</S.ProbabilityPlaceholder>
+            <S.ProbabilityPlaceholder>
+              지원 가능성 분석
+            </S.ProbabilityPlaceholder>
           )}
         </S.ProbabilityBox>
 

@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import api from '../api/axios'; // axios 인스턴스 임포트
 import Header from '../components/Header';
 import BenefitDetailBox from '../components/BenefitDetailBox';
 import * as S from './BenefitAll.styles';
 import CategoryButtonBar from '../components/CategoryButtonBar';
 import UserInfoCard from '../components/UserInfoCard';
+
+// 한글 카테고리명을 백엔드 요청용 쿼리 스트링 값으로 매핑
+const categoryMap = {
+  전체: 'ALL',
+  국가장학금: 'STATE',
+  '기업·재단 장학금': 'CORPORATE',
+  '지역 장학금': 'REGION',
+  조건별장학금: 'REQUIREMENTS',
+};
+
+// 프론트엔드 정렬 타입을 백엔드 요청용 쿼리 스트링 값으로 매핑
+const sortMap = {
+  최신순: 'DEFAULT',
+  금액순: 'AMOUNT_HIGH',
+};
 
 function BenefitAll() {
   const location = useLocation();
@@ -22,51 +38,16 @@ function BenefitAll() {
     incomeLevel: '',
   });
 
+  // 사용자 정보 조회 API 연동
   useEffect(() => {
-    const backendUrl = 'http://43.201.77.120:8080/api/benefits?category=ALL&sort=DEFAULT&page=1';
-    const token = localStorage.getItem("accessToken");
-
-    fetch(backendUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    api
+      .get('/api/users/info')
       .then((res) => {
-        if (!res.ok) {
-          throw new Error('네트워크 응답이 올바르지 않습니다.');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log('categories 실제값:', data.result.benefits.map(b => b.categories));
-        setBenefitList(data.result.benefits);
-      })
-      .catch((error) => {
-        console.error('장학금 리스트 조회 실패', error);
-        setBenefitList([]);
-      });
-  }, [currentCategory]);
-
-  useEffect(() => {
-    const userUrl = 'http://43.201.77.120:8080/api/users/info';
-    const token = localStorage.getItem("accessToken");
-
-    fetch(userUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('네트워크 응답이 올바르지 않습니다.');
-        }
-        return res.json();
-      })
-      .then((data) => {
+        const { baseInfo, detailInfo } = res.data.result;
         setUserInfo({
-          name: data.result.baseInfo.schoolName,
-          gpa: data.result.detailInfo.gpa,
-          incomeLevel: data.result.detailInfo.incomeBracket + "구간",
+          name: baseInfo.name,
+          gpa: detailInfo.gpa,
+          incomeLevel: detailInfo.incomeBracket + '구간',
         });
       })
       .catch((error) => {
@@ -74,23 +55,21 @@ function BenefitAll() {
       });
   }, []);
 
-  // currentCategory(한글 라벨)를 실제 코드로 변환해서 필터링
-  const filteredList =
-    currentCategory === '전체'
-      ? benefitList
-      : benefitList.filter(
-          (item) =>
-            item.categories &&
-            item.categories.includes(categoryCodeMap[currentCategory])
-        );
+  // 카테고리 또는 정렬 기준 변경 시 혜택 목록 조회 API 연동
+  useEffect(() => {
+    const categoryQuery = categoryMap[currentCategory] || 'ALL';
+    const sortQuery = sortMap[sortType] || 'DEFAULT';
 
-  const sortedList = [...filteredList].sort((a, b) => {
-    if (sortType === '최신순') {
-      return new Date(b.date) - new Date(a.date);
-    } else {
-      return b.priceValue - a.priceValue;
-    }
-  });
+    api
+      .get(`/api/benefits?category=${categoryQuery}&sort=${sortQuery}&page=0`)
+      .then((res) => {
+        setBenefitList(res.data.result.benefits || []);
+      })
+      .catch((error) => {
+        console.error('장학금 리스트 조회 실패', error);
+        setBenefitList([]);
+      });
+  }, [currentCategory, sortType]);
 
   return (
     <S.PageWrapper>
@@ -107,7 +86,7 @@ function BenefitAll() {
       <S.ScrollArea>
         <S.Rowbox>
           <S.SubTitle>
-            추천 혜택 <span>{filteredList.length}</span>
+            추천 혜택 <span>{benefitList.length}</span>
           </S.SubTitle>
 
           <S.SortWrapper>
@@ -140,25 +119,36 @@ function BenefitAll() {
           </S.SortWrapper>
         </S.Rowbox>
 
-        {sortedList.map((benefit) => {
-          return (
-            <BenefitDetailBox
-              key={benefit.benefitId}
-              buttonText="상세 보기"
-              to={`/detail/${benefit.benefitId}`}
-              category={benefit.categories[0]}
-              tags={benefit.categories}
-            >
-              <p style={{ fontWeight: "bold", fontSize: "20px" }}>
-                {benefit.benefitName}
-              </p>
+        {benefitList &&
+          benefitList.map((benefit) => {
+            // 백엔드 데이터에 문자열 공백이 포함되어 올 경우를 대비해 trim 처리
+            const cleanCategory = benefit.categories[0]
+              ? benefit.categories[0].trim()
+              : '';
 
-              <p style={{ color: "#2578B0", fontWeight: "bold", fontSize: "17px" }}>
-                {benefit.amount.toLocaleString()}
-              </p>
-            </BenefitDetailBox>
-          );
-        })}
+            return (
+              <BenefitDetailBox
+                key={benefit.benefitId}
+                buttonText="상세 보기"
+                to={`/detail/${benefit.benefitId}`}
+                category={cleanCategory}
+                tags={benefit.categories}
+              >
+                <p style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                  {benefit.benefitName}
+                </p>
+                <p
+                  style={{
+                    color: '#2578B0',
+                    fontWeight: 'bold',
+                    fontSize: '17px',
+                  }}
+                >
+                  {benefit.amount}
+                </p>
+              </BenefitDetailBox>
+            );
+          })}
       </S.ScrollArea>
     </S.PageWrapper>
   );

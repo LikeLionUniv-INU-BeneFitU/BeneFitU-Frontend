@@ -26,7 +26,6 @@ const Box = styled.div`
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4); /* 전체 박스 그림자 */
 
   padding: 15px;
-  gap: 10px;
 
   display: flex;
   flex-direction: column;

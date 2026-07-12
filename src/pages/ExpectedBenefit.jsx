@@ -10,69 +10,96 @@ export default function ExpectedBenefit() {
   const [benefitList, setBenefitList] = useState([]);
 
   useEffect(() => {
-  const dummyData = [
-    { id: 1, title: "교내 성적우수 장학금", price: "최대 100만원", tags: ["교내장학금", "성적우수"] },
-    { id: 2, title: "인천대학교 근로장학금", price: "최대 120만원", tags: ["교내근로", "시간제"] },
-    { id: 3, title: "바른 생활 장학금", price: "20만원", tags: ["청년지원금", "소득분위"] },
-  ];
-  const dummyTotal = 1460000;
+    const dummyData = [
+      {
+        id: 1,
+        title: '교내 성적우수 장학금',
+        price: '최대 100만원',
+        tags: ['교내장학금', '성적우수'],
+      },
+      {
+        id: 2,
+        title: '인천대학교 근로장학금',
+        price: '최대 120만원',
+        tags: ['교내근로', '시간제'],
+      },
+      {
+        id: 3,
+        title: '바른 생활 장학금',
+        price: '20만원',
+        tags: ['청년지원금', '소득분위'],
+      },
+    ];
+    const dummyTotal = 1460000;
 
-  const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('accessToken');
 
-  // 1. 총 금액 조회
-  fetch('http://43.201.77.120:8080/api/benefits/total-amount', {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error('실패');
-      return res.json();
+    // 1. 총 금액 조회
+    fetch('http://43.201.77.120:8080/api/benefits/total-amount', {
+      headers: { Authorization: `Bearer ${token}` },
     })
-    .then((data) => {
-      console.log('총 금액 응답:', data.result);
-      setTotalAmount(data.result.totalAmount);
-    })
-    .catch(() => {
-      setTotalAmount(dummyTotal);
-    });
+      .then((res) => {
+        if (!res.ok) throw new Error('실패');
+        return res.json();
+      })
+      .then((data) => {
+        console.log('총 금액 응답:', data.result);
+        setTotalAmount(data.result.totalAmount);
+      })
+      .catch(() => {
+        setTotalAmount(dummyTotal);
+      });
 
-  // 2. 혜택 목록 조회
-  fetch('http://43.201.77.120:8080/api/benefits?category=ALL', {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error('실패');
-      return res.json();
+    // 2. 혜택 목록 조회
+    fetch('http://43.201.77.120:8080/api/benefits?category=ALL', {
+      headers: { Authorization: `Bearer ${token}` },
     })
-    .then((data) => {
-      console.log('혜택 목록 응답:', data.result);
-      console.log('카테고리 확인:', data.result.benefits.map(b => b.categories));
-      setBenefitList(data.result.benefits || []);
-    })
-    .catch(() => {
-      setBenefitList(dummyData);
-    });
-}, []);
+      .then((res) => {
+        if (!res.ok) throw new Error('실패');
+        return res.json();
+      })
+      .then((data) => {
+        console.log('혜택 목록 응답:', data.result);
+        console.log(
+          '카테고리 확인:',
+          data.result.benefits.map((b) => b.categories),
+        );
+        setBenefitList(data.result.benefits || []);
+      })
+      .catch(() => {
+        setBenefitList(dummyData);
+      });
+  }, []);
 
   return (
     <S.PageWrapper>
       <Header title="예상 혜택 금액" onBack={() => navigate(-1)} />
-      <S.TotalAmountText>
-        총 {totalAmount.toLocaleString()}
-      </S.TotalAmountText>
-      
+      <S.TotalAmountText>총 {totalAmount.toLocaleString()}</S.TotalAmountText>
+
       <S.ScrollArea>
-      {benefitList && benefitList.map((benefit) => (
-        <BenefitDetailBox
-          key={benefit.benefitId}
-          buttonText="상세 보기"
-          to={`/detail/${benefit.benefitId}`}
-          category={benefit.categories[0]}
-          tags={benefit.categories}
-        >
-          <p style={{ fontWeight: 'bold', fontSize: '20px', letterSpacing: '-1px', marginBottom: '18px' }}>{benefit.benefitName}</p>
-          <p style={{ color: '#2578B0', fontSize: '18px', letterSpacing: '-1px' }}>{benefit.amount}</p>
-        </BenefitDetailBox>
-      ))}
+        {benefitList &&
+          benefitList.map((benefit) => (
+            <BenefitDetailBox
+              key={benefit.benefitId}
+              buttonText="상세 보기"
+              to={`/detail/${benefit.benefitId}`}
+              category={benefit.categories[0]}
+              tags={benefit.categories}
+            >
+              <p style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                {benefit.benefitName}
+              </p>
+              <p
+                style={{
+                  color: '#2578B0',
+                  fontWeight: 'bold',
+                  fontSize: '18px',
+                }}
+              >
+                {benefit.amount}
+              </p>
+            </BenefitDetailBox>
+          ))}
       </S.ScrollArea>
     </S.PageWrapper>
   );

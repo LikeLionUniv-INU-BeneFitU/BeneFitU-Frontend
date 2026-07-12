@@ -58,9 +58,8 @@ function BenefitAll() {
   // 카테고리 또는 정렬 기준 변경 시 혜택 목록 조회 API 연동
   useEffect(() => {
     const categoryQuery = categoryMap[currentCategory] || 'ALL';
-    const sortQuery = sortMap[sortType] || 'DEFAULT'; // 원래 정렬 맵 로직으로 복구
+    const sortQuery = sortMap[sortType] || 'DEFAULT';
 
-    // 첫 페이지 인덱스 가설 검증을 위해 page를 0으로 설정하여 호출
     api
       .get(`/api/benefits?category=${categoryQuery}&sort=${sortQuery}&page=0`)
       .then((res) => {
@@ -120,7 +119,6 @@ function BenefitAll() {
           </S.SortWrapper>
         </S.Rowbox>
 
-        {/* ExpectedBenefit 컴포넌트의 매핑 및 렌더링 구조와 완벽히 통일 */}
         {benefitList &&
           benefitList.map((benefit) => {
             // 백엔드 데이터에 문자열 공백이 포함되어 올 경우를 대비해 trim 처리

@@ -19,7 +19,7 @@ const Card = styled.div`
 
   padding: 12px 20px;
   margin: 14px;
-  gap: 10px;
+  gap: 9px;
 
   display: flex;
   flex-direction: column;
@@ -33,7 +33,9 @@ const TopRow = styled.div`
 
 const NameText = styled.p`
   font-size: 20px;
+  weight: 500;
   color: #ffffff;
+  letter-spacing: -0.8px;
 `;
 
 // 마이페이지 이동 버튼
@@ -54,7 +56,6 @@ const MyButton = styled.button`
 const TagRow = styled.div`
   display: flex;
   gap: 0 6px;
-  margin-top: 9px;
 `;
 
 const Tag = styled.span`

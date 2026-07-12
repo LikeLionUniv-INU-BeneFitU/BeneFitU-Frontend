@@ -41,6 +41,8 @@ const Columnbox = styled.div`
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  letter-spacing: -1px;
+  word-break: keep-all;
 `;
 
 // 키워드 박스 스타일
@@ -64,7 +66,7 @@ const MoveButton = styled.button`
   width: 100%;
   height: 40px;
 
-  margin-top: 18px;
+  margin-top: px;
   display: flex;
   align-items: center;
   justify-content: center;

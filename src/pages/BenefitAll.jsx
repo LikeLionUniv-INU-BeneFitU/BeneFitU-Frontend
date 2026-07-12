@@ -22,14 +22,6 @@ function BenefitAll() {
     incomeLevel: '',
   });
 
-  // 실제 API 카테고리 값과 화면에 보여줄 한글 라벨 매핑
-  const categoryCodeMap = {
-    '장학금': 'SCHOLARSHIP',
-    '교내 근로': 'CAMPUS_WORK',
-    '대외 활동': 'EXTERNAL_ACTIVITY',
-    '청년 지원금': 'YOUTH_SUPPORT',
-  };
-
   useEffect(() => {
     const backendUrl = 'http://43.201.77.120:8080/api/benefits?category=ALL&sort=DEFAULT&page=1';
     const token = localStorage.getItem("accessToken");

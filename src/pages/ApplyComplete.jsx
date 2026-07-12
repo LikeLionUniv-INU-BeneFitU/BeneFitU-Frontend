@@ -27,7 +27,6 @@ export default function ApplyComplete() {
 
   return (
     <S.PageWrapper>
-      {/* ⭐️ 타이틀부터 하단 설명글까지 묶어 60vh로 제한하는 반응형 박스 */}
       <S.MainContentBox>
         {/* 1. 메인 타이틀 */}
         <S.MainTitle>
@@ -40,7 +39,7 @@ export default function ApplyComplete() {
         </S.GraphicWrapper>
       </S.MainContentBox>
 
-      {/* ⭐️ 4. 원본 그대로 유지되는 하단 고정 버튼 영역 */}
+      {/* 4. 원본 그대로 유지되는 하단 고정 버튼 영역 */}
       <S.ButtonContainer>
         <BasicButton onClick={() => navigate('/benefit')}>
           맞춤 혜택 보러가기

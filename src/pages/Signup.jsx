@@ -44,14 +44,15 @@ const LogoImg = styled.img`
 `;
 
 const Title = styled.h1`
-  font-size: 1.5rem;
+  font-size: 24px;
+  letter-spacing: -1px;
   font-weight: 700;
   color: #111111;
   margin-left: 15px;
 `;
 
 const SubTitle = styled.p`
-  font-size: 0.8125rem;
+  font-size: 12px;
   color: #000000;
   margin-top: 5pcx;
   margin-bottom: 20px;
@@ -59,7 +60,7 @@ const SubTitle = styled.p`
 `;
 
 const SubTitlehighlight = styled.span`
-  font-size: 0.8125rem;
+  font-size: 12px;
   color: #5c4ff2;
 `;
 
@@ -70,7 +71,8 @@ export const Rowbox = styled.div`
 
 // 아이디, 비밀번호, 비밀번호 확인 텍스트
 const Label = styled.label`
-  font-size: 1.25rem;
+  font-size: 14px;
+  letter-spacing: -1px;
   font-weight: 700;
   color: #111111;
   display: block;
@@ -125,7 +127,8 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: 12px;
 
-  font-size: 1rem;
+  font-size: 18px;
+  letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
 

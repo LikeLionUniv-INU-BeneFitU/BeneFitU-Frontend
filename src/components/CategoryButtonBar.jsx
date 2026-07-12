@@ -18,7 +18,8 @@ const CategoryButton = styled.button`
   background: none;
   border: none;
   padding: 10px 4px;
-  font-size: 11px;
+  font-size: 12px;
+  letter-spacing: -1px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;

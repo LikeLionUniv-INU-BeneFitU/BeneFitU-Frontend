@@ -18,6 +18,9 @@ const PageWrapper = styled.div`
 const Box = styled.div`
   width: 98%;
 
+  font-size: 18px;
+  letter-spacing: -1px;
+
   background-color: #FFFFFF;
   
   border-radius: 12px; /* 전체 박스 모서리 */
@@ -44,28 +47,15 @@ const Columnbox = styled.div`
   min-width: 0;
 `;
 
-// 키워드 박스 스타일
-const KwordBox = styled.div`
-  padding: 2px 12px;
-  font-size: 0.8rem;
-
-  background-color: #D9D9D9;
-
-  border-radius: 12px;
-  
-  margin-right: 5px;
-  margin-top: 8px;
-
-  white-space: nowrap;     // 글자가 두 줄로 안 꺾이게
-  display: inline-block;   // 내용 크기만큼만 차지하도록
-`;
-
 // 상세보기 버튼 스타일
 const MoveButton = styled.button`
   width: 100%;
   height: 40px;
 
-  margin-top: 10px;
+  font-size: 18px;
+  letter-spacing: -1px;
+
+  margin-top: 18px;
   display: flex;
   align-items: center;
   justify-content: center;

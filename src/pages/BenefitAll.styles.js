@@ -17,6 +17,7 @@ export const Rowbox = styled.div`
 
 export const SubTitle = styled.div`
   font-size: 18px;
+  letter-spacing: -1px;
   font-weight: bold;
   span {
   color: #584FEA;
@@ -55,6 +56,7 @@ export const SortButton = styled.button`
 
   border-radius: 8px;
   font-size: 14px;
+  letter-spacing: -1px;
   cursor: pointer;
 `;
 
@@ -70,6 +72,7 @@ export const SortDropdown = styled.div`
 export const SortOption = styled.div`
   padding: 5px 10px;
   font-size: 14px;
+  letter-spacing: -1px;
   cursor: pointer;
 
   border: 1px solid #4A4A4A;

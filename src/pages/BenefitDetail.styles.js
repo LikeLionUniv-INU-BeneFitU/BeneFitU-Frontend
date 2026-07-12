@@ -5,7 +5,7 @@ export const PageWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: #E9E6FF;
+  background-color: #F1F0FF;
 `;
 
 export const ContentWrapper = styled.div`
@@ -15,83 +15,54 @@ export const ContentWrapper = styled.div`
   gap: 16px;
 `;
 
-// 공통 박스 스타일 (3개 박스가 다 흰색 + 둥근 모서리 + 그림자)
+// 설명박스
 export const InfoBox = styled.div`
   background-color: #ffffff;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 `;
-
-export const ReasonBox = styled.div`
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-`;
-
-export const ProbabilityBox = styled.div`
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  cursor: ${(props) => (props.$clickable ? 'pointer' : 'default')};
-`;
-
+// 장학금이름
 export const Title = styled.h1`
-  font-size: clamp(25.43px, calc(25.43px + (32 - 25.43) * ((100vw - 320px) / 83)), 32px);
+  font-size: 24px;
   font-weight: 700;
+  margin-bottom: 20px;
 `;
-
-export const TagRow = styled.div`
-  display: flex;
-  gap: 8px;
-  margin: 10px 0;
-`;
-
-export const Tag = styled.span`
-  background-color: #EEEEEF;
-  color: #4A4A4A;
-  font-size: clamp(12.71px, calc(12.71px + (16 - 12.71) * ((100vw - 320px) / 83)), 16px);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: clamp(0.8rem, 4vw, 1rem);
-`;
-
+// 장학금 금액
 export const Amount = styled.p`
   color: #2578B0;
   font-weight: bold;
-  ont-size: clamp(19.07px, calc(19.07px + (24 - 19.07) * ((100vw - 320px) / 83)), 24px);
-  margin: 10px 0 10px;
+  font-size: 20px;
+  margin-bottom: 20px;
 `;
 
 export const Rowbox = styled.div`
   display: flex;
   margin-bottom: 5px;
-
-  
 `;
 
+// 마감기한
 export const Deadline = styled.p`
   color: #4A4A4A;
-  font-size: clamp(15.26px, calc(15.26px + (19.2 - 15.26) * ((100vw - 320px) / 83)), 19.2px);
+  font-size: 18px;
   margin-right: 10px;
+  margin-bottom: 20px;
 `;
-
 export const Deadlinenum = styled.p`
   color: #000000;
   font-weight: bold;
-  font-size: clamp(19.07px, calc(19.07px + (24 - 19.07) * ((100vw - 320px) / 83)), 24px);
+  font-size: 20px;
+  margin-bottom: 20px;
 `;
 
 export const RequirementList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 `;
 
 export const RequirementItem = styled.div`
-  font-size: clamp(10.17px, calc(10.17px + (12.8 - 10.17) * ((100vw - 320px) / 83)), 12.8px);
+  font-size: 14px;
   color: #333333;
 `;
 
@@ -107,30 +78,42 @@ export const CheckboxLabel = styled.label`
   }
 `;
 
-export const ReasonTitle = styled.h3`
-  font-size: clamp(12.71px, calc(12.71px + (16 - 12.71) * ((100vw - 320px) / 83)), 16px);
-  font-weight: 700;
-  margin-bottom: 8px;
+// 추천이유 박스
+export const ReasonBox = styled.div`
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 `;
-
+export const ReasonTitle = styled.h3`
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+`;
 export const ReasonText = styled.p`
-  font-size: clamp(11.12px, calc(11.12px + (14 - 11.12) * ((100vw - 320px) / 83)), 14px);
+  font-size: 18px;
   color: #4A4A4A;
 `;
 
+// 지원가능성 박스
+export const ProbabilityBox = styled.div`
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  cursor: ${(props) => (props.$clickable ? 'pointer' : 'default')};
+`;
 export const ProbabilityTopRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 `;
-
 export const ProbabilityLabel = styled.p`
-  font-size: clamp(15.26px, calc(15.26px + (19.2 - 15.26) * ((100vw - 320px) / 83)), 19.2px);
+  font-size: 20px;
   font-weight: 700;
   color: #4A4A4A;
 `;
-
 export const ProbabilityBarBg = styled.div`
   width: 100%;
   height: 10px;
@@ -139,36 +122,33 @@ export const ProbabilityBarBg = styled.div`
   overflow: hidden;
   margin-top: 18px;
 `;
-
 export const ProbabilityBarFill = styled.div`
   width: ${(props) => props.$percent}%;
   height: 100%;
   background-color: #68B978;
 `;
-
 export const ProbabilityPercent = styled.p`
-  font-size: clamp(15.26px, calc(15.26px + (19.2 - 15.26) * ((100vw - 320px) / 83)), 19.2px);
+  font-size: 18px;
   font-weight: 700;
   color: #000000;
 `;
-
 export const ProbabilityPlaceholder = styled.p`
   text-align: center;
   color: #828282;
-  font-size: clamp(11.44px, calc(11.44px + (14.4 - 11.44) * ((100vw - 320px) / 83)), 14.4px);
+  font-size: 14px;
 `;
 
+// 버튼
 export const ButtonRow = styled.div`
   display: flex;
   gap: 10px;
 `;
 
-// 버튼
 export const DetailButton = styled.button`
   width: 100%;
   height: 56px;
   border-radius: 8px;
-  font-size: clamp(12.71px, calc(12.71px + (16 - 12.71) * ((100vw - 320px) / 83)), 16px);
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -183,13 +163,13 @@ export const DetailButton = styled.button`
     props.disabled
       ? '#ffffff'
       : props.$variant === 'white'
-        ? '#584FEA'                 /* white 버튼 글자색: 보라색으로 변경 */
+        ? '#584FEA'
         : 'rgb(255, 255, 255)'};
   border: ${(props) =>
     props.disabled
       ? '1px solid #9d9d9d'
       : props.$variant === 'white'
-        ? '1px solid #584FEA'       /* white 버튼 테두리: 보라색으로 변경 */
+        ? '1px solid #584FEA'
         : '1px solid rgb(88, 79, 234)'};
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 `;

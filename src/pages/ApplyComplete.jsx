@@ -34,6 +34,10 @@ export default function ApplyComplete() {
         </S.GraphicWrapper>
       </S.MainContentBox>
 
+<<<<<<< HEAD
+=======
+      {/* 4. 원본 그대로 유지되는 하단 고정 버튼 영역 */}
+>>>>>>> main
       <S.ButtonContainer>
         <BasicButton onClick={() => navigate('/applied')}>
           신청 현황 보러가기

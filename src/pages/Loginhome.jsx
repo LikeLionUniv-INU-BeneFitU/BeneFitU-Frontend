@@ -33,7 +33,8 @@ const LoginButton = styled.button`
   color: #ffffff;
   border: none;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 18px;
+  letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
   
@@ -52,7 +53,8 @@ const SignupButton = styled.button`
   color: #5c4ff2;
   border: 1px solid #5c4ff2;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 18px;
+  letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
   
@@ -99,7 +101,9 @@ const TermsAgreement = styled.div`
   width: 50%;
   
   font-weight: bold;
-  font-size: 10px;
+  font-size: 12px;
+  letter-spacing: -1px;
+
   margin-bottom: 106px;
   margin-top: 23px;
 `;

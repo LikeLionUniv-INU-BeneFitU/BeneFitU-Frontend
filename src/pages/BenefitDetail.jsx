@@ -49,14 +49,27 @@ export default function BenefitDetail() {
   }, [benefitId]);
 
   const handleApply = () => {
-    const token = localStorage.getItem('accessToken');
-    fetch(`http://43.201.77.120:8080/api/benefits/${benefitId}/apply`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
+  const token = localStorage.getItem('accessToken');
+  fetch(`http://43.201.77.120:8080/api/benefits/${benefitId}/apply`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error('신청 실패');
+      return res.json();
     })
-      .then(() => alert('신청이 완료되었습니다!'))
-      .catch((error) => console.error('신청 실패:', error));
-  };
+    .then((data) => {
+      if (data.isSuccess) {
+        navigate('/apply-complete');
+      } else {
+        alert(data.message || '신청에 실패했습니다.');
+      }
+    })
+    .catch((error) => {
+      console.error('신청 실패:', error);
+      alert('신청 처리 중 오류가 발생했습니다.');
+    });
+};
 
   // 체크박스 하나 클릭했을 때
   const handleCheck = (index) => {
@@ -163,15 +176,10 @@ export default function BenefitDetail() {
         </S.ProbabilityBox>
 
         <S.ButtonRow>
-          <S.DetailButton
-            $variant="white"
-            onClick={() => window.open(benefit.siteUrl, '_blank')}
-          >
-            사이트로이동
+          <S.DetailButton $variant="white" onClick={() => window.open(benefit.siteUrl, '_blank')}>
+            사이트로 이동
           </S.DetailButton>
-          <S.DetailButton onClick={() => navigate('/apply-complete')}>
-            신청 완료
-          </S.DetailButton>
+          <S.DetailButton onClick={handleApply}>신청 완료</S.DetailButton>
         </S.ButtonRow>
       </S.ContentWrapper>
     </S.PageWrapper>

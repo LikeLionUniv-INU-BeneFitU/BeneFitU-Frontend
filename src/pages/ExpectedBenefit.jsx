@@ -69,8 +69,8 @@ export default function ExpectedBenefit() {
           category={benefit.categories[0]}
           tags={benefit.categories}
         >
-          <p style={{ fontWeight: 'bold', fontSize: '20px' }}>{benefit.benefitName}</p>
-          <p style={{ color: '#2578B0', fontWeight: 'bold', fontSize: '18px' }}>{benefit.amount}</p>
+          <p style={{ fontWeight: 'bold', fontSize: '20px', letterSpacing: '-1px', marginBottom: '18px' }}>{benefit.benefitName}</p>
+          <p style={{ color: '#2578B0', fontSize: '18px', letterSpacing: '-1px' }}>{benefit.amount}</p>
         </BenefitDetailBox>
       ))}
       </S.ScrollArea>

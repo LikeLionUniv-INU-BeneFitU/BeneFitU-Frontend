@@ -45,6 +45,7 @@ export default function ExpectedBenefit() {
     })
     .then((data) => {
       console.log('혜택 목록 응답:', data.result);
+      console.log('카테고리 확인:', data.result.benefits.map(b => b.categories));
       setBenefitList(data.result.benefits || []);
     })
     .catch(() => {

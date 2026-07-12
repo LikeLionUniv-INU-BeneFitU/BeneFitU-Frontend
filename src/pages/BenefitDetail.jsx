@@ -24,16 +24,16 @@ export default function BenefitDetail() {
       })
       .then((data) => {
         console.log('상세 응답 전체:', data);
-        const detail = data.result.benefitDetails; // benefitDetail → benefitDetails
+        const detail = data.result.benefitDetails;
         const matched = data.result.matchedConditions;
 
         const mapped = {
           title: detail.benefitName,
-          tags: [detail.category], // category가 단수 문자열이라 배열로 감싸서 기존 로직 재사용
+          tags: [detail.category],
           amount: `${detail.amount?.toLocaleString?.() || detail.amount}원`,
-          deadline: detail.deadLine, // deadline → deadLine
+          deadline: detail.deadLine,
           siteUrl: detail.benefitUrl,
-          probability: parseInt(data.result.passProbability, 10) || 0, // "100%" → 100
+          probability: parseInt(data.result.passProbability, 10) || 0,
           requirementType: 'AUTO',
           requirements: matched ? Object.values(matched) : [],
           reason: matched

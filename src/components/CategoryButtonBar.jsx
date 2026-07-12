@@ -2,14 +2,14 @@ import styled from 'styled-components';
 
 const CategoryBar = styled.div`
   display: flex;
-  justify-content: space-evenly;   /* 되돌림: 버튼 사이 간격만 균등 배분 */
 
   background-color: #F7F6FF;
   border-bottom: 1px solid #D9D9D9;
 `;
 
 const CategoryButton = styled.button`
-  /* flex: 1, min-width: 0 제거 → 글씨 길이만큼만 폭 차지 */
+  flex: 1;                 /* 5개 버튼이 CategoryBar 너비를 정확히 5등분 */
+  min-width: 0;
 
   display: flex;
   align-items: center;

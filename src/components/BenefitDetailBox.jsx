@@ -76,11 +76,6 @@ const MoveButton = styled.button`
   border-radius: 12px;
 
   color: ${(props) => (props.$isActive ? '#ffffff' : '#111111')};
-
-  &:hover {
-    background-color: #584FEA;
-    color: #EEEEFF;
-  }
 `;
 
 // 혜택 아이콘 스타일
@@ -102,17 +97,17 @@ const BenefitIcon = styled.button`
 `;
 
   const categoryIconMap = {
-    STATE: state2,
-    CORPORATE: corporate2,
-    REGION: region2,
-    REQUIREMENTS: requirement2,
+    SCHOLARSHIP: state2,
+    CAMPUS_WORK: corporate2,
+    EXTERNAL_ACTIVITY: requirement2,
+    YOUTH_SUPPORT: region2,
   };
 
   const categoryLabelMap = {
-    STATE: '국가장학금',
-    CORPORATE: '기업·재단 장학금',
-    REGION: '지역 장학금',
-    REQUIREMENTS: '조건별 장학금',
+    SCHOLARSHIP: '장학금',
+    CAMPUS_WORK: '교내 근로',
+    EXTERNAL_ACTIVITY: '대외 활동',
+    YOUTH_SUPPORT: '청년 지원금',
   };
 
 export default function DetailBox({ children, buttonText, to, tags, category }) {
@@ -127,14 +122,8 @@ export default function DetailBox({ children, buttonText, to, tags, category }) 
           </BenefitIcon>
           <Columnbox>
             {children}
-            <Rowbox>
-              {tags && tags.map((tag, index) => (
-              <KwordBox key={index}>{categoryLabelMap[tag] || tag}</KwordBox>
-              ))}
-            </Rowbox>
           </Columnbox>
         </Rowbox>
-        
         <MoveButton onClick={() => navigate(to)}>{buttonText}</MoveButton>
       </Box>
     </PageWrapper>

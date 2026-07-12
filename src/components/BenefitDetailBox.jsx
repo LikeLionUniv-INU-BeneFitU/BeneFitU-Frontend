@@ -35,13 +35,14 @@ const Box = styled.div`
 const Rowbox = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  
   flex-wrap: wrap;
 `;
 
 const Columnbox = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   flex: 1;
   min-width: 0;
   letter-spacing: -1px;
@@ -88,10 +89,10 @@ const BenefitIcon = styled.button`
 `;
 
 const categoryIconMap = {
-  국가장학금: state2,
+  '국가장학금': state2,
   '기업·재단 장학금': corporate2,
   '지역 장학금': region2,
-  조건별장학금: requirement2,
+  '조건별장학금': requirement2,
 };
 
 export default function DetailBox({

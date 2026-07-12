@@ -38,7 +38,7 @@ function BenefitAll() {
 
   useEffect(() => {
     const backendUrl = `http://43.201.77.120:8080/api/benefits?category=ALL&sort=DEFAULT&page=${currentPage}`;
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem('accessToken');
 
     fetch(backendUrl, {
       headers: {
@@ -62,12 +62,12 @@ function BenefitAll() {
 
   useEffect(() => {
     const userUrl = 'http://43.201.77.120:8080/api/users/info';
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem('accessToken');
 
     fetch(userUrl, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         if (!res.ok) {
@@ -77,9 +77,9 @@ function BenefitAll() {
       })
       .then((data) => {
         setUserInfo({
-          name: data.result.baseInfo.schoolName,
+          name: data.result.baseInfo.name,
           gpa: data.result.detailInfo.gpa,
-          incomeLevel: data.result.detailInfo.incomeBracket + "구간",
+          incomeLevel: data.result.detailInfo.incomeBracket + '구간',
         });
       })
       .catch((error) => {
@@ -111,7 +111,8 @@ function BenefitAll() {
     currentCategory === '전체'
       ? benefitList
       : benefitList.filter(
-          (item) => item.categories && item.categories.includes(currentCategory)
+          (item) =>
+            item.categories && item.categories.includes(currentCategory),
         );
 
   const sortedList = [...filteredList].sort((a, b) => {
@@ -179,8 +180,25 @@ function BenefitAll() {
               category={benefit.categories[0]}
               tags={benefit.categories}
             >
-              <p style={{ fontWeight: 'bold', fontSize: '20px', letterSpacing: '-1px' }}>{benefit.benefitName}</p>
-              <p style={{ color: '#2578B0', fontSize: '18px', letterSpacing: '-1px', fontWeight: '600' }}>{benefit.amount}</p>
+              <p
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: '20px',
+                  letterSpacing: '-1px',
+                }}
+              >
+                {benefit.benefitName}
+              </p>
+              <p
+                style={{
+                  color: '#2578B0',
+                  fontSize: '18px',
+                  letterSpacing: '-1px',
+                  fontWeight: '600',
+                }}
+              >
+                {benefit.amount}
+              </p>
             </BenefitDetailBox>
           );
         })}
@@ -188,7 +206,10 @@ function BenefitAll() {
 
       {sortedList.length > 0 && (
         <S.PaginationContainer>
-          <S.BlockArrowBtn disabled={currentBlock === 0} onClick={handlePrevBlock}>
+          <S.BlockArrowBtn
+            disabled={currentBlock === 0}
+            onClick={handlePrevBlock}
+          >
             &lt;
           </S.BlockArrowBtn>
 
@@ -215,4 +236,3 @@ function BenefitAll() {
 }
 
 export default BenefitAll;
-

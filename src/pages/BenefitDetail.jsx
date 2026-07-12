@@ -3,27 +3,24 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import BasicButton from '../components/BasicButton';
 import * as S from './BenefitDetail.styles';
+import api from '../api/axios'; // 1. 작성하신 커스텀 axios 인스턴스 임포트
 
 export default function BenefitDetail() {
   const navigate = useNavigate();
   const { benefitId } = useParams();
 
   const [benefit, setBenefit] = useState(null);
-  const [checkedItems, setCheckedItems] = useState([]); // 체크된 조건들 기억
-  const [showProbability, setShowProbability] = useState(false); // 지원가능성 보여줄지 여부
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [showProbability, setShowProbability] = useState(false);
 
+  // 2. 상세 조회 API 호출 (axios 적용)
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-
-    fetch(`http://43.201.77.120:8080/api/benefits/${benefitId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    api
+      .get(`/api/benefits/${benefitId}`) // baseURL이 설정되어 있으므로 상대 경로만 작성
       .then((res) => {
-        if (!res.ok) throw new Error('실패');
-        return res.json();
-      })
-      .then((data) => {
+        const data = res.data;
         console.log('상세 응답 전체:', data);
+
         const detail = data.result.benefitDetails;
         const matched = data.result.matchedConditions;
 
@@ -45,39 +42,40 @@ export default function BenefitDetail() {
       })
       .catch((error) => {
         console.error('상세 조회 실패:', error);
+        // axios 인터셉터에서 가공한 에러 메시지가 있을 경우 alert로 노출 가능
+        if (error.message) alert(error.message);
       });
   }, [benefitId]);
 
+  // 3. 신청 하기 API 호출 (axios 적용)
   const handleApply = () => {
-  const token = localStorage.getItem('accessToken');
-  fetch(`http://43.201.77.120:8080/api/benefits/${benefitId}/apply`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error('신청 실패');
-      return res.json();
-    })
-    .then((data) => {
-      if (data.isSuccess) {
-        navigate('/apply-complete');
-      } else {
-        alert(data.message || '신청에 실패했습니다.');
-      }
-    })
-    .catch((error) => {
-      console.error('신청 실패:', error);
-      alert('신청 처리 중 오류가 발생했습니다.');
-    });
-};
+    const requestBody = {
+      applyStatus: 'UNDER_REVIEW',
+    };
+
+    api
+      .post(`/api/benefits/${benefitId}/apply`, requestBody)
+      .then((res) => {
+        const data = res.data;
+        if (data.isSuccess) {
+          navigate('/apply-complete');
+        } else {
+          alert(data.message || '신청에 실패했습니다.');
+        }
+      })
+      .catch((error) => {
+        console.error('신청 실패:', error);
+        // 인터셉터에서 걸러진 네트워크 에러 메시지나 기본 메시지 출력
+        alert(error.message || '신청 처리 중 오류가 발생했습니다.');
+      });
+  };
 
   // 체크박스 하나 클릭했을 때
   const handleCheck = (index) => {
-    setCheckedItems(
-      (prev) =>
-        prev.includes(index)
-          ? prev.filter((item) => item !== index) // 이미 체크됐으면 해제
-          : [...prev, index], // 안 됐으면 추가
+    setCheckedItems((prev) =>
+      prev.includes(index)
+        ? prev.filter((item) => item !== index)
+        : [...prev, index],
     );
   };
 
@@ -91,7 +89,6 @@ export default function BenefitDetail() {
   const dDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   const isCheckType = benefit.requirementType === 'CHECK';
-  // 체크형일 때: 모든 조건에 체크했는지 확인
   const allChecked =
     isCheckType && checkedItems.length === (benefit.requirements?.length || 0);
 
@@ -108,7 +105,6 @@ export default function BenefitDetail() {
           <S.Rowbox>
             <S.Deadline>마감일</S.Deadline>{' '}
             <S.Deadlinenum>
-              {' '}
               {benefit.deadline} (D-{dDay})
             </S.Deadlinenum>{' '}
           </S.Rowbox>
@@ -118,7 +114,6 @@ export default function BenefitDetail() {
               benefit.requirements.map((req, index) => (
                 <S.RequirementItem key={index}>
                   {isCheckType ? (
-                    // 타입 B: 체크박스 있음
                     <S.CheckboxLabel>
                       <input
                         type="checkbox"
@@ -128,7 +123,6 @@ export default function BenefitDetail() {
                       {req}
                     </S.CheckboxLabel>
                   ) : (
-                    // 타입 A: 그냥 •만 표시
                     <span>• {req}</span>
                   )}
                 </S.RequirementItem>
@@ -168,7 +162,6 @@ export default function BenefitDetail() {
               </S.ProbabilityBarBg>
             </>
           ) : (
-            // 타입 B에서 아직 클릭 전 상태
             <S.ProbabilityPlaceholder>
               지원 가능성 분석
             </S.ProbabilityPlaceholder>
@@ -176,7 +169,10 @@ export default function BenefitDetail() {
         </S.ProbabilityBox>
 
         <S.ButtonRow>
-          <S.DetailButton $variant="white" onClick={() => window.open(benefit.siteUrl, '_blank')}>
+          <S.DetailButton
+            $variant="white"
+            onClick={() => window.open(benefit.siteUrl, '_blank')}
+          >
             사이트로 이동
           </S.DetailButton>
           <S.DetailButton onClick={handleApply}>신청 완료</S.DetailButton>

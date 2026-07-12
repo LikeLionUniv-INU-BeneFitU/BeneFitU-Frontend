@@ -1,26 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import api from '../api/axios'; // axios 인스턴스 임포트
+import styled from 'styled-components';
 import Header from '../components/Header';
 import BenefitDetailBox from '../components/BenefitDetailBox';
 import * as S from './BenefitAll.styles';
 import CategoryButtonBar from '../components/CategoryButtonBar';
 import UserInfoCard from '../components/UserInfoCard';
-
-// 한글 카테고리명을 백엔드 요청용 쿼리 스트링 값으로 매핑
-const categoryMap = {
-  전체: 'ALL',
-  국가장학금: 'STATE',
-  '기업·재단 장학금': 'CORPORATE',
-  '지역 장학금': 'REGION',
-  조건별장학금: 'REQUIREMENTS',
-};
-
-// 프론트엔드 정렬 타입을 백엔드 요청용 쿼리 스트링 값으로 매핑
-const sortMap = {
-  최신순: 'DEFAULT',
-  금액순: 'AMOUNT_HIGH',
-};
 
 function BenefitAll() {
   const location = useLocation();
@@ -38,16 +23,63 @@ function BenefitAll() {
     incomeLevel: '',
   });
 
-  // 사용자 정보 조회 API 연동
+  // 페이지네이션 상태
+  const [currentPage, setCurrentPage] = useState(0);
+  const totalPages = 20; // 총 페이지 수 임시 정의 (백엔드에서 total 값 주면 그걸로 교체)
+
+  const currentBlock = Math.floor(currentPage / 10);
+  const startPage = currentBlock * 10;
+  const endPage = Math.min(startPage + 9, totalPages - 1);
+
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+
   useEffect(() => {
-    api
-      .get('/api/users/info')
+    const backendUrl = `http://43.201.77.120:8080/api/benefits?category=ALL&sort=DEFAULT&page=${currentPage}`;
+    const token = localStorage.getItem("accessToken");
+
+    fetch(backendUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
-        const { baseInfo, detailInfo } = res.data.result;
+        if (!res.ok) {
+          throw new Error('네트워크 응답이 올바르지 않습니다.');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setBenefitList(data.result.benefits);
+      })
+      .catch((error) => {
+        console.error('장학금 리스트 조회 실패', error);
+        setBenefitList([]);
+      });
+  }, [currentCategory, currentPage]);
+
+  useEffect(() => {
+    const userUrl = 'http://43.201.77.120:8080/api/users/info';
+    const token = localStorage.getItem("accessToken");
+
+    fetch(userUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('네트워크 응답이 올바르지 않습니다.');
+        }
+        return res.json();
+      })
+      .then((data) => {
         setUserInfo({
-          name: baseInfo.name,
-          gpa: detailInfo.gpa,
-          incomeLevel: detailInfo.incomeBracket + '구간',
+          name: data.result.baseInfo.schoolName,
+          gpa: data.result.detailInfo.gpa,
+          incomeLevel: data.result.detailInfo.incomeBracket + "구간",
         });
       })
       .catch((error) => {
@@ -55,21 +87,40 @@ function BenefitAll() {
       });
   }, []);
 
-  // 카테고리 또는 정렬 기준 변경 시 혜택 목록 조회 API 연동
-  useEffect(() => {
-    const categoryQuery = categoryMap[currentCategory] || 'ALL';
-    const sortQuery = sortMap[sortType] || 'DEFAULT';
+  const handleCategoryChange = (category) => {
+    setCurrentCategory(category);
+    setCurrentPage(0); // 카테고리 바뀌면 1페이지로 초기화
+  };
 
-    api
-      .get(`/api/benefits?category=${categoryQuery}&sort=${sortQuery}&page=0`)
-      .then((res) => {
-        setBenefitList(res.data.result.benefits || []);
-      })
-      .catch((error) => {
-        console.error('장학금 리스트 조회 실패', error);
-        setBenefitList([]);
-      });
-  }, [currentCategory, sortType]);
+  const handleNextBlock = () => {
+    const nextBlockStart = (currentBlock + 1) * 10;
+    if (nextBlockStart < totalPages) {
+      setCurrentPage(nextBlockStart);
+    }
+  };
+
+  const handlePrevBlock = () => {
+    const prevBlockStart = (currentBlock - 1) * 10;
+    if (prevBlockStart >= 0) {
+      setCurrentPage(prevBlockStart + 9);
+    }
+  };
+
+  // categoryCodeMap 삭제 — currentCategory에 이미 실제 코드값(SCHOLARSHIP 등)이 담기므로 바로 비교
+  const filteredList =
+    currentCategory === '전체'
+      ? benefitList
+      : benefitList.filter(
+          (item) => item.categories && item.categories.includes(currentCategory)
+        );
+
+  const sortedList = [...filteredList].sort((a, b) => {
+    if (sortType === '최신순') {
+      return new Date(b.date) - new Date(a.date);
+    } else {
+      return b.priceValue - a.priceValue;
+    }
+  });
 
   return (
     <S.PageWrapper>
@@ -81,12 +132,12 @@ function BenefitAll() {
       />
       <CategoryButtonBar
         currentCategory={currentCategory}
-        setCurrentCategory={setCurrentCategory}
+        setCurrentCategory={handleCategoryChange}
       />
       <S.ScrollArea>
         <S.Rowbox>
           <S.SubTitle>
-            추천 혜택 <span>{benefitList.length}</span>
+            추천 혜택 <span>{filteredList.length}</span>
           </S.SubTitle>
 
           <S.SortWrapper>
@@ -119,39 +170,49 @@ function BenefitAll() {
           </S.SortWrapper>
         </S.Rowbox>
 
-        {benefitList &&
-          benefitList.map((benefit) => {
-            // 백엔드 데이터에 문자열 공백이 포함되어 올 경우를 대비해 trim 처리
-            const cleanCategory = benefit.categories[0]
-              ? benefit.categories[0].trim()
-              : '';
-
-            return (
-              <BenefitDetailBox
-                key={benefit.benefitId}
-                buttonText="상세 보기"
-                to={`/detail/${benefit.benefitId}`}
-                category={cleanCategory}
-                tags={benefit.categories}
-              >
-                <p style={{ fontWeight: 'bold', fontSize: '20px' }}>
-                  {benefit.benefitName}
-                </p>
-                <p
-                  style={{
-                    color: '#2578B0',
-                    fontWeight: 'bold',
-                    fontSize: '17px',
-                  }}
-                >
-                  {benefit.amount}
-                </p>
-              </BenefitDetailBox>
-            );
-          })}
+        {sortedList.map((benefit) => {
+          return (
+            <BenefitDetailBox
+              key={benefit.benefitId}
+              buttonText="상세 보기"
+              to={`/detail/${benefit.benefitId}`}
+              category={benefit.categories[0]}
+              tags={benefit.categories}
+            >
+              <p style={{ fontWeight: 'bold', fontSize: '20px', letterSpacing: '-1px' }}>{benefit.benefitName}</p>
+              <p style={{ color: '#2578B0', fontSize: '18px', letterSpacing: '-1px', fontWeight: '600' }}>{benefit.amount}</p>
+            </BenefitDetailBox>
+          );
+        })}
       </S.ScrollArea>
+
+      {sortedList.length > 0 && (
+        <S.PaginationContainer>
+          <S.BlockArrowBtn disabled={currentBlock === 0} onClick={handlePrevBlock}>
+            &lt;
+          </S.BlockArrowBtn>
+
+          {pageNumbers.map((num) => (
+            <S.NumButton
+              key={num}
+              $isCurrent={currentPage === num}
+              onClick={() => setCurrentPage(num)}
+            >
+              {num + 1}
+            </S.NumButton>
+          ))}
+
+          <S.BlockArrowBtn
+            disabled={(currentBlock + 1) * 10 >= totalPages}
+            onClick={handleNextBlock}
+          >
+            &gt;
+          </S.BlockArrowBtn>
+        </S.PaginationContainer>
+      )}
     </S.PageWrapper>
   );
 }
 
 export default BenefitAll;
+

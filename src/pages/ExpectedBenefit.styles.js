@@ -25,3 +25,43 @@ export const TotalAmountText = styled.p`
   font-size: 28px;
   margin: 20px 0;
 `;
+
+
+// 페이지네이션 스타일
+export const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2vw;
+  padding: 15px 0 25px 0;
+  background-color: #ffffff;
+`;
+
+export const BlockArrowBtn = styled.button`
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #5c59f0;
+  cursor: pointer;
+  padding: 0 6px;
+
+  &:disabled {
+    color: #e0e0e0;
+    cursor: not-allowed;
+  }
+`;
+
+export const NumButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: ${(props) => (props.$isCurrent ? '700' : '400')};
+  color: ${(props) => (props.$isCurrent ? '#5c59f0' : '#888888')};
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

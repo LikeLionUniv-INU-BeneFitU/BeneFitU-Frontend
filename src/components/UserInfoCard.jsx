@@ -33,9 +33,8 @@ const TopRow = styled.div`
 
 const NameText = styled.p`
   font-size: 20px;
-  weight: 500;
-  color: #ffffff;
-  letter-spacing: -0.8px;
+  letter-spacing: -1px;
+  color: #FFFFFF;
 `;
 
 // 마이페이지 이동 버튼
@@ -60,7 +59,8 @@ const TagRow = styled.div`
 
 const Tag = styled.span`
   font-size: 12px;
-  background-color: #ffffff;
+  letter-spacing: -1px;
+  background-color: #FFFFFF;
   color: #000000;
   padding: 4px 10px;
   border-radius: 8px;

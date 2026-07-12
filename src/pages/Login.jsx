@@ -84,7 +84,8 @@ const LoginButton = styled.button`
   color: #ffffff;
   border: none;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 18px;
+  letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
   margin-top: 65px;
@@ -103,7 +104,8 @@ const NewLoginButton = styled.button`
   color: #5c4ff2;
   border: 1px solid #5c4ff2;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 18px;
+  letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
   margin-top: 13px;

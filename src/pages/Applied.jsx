@@ -20,62 +20,76 @@ export default function Applied() {
     location.state?.activeTab || 'ALL',
   );
   const [benefitsList, setBenefitsList] = useState([]);
-
-  // 현재 가리키고 있는 페이지 상태 관리
   const [currentPage, setCurrentPage] = useState(0);
 
-  // 총 페이지 수 임시 정의
-  const totalPages = 20;
+  // 백엔드에서 받아올 실제 전체 페이지 수 (기본값 1로 설정 후 API 응답에 따라 갱신)
+  const [totalPages, setTotalPages] = useState(1);
 
-  // 10단위 묶음 처리를 위한 현재 블록 계산 (0층: 1~10, 1층: 11~20)
   const currentBlock = Math.floor(currentPage / 10);
   const startPage = currentBlock * 10;
   const endPage = Math.min(startPage + 9, totalPages - 1);
 
-  // 동적 숫자 버튼 배열 구성
   const pageNumbers = [];
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
 
+  // 1. activeTab 및 currentPage 변경 시마다 API 호출
   useEffect(() => {
     const fetchAppliedBenefits = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
-        const headers = { Authorization: `Bearer ${token}` };
+        // 'ALL'이 아닐 때만 쿼리 스트링 추가
+        const statusQuery =
+          activeTab === 'ALL' ? '' : `&applyStatus=${activeTab}`;
 
-        // 쿼리 스트링 파라미터에 고정된 0 대신 currentPage 상태값을 연동
         const response = await api.get(
-          `/api/benefits/applied?page=0&applyStatus=${activeTab}`,
-          { headers },
+          `/api/benefits/applied?page=${currentPage}${statusQuery}`,
         );
 
-        if (response.data.isSuccess) {
+        if (response.data && response.data.isSuccess) {
+          // 백엔드 API 응답 데이터 구조 확인 필요 (result 내부에 담겨있다고 가정)
           const rawBenefits = response.data.result?.appliedBenefits || [];
 
-          // 받은 데이터를 신청 처리 날짜 최신순(내림차순)으로 정렬
+          // 백엔드에서 전체 페이지 수(예: totalPages)를 같이 내려준다면 연동 (없으면 기본값 사용)
+          if (response.data.result?.totalPages) {
+            setTotalPages(response.data.result.totalPages);
+          } else {
+            // 임시로 데이터가 있으면 1페이지 이상으로 처리되도록 방어 코드 작성
+            setTotalPages(
+              rawBenefits.length > 0 ? Math.ceil(rawBenefits.length / 10) : 1,
+            );
+          }
+
+          // 날짜 기준 내림차순 정렬
           const sorted = [...rawBenefits].sort((a, b) => {
+            if (!a.appliedDate || !b.appliedDate) return 0;
             const dateA = new Date(a.appliedDate.replace(/\./g, '-'));
             const dateB = new Date(b.appliedDate.replace(/\./g, '-'));
             return dateB - dateA;
           });
 
           setBenefitsList(sorted);
+        } else {
+          // 실패 응답 시 리스트 초기화
+          setBenefitsList([]);
+          setTotalPages(1);
         }
       } catch (error) {
         console.error('신청 내역 조회 중 오류 발생:', error);
+        // 에러 발생 시 빈 배열 처리하여 렌더링 에러 방지
+        setBenefitsList([]);
+        setTotalPages(1);
       }
     };
 
     fetchAppliedBenefits();
-  }, [activeTab]);
+  }, [activeTab, currentPage]); // 이 두 값이 바뀔 때마다 useEffect 실행
 
-  const handleTabchange = (tabId) => {
+  const handleTabChange = (tabId) => {
     setActiveTab(tabId);
-    setCurrentPage(0);
+    setCurrentPage(0); // 탭이 바뀔 때는 반드시 첫 페이지(0)로 리셋
   };
 
-  // 다음 10개 묶음 블록으로 건너뛰기 처리
   const handleNextBlock = () => {
     const nextBlockStart = (currentBlock + 1) * 10;
     if (nextBlockStart < totalPages) {
@@ -83,7 +97,6 @@ export default function Applied() {
     }
   };
 
-  // 이전 10개 묶음 블록으로 되돌아가기 처리
   const handlePrevBlock = () => {
     const prevBlockStart = (currentBlock - 1) * 10;
     if (prevBlockStart >= 0) {
@@ -91,16 +104,20 @@ export default function Applied() {
     }
   };
 
+  const handleCustomBack = () => {
+    navigate('/my-page');
+  };
+
   return (
     <Container>
-      <Header title="신청 현황" variant="white" />
+      <Header title="신청 현황" onBack={handleCustomBack} variant="white" />
 
       <TabContainer>
         {TABS.map((tab) => (
           <TabButton
             key={tab.id}
             $isActive={activeTab === tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => handleTabChange(tab.id)}
           >
             {tab.label}
           </TabButton>
@@ -130,7 +147,9 @@ export default function Applied() {
           <EmptyMessage>신청 내역이 없습니다.</EmptyMessage>
         )}
       </ContentList>
-      {benefitsList.length > 0 && (
+
+      {/* 페이지가 1개보다 많고, 데이터가 있을 때만 페이지네이션 노출 */}
+      {benefitsList.length > 0 && totalPages > 1 && (
         <PaginationContainer>
           <BlockArrowBtn
             disabled={currentBlock === 0}
@@ -161,12 +180,14 @@ export default function Applied() {
   );
 }
 
-// 스타일 컴포넌트
+// -----------------------------------------------------------
+// 스타일 컴포넌트 영역 (기존 구조 100% 보존)
+// -----------------------------------------------------------
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 430px; /* 모바일 와이어프레임 스타일 대응 */
+  max-width: 430px;
   min-height: 100vh;
   margin: 0 auto;
   background-color: #ffffff;
@@ -188,8 +209,6 @@ const TabButton = styled.button`
   border: none;
   cursor: pointer;
   position: relative;
-
-  /* 활성화된 탭 하단의 인디케이터 선 (와이어프레임의 파란색 선 반영) */
   &::after {
     content: '';
     display: ${(props) => (props.$isActive ? 'block' : 'none')};
@@ -198,7 +217,7 @@ const TabButton = styled.button`
     left: 0;
     right: 0;
     height: 2px;
-    background-color: #423bb3; /* 와이어프레임에 어울리는 포인트 블루 컬러 */
+    background-color: #423bb3;
   }
 `;
 
@@ -236,7 +255,6 @@ const BlockArrowBtn = styled.button`
   color: #5c59f0;
   cursor: pointer;
   padding: 0 6px;
-
   &:disabled {
     color: #e0e0e0;
     cursor: not-allowed;

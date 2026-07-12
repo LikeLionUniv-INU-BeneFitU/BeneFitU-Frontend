@@ -4,10 +4,6 @@ import Header from '../components/Header';
 import BasicButton from '../components/BasicButton';
 import * as S from './BenefitDetail.styles';
 
-
-// A타입 : 체크박스X
-// B타입 : 체크박스O
-
 export default function BenefitDetail() {
   const navigate = useNavigate();
   const { benefitId } = useParams();
@@ -17,41 +13,6 @@ export default function BenefitDetail() {
   const [showProbability, setShowProbability] = useState(false); // 지원가능성 보여줄지 여부
 
   useEffect(() => {
-    // 타입 A 예시 더미 데이터
-    const dummyTypeA = {
-      title: "한국장학재단 국가장학금 1유형",
-      tags: ["국가장학금", "한국장학재단"],
-      amount: "최대 250만원",
-      deadline: "2026-08-20",
-      requirementType: "AUTO", // 자동 판단형
-      requirements: [
-        "학자금 지원 9구간 이하",
-        "성적 및 이수학점 기준 충족",
-        "한국 장학재단 신청 및 가구원 동의 완료",
-        "소득구간에 따라 등록금 차등 지원",
-      ],
-      reason: "도현님은 소득분위 3분위 이하 (으)로 해당 장학금의 지원 자격이 됩니다.",
-      probability: 70,
-      siteUrl: "https://www.kosaf.go.kr",
-    };
-
-    // 타입 B 예시 더미 데이터
-    const dummyTypeB = {
-      title: "건설근로자 자녀 장학금",
-      tags: ["학습장려금", "함성장학금"],
-      amount: "50만원",
-      deadline: "2026-08-20",
-      requirementType: "CHECK", // 체크형
-      requirements: [
-        "건설근로자공제회 기준 총 적립일수 600일 이상이면서 2025년도 근로내역이 100일 이상 적립된 공제회원의 자녀",
-        "국내 4년제 이상 대학교의 신입생 또는 2026년 기준 2~3년 재학생",
-        "재학 · 적정 학기 12학점 이상 이수, 평점 3.2/4.5, 3.0/4.3 이상인 자",
-      ],
-      reason: "도현님은 직전 학기 평점이 3.2 이상 (으)로 해당 장학금의 지원 자격이 있습니다.",
-      probability: 80,
-      siteUrl: "https://www.kosaf.go.kr",
-    };
-
     const token = localStorage.getItem('accessToken');
 
     fetch(`http://43.201.77.120:8080/api/benefits/${benefitId}`, {
@@ -62,25 +23,28 @@ export default function BenefitDetail() {
         return res.json();
       })
       .then((data) => {
-        const detail = data.result.benefitDetail;
+        console.log('상세 응답 전체:', data);
+        const detail = data.result.benefitDetails; // benefitDetail → benefitDetails
         const matched = data.result.matchedConditions;
 
         const mapped = {
           title: detail.benefitName,
-          tags: detail.categories,
-          amount: `${detail.amount.toLocaleString()}원`,
-          deadline: detail.deadline,
+          tags: [detail.category], // category가 단수 문자열이라 배열로 감싸서 기존 로직 재사용
+          amount: `${detail.amount?.toLocaleString?.() || detail.amount}원`,
+          deadline: detail.deadLine, // deadline → deadLine
           siteUrl: detail.benefitUrl,
-          probability: data.result.passProbability,
+          probability: parseInt(data.result.passProbability, 10) || 0, // "100%" → 100
           requirementType: 'AUTO',
-          requirements: Object.values(matched),
-          reason: `회원님은 ${Object.values(matched).join(', ')} 조건에 해당하여 지원 자격이 됩니다.`,
+          requirements: matched ? Object.values(matched) : [],
+          reason: matched
+            ? `회원님은 ${Object.values(matched).join(', ')} 조건에 해당하여 지원 자격이 됩니다.`
+            : '',
         };
 
         setBenefit(mapped);
       })
-      .catch(() => {
-        setBenefit(dummyTypeB);
+      .catch((error) => {
+        console.error('상세 조회 실패:', error);
       });
   }, [benefitId]);
 
@@ -124,7 +88,6 @@ export default function BenefitDetail() {
         {/* 박스 1: 장학금 이름 + 금액 + 마감일 + 조건 */}
         <S.InfoBox>
           <S.Title>{benefit.title}</S.Title>
-          
 
           <S.Amount>{benefit.amount}</S.Amount>
           <S.Rowbox><S.Deadline>마감일</S.Deadline> <S.Deadlinenum> {benefit.deadline} (D-{dDay})</S.Deadlinenum> </S.Rowbox>
@@ -190,7 +153,7 @@ export default function BenefitDetail() {
           <S.DetailButton $variant="white" onClick={() => window.open(benefit.siteUrl, '_blank')}>
             사이트로이동
           </S.DetailButton>
-        <S.DetailButton onClick={() => navigate('/apply-complete')}>신청 완료</S.DetailButton>
+          <S.DetailButton onClick={() => navigate('/apply-complete')}>신청 완료</S.DetailButton>
         </S.ButtonRow>
       </S.ContentWrapper>
     </S.PageWrapper>

@@ -74,7 +74,7 @@ export default function UserInfoCard({ name, gpa, incomeLevel, onMyClick }) {
         <TopRow>
           <NameText>{name}님의 정보</NameText>
           <MyButton
-            onClick={() => navigate('/my-page') /*마이페이지로 바꾸기*/}
+            onClick={() => navigate('/my-page')}
           ></MyButton>
         </TopRow>
         <TagRow>

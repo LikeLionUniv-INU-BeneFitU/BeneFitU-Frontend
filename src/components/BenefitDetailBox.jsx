@@ -65,7 +65,7 @@ const MoveButton = styled.button`
   width: 100%;
   height: 40px;
 
-  margin-top: 18px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;

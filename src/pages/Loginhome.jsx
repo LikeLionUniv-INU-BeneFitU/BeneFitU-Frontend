@@ -65,7 +65,7 @@ const SignupButton = styled.button`
   }
 `;
 
-// 로고 텍스트 사진
+// 로고 텍스트 이미지
 const LogoBox = styled.div`
   width: 75%;
   height: 90px;
@@ -87,7 +87,7 @@ const LogoimgBox = styled.div`
 
 // 로고 밑 텍스트
 const Subtitle = styled.div`
-  font-size: clamp(0.7rem, 3vw, 1rem);
+  font-size: clamp(0.7rem, 3.5vw, 1rem);
   margin-top: 5px;
 `;
 

@@ -124,11 +124,7 @@ export default function BenefitDetail() {
         {/* 박스 1: 장학금 이름 + 금액 + 마감일 + 조건 */}
         <S.InfoBox>
           <S.Title>{benefit.title}</S.Title>
-          <S.TagRow>
-            {benefit.tags && benefit.tags.map((tag, index) => (
-              <S.Tag key={index}>{tag}</S.Tag>
-            ))}
-          </S.TagRow>
+          
 
           <S.Amount>{benefit.amount}</S.Amount>
           <S.Rowbox><S.Deadline>마감일</S.Deadline> <S.Deadlinenum> {benefit.deadline} (D-{dDay})</S.Deadlinenum> </S.Rowbox>

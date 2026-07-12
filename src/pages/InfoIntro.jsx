@@ -16,21 +16,17 @@ export default function InfoIntro() {
 
   return (
     <S.PageWrapper>
-      {/* 타이틀부터 마지막 리스트까지 하나로 묶어 비율을 고정하는 박스 */}
       <S.MainContentBox>
-        {/* 1. 상단 타이틀 */}
         <S.MainTitle>
           맞춤 혜택 추천을 위해
           <br />
           정보를 입력해주세요
         </S.MainTitle>
 
-        {/* 2. 중간 메인 일러스트 */}
         <S.ImageSection>
           <img src={Infointro1} alt="메인 일러스트" />
         </S.ImageSection>
 
-        {/* 3. 특장점 소개 리스트 */}
         <S.FeatureList>
           <S.FeatureItem>
             <S.LogoPlaceholder>
@@ -69,8 +65,7 @@ export default function InfoIntro() {
           </S.FeatureItem>
         </S.FeatureList>
       </S.MainContentBox>
-
-      {/* 4. 하단 고정 버튼 */}
+      \
       <S.ButtonWrapper>
         <BasicButton onClick={handleStart}>다음</BasicButton>
       </S.ButtonWrapper>

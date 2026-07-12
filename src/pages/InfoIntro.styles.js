@@ -24,7 +24,7 @@ export const MainContentBox = styled.div`
 
   /* 피그마 상단 Status Bar 공간(9:41) 확보를 위해 상단 마진 배치 */
   margin-top: calc(99 * (100dvh / 874));
-  padding: 0 30px;
+  padding: 0 40px;
   box-sizing: border-box;
 
   display: flex;

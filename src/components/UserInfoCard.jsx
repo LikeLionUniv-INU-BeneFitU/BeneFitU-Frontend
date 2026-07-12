@@ -19,8 +19,8 @@ const Card = styled.div`
   border-radius: 12px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
 
-  padding: 16px 20px;
-  margin: 15px;
+  padding: 12px 20px;
+  margin: 14px;
   gap: 10px;
 
   display: flex;
@@ -56,7 +56,7 @@ const MyButton = styled.button`
 // 태그 관련 스타일
 const TagRow = styled.div`
   display: flex;
-  gap: 0 5px;
+  gap: 0 6px;
 `;
 
 const Tag = styled.span`

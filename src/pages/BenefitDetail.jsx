@@ -147,7 +147,7 @@ export default function BenefitDetail() {
                     {req}
                   </S.CheckboxLabel>
                 ) : (
-                  // 타입 A: 그냥 불릿(•)만 표시
+                  // 타입 A: 그냥 •만 표시
                   <span>• {req}</span>
                 )}
               </S.RequirementItem>
@@ -191,10 +191,10 @@ export default function BenefitDetail() {
         </S.ProbabilityBox>
 
         <S.ButtonRow>
-          <BasicButton variant="white" onClick={() => window.open(benefit.siteUrl, '_blank')}>
+          <S.DetailButton $variant="white" onClick={() => window.open(benefit.siteUrl, '_blank')}>
             사이트로이동
-          </BasicButton>
-          <BasicButton onClick={() => navigate('/apply-complete')}>신청 완료</BasicButton>
+          </S.DetailButton>
+        <S.DetailButton onClick={() => navigate('/apply-complete')}>신청 완료</S.DetailButton>
         </S.ButtonRow>
       </S.ContentWrapper>
     </S.PageWrapper>

@@ -22,6 +22,6 @@ export const TotalAmountText = styled.p`
   text-align: center;
   color: #584FEA;
   font-weight: 700;
-  font-size: 2rem;
+  font-size: calc(30px + (32 - 30) * ((100vh - 667px) / (874 - 667)));
   margin: 20px 0;
 `;

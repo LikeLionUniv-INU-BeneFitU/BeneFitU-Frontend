@@ -31,7 +31,6 @@ const TopRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
 `;
 
 const NameText = styled.p`
@@ -65,11 +64,11 @@ const Tag = styled.span`
   background-color: #FFFFFF;
   color: #000000;
   padding: 4px 8px;
-  margin-top: 24px;
+  margin-top: 9px;
   border-radius: 7px;
 `;
 
-export default function UserInfoCard({ name, grade, incomeLevel, onMyClick }) {
+export default function UserInfoCard({ name, gpa, incomeLevel, onMyClick }) {
   const navigate = useNavigate();
   return (
     <PageWrapper>
@@ -79,7 +78,7 @@ export default function UserInfoCard({ name, grade, incomeLevel, onMyClick }) {
           <MyButton onClick={() => navigate('/my-page')/*마이페이지로 바꾸기*/ }></MyButton>
         </TopRow>
         <TagRow>
-          <Tag>성적 {grade}</Tag>
+          <Tag>성적 {gpa}</Tag>
           <Tag>소득분위 {incomeLevel}</Tag>
         </TagRow>
       </Card>

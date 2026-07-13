@@ -73,8 +73,7 @@ export const Rowbox = styled.div`
 
 // 아이디, 비밀번호, 비밀번호 확인 텍스트
 const Label = styled.label`
-  font-size: 14px;
-  letter-spacing: -1px;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #111111;
   display: block;

@@ -25,6 +25,7 @@ export const InfoBox = styled.div`
 // 장학금이름
 export const Title = styled.h1`
   font-size: 24px;
+  letter-spacing: -1px;
   font-weight: 600;
   letter-spacing: -1px;
   word-break: keep-all;
@@ -34,6 +35,7 @@ export const Amount = styled.p`
   color: #2578b0;
   font-weight: bold;
   font-size: 20px;
+  letter-spacing: -1px;
   margin: 16px 0 20px 0;
 `;
 
@@ -46,12 +48,14 @@ export const Rowbox = styled.div`
 export const Deadline = styled.p`
   color: #4a4a4a;
   font-size: 18px;
+  letter-spacing: -1px;
   margin: 0 10px 20px 0;
 `;
 export const Deadlinenum = styled.p`
   color: #000000;
   font-weight: bold;
   font-size: 20px;
+  letter-spacing: -1px;
   margin-bottom: 20px;
 `;
 
@@ -63,6 +67,7 @@ export const RequirementList = styled.div`
 
 export const RequirementItem = styled.div`
   font-size: 14px;
+  letter-spacing: -1px;
   color: #333333;
 `;
 
@@ -87,11 +92,13 @@ export const ReasonBox = styled.div`
 `;
 export const ReasonTitle = styled.h3`
   font-size: 24px;
+  letter-spacing: -1px;
   font-weight: 700;
   margin-bottom: 16px;
 `;
 export const ReasonText = styled.p`
   font-size: 18px;
+  letter-spacing: -1px;
   color: #4A4A4A;
 `;
 
@@ -111,6 +118,7 @@ export const ProbabilityTopRow = styled.div`
 `;
 export const ProbabilityLabel = styled.p`
   font-size: 20px;
+  letter-spacing: -1px;
   font-weight: 700;
   color: #4a4a4a;
 `;
@@ -144,6 +152,7 @@ export const ButtonRow = styled.div`
   gap: 10px;
 `;
 
+// 사이트로 이동, 신청 완료 버튼
 export const DetailButton = styled.button`
   width: 100%;
   height: 56px;

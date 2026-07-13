@@ -61,7 +61,6 @@ const TagRow = styled.div`
 
 const Tag = styled.span`
   font-size: 12px;
-  letter-spacing: -1px;
   background-color: #FFFFFF;
   color: #000000;
   padding: 4px 10px;

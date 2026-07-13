@@ -34,6 +34,7 @@ export const MainContentBox = styled.div`
 // 타이틀
 export const MainTitle = styled.h1`
   font-size: 1.85rem;
+  letter-spacing: -1px;
   font-weight: 700;
   color: #111111;
   line-height: 1.4;
@@ -95,6 +96,7 @@ export const TextGroup = styled.div`
 
 export const FeatureTitle = styled.h2`
   font-size: 1.15rem;
+  letter-spacing: -1px;
   font-weight: 700;
   color: #111111;
   margin: 0;
@@ -102,6 +104,7 @@ export const FeatureTitle = styled.h2`
 
 export const FeatureDesc = styled.p`
   font-size: 0.85rem;
+  letter-spacing: -1px;
   line-height: 1.4;
   color: #666666;
   margin: 0;

@@ -20,7 +20,7 @@ export const MainContentBox = styled.div`
   max-height: 70dvh;
   height: 100%;
 
-  margin-top: calc(99 * (100dvh / 874));
+  margin-top: calc(80 * (100dvh / 874));
   padding: 0 40px;
   box-sizing: border-box;
 
@@ -35,11 +35,11 @@ export const MainContentBox = styled.div`
 export const MainTitle = styled.h1`
   font-size: 1.8rem;
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -1.5px;
   color: #111111;
-  line-height: 1.4;
+  line-height: 1.2;
   margin: 0;
-  margin-bottom: 1.5rem; /* 최소 여백 확보 */
+  margin-bottom: 2dvh; /* 최소 여백 확보 */
 `;
 
 // 중앙 일러스트 영역
@@ -48,8 +48,8 @@ export const ImageSection = styled.div`
   justify-content: center;
   align-items: center;
   flex: 1; /* 남는 세로 공간을 차지 */
-  min-height: 140px; /* 화면이 엄청 작아져도 유지할 최소 높이 */
-  margin-bottom: 1.5rem;
+  min-height: 150px; /* 화면이 엄청 작아져도 유지할 최소 높이 */
+  margin-bottom: 2dvh;
 
   img {
     height: 100%;
@@ -80,6 +80,7 @@ export const LogoPlaceholder = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 5px;
 
   img {
     width: 100%;
@@ -97,15 +98,16 @@ export const TextGroup = styled.div`
 export const FeatureTitle = styled.h2`
   font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -1.5px;
   color: #111111;
   margin: 0;
 `;
 
 export const FeatureDesc = styled.p`
-  font-size: 0.85rem;
-  letter-spacing: -1px;
+  font-size: 0.8rem;
+  letter-spacing: -1.3px;
   line-height: 1.4;
+  font-weight: 500;
   color: #666666;
   margin: 0;
   word-break: keep-all;

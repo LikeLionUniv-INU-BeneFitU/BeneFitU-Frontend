@@ -6,7 +6,7 @@ import loginhome2 from '../assets/images/loginhome2.png'
 
 const PageWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
 
   display: flex;
   flex-direction: column;
@@ -90,8 +90,8 @@ const LogoimgBox = styled.div`
 // 로고 밑 텍스트
 const Subtitle = styled.div`
   font-size: clamp(0.7rem, 3.5vw, 1rem);
-  margin-top: 5px;
   letter-spacing: -1px;
+  margin-top: 5px;
 `;
 
 // 이용약관 텍스트
@@ -103,8 +103,7 @@ const TermsAgreement = styled.div`
   
   font-weight: bold;
   font-size: 12px;
-  letter-spacing: -1px;
-
+  
   margin-bottom: 106px;
   margin-top: 23px;
 `;

@@ -9,29 +9,27 @@ import lockIcon from '../assets/images/lockIcon.png';
 const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
-  height: 100vh;
+  
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   background-color: #e9e6ff;
 `;
 
-const Container = styled.div`
-  width: 100%;
-  height: 100vh;
-`;
-
 const ContentWrapper = styled.div`
   width: 100%;
+  height: 100vh;
 
   flex: 1;
   display: flex;
   flex-direction: column;
+  
   padding: 20px;
   box-sizing: border-box;
   position: relative;
-
   margin-top: 60px;
+  
+  transform: translateY(20px);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 
@@ -43,7 +41,7 @@ const ContentWrapper = styled.div`
 const LogoImg = styled.img`
   width: 80%;
   height: auto;
-  margin: 65px 0 65px 0;
+  margin: 45px 0 21px 0;
   display: block;
   align-self: center;
 `;
@@ -133,14 +131,12 @@ const SubmitButton = styled.button`
   border-radius: 12px;
 
   font-size: 18px;
-  letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
 
-  margin-top: 88px;
+  margin-top: 70px;
   margin-left: 15px;
   margin-right: 15px;
-  margin-bottom: 20px;
 
   &:hover {
     opacity: 0.9;
@@ -193,9 +189,8 @@ export default function Signup() {
 
   return (
     <PageWrapper>
-      <Container>
+      
         <Header color={'#E9E6FF'} onBack={() => navigate(-1)} />
-
         <ContentWrapper>
           <LogoImg src={Logo} alt="BeneFitU 로고" />
           <Title>회원가입</Title>
@@ -237,7 +232,7 @@ export default function Signup() {
 
           <SubmitButton onClick={handleSignup}>회원가입</SubmitButton>
         </ContentWrapper>
-      </Container>
+      
     </PageWrapper>
   );
 }

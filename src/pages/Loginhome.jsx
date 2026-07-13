@@ -34,7 +34,7 @@ const LoginButton = styled.button`
   border: none;
   border-radius: 12px;
   font-size: 18px;
-  letter-spacing: -1px;
+  
   font-weight: 700;
   cursor: pointer;
   
@@ -54,7 +54,7 @@ const SignupButton = styled.button`
   border: 1px solid #5c4ff2;
   border-radius: 12px;
   font-size: 18px;
-  letter-spacing: -1px;
+  
   font-weight: 700;
   cursor: pointer;
   
@@ -91,6 +91,7 @@ const LogoimgBox = styled.div`
 const Subtitle = styled.div`
   font-size: clamp(0.7rem, 3.5vw, 1rem);
   margin-top: 5px;
+  letter-spacing: -1px;
 `;
 
 // 이용약관 텍스트

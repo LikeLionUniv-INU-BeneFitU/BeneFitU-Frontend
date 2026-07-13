@@ -10,7 +10,7 @@ import api from '../api/axios';
 const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
-  height: 100vh;
+  
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -19,15 +19,21 @@ const PageWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   width: 100%;
+  height: 100dvh;
+  
   flex: 1;
   display: flex;
   flex-direction: column;
+
   padding: 20px;
   box-sizing: border-box;
   position: relative;
   margin-top: 60px;
+
+  transform: translateY(20px);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  
   background-color: #ffffff;
   box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
 `;
@@ -111,7 +117,6 @@ const NewLoginButton = styled.button`
   margin-top: 13px;
   margin-left: 15px;
   margin-right: 15px;
-  margin-bottom: 152px;
 
   &:hover {
     background-color: #f0f0f0;

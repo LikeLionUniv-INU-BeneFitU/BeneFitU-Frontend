@@ -130,7 +130,7 @@ function BenefitAll() {
 
   return (
     <S.PageWrapper>
-      <Header title="맞춤 추천 혜택" />
+      <Header title="맞춤 추천 혜택" variant="white" />
       <UserInfoCard
         name={userInfo.name}
         gpa={userInfo.gpa}

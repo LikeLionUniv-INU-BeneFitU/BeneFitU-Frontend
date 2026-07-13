@@ -27,6 +27,7 @@ const ContentWrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  
   padding: 20px;
   box-sizing: border-box;
   position: relative;
@@ -140,7 +141,7 @@ const SubmitButton = styled.button`
   margin-top: 88px;
   margin-left: 15px;
   margin-right: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 76px;
 
   &:hover {
     opacity: 0.9;

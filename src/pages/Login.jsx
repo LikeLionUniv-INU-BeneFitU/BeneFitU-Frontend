@@ -111,7 +111,7 @@ const NewLoginButton = styled.button`
   margin-top: 13px;
   margin-left: 15px;
   margin-right: 15px;
-  margin-bottom: 152px;
+  margin-bottom: 70px;
 
   &:hover {
     background-color: #f0f0f0;

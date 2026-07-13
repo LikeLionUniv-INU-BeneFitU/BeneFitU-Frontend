@@ -168,6 +168,7 @@ const NameSection = styled.div`
   margin-bottom: 4vh;
   h2 {
     font-size: 1.7rem;
+    letter-spacing: -1px;
     margin: 0;
     font-weight: bold;
     color: #000;
@@ -185,6 +186,7 @@ const SectionHeader = styled.div`
   margin-bottom: 2vh;
   h3 {
     font-size: 1.4rem;
+    letter-spacing: -1px;
     margin: 0;
     font-weight: bold;
     color: #000;
@@ -195,6 +197,7 @@ const SectionHeader = styled.div`
     border-radius: 4px;
     padding: 0.5vh 1.1rem;
     font-size: 0.9rem;
+    letter-spacing: -1px;
     color: #666;
     cursor: pointer;
   }
@@ -206,6 +209,7 @@ const InfoRow = styled.div`
   align-items: flex-start; /* 글자가 두 줄 이상이 될 때 세로 정렬 기준을 상단으로 맞춰 정돈 */
   margin-bottom: 1.8vh;
   font-size: 1rem;
+  letter-spacing: -1px;
   gap: 15px; /* 왼쪽 라벨과 오른쪽 데이터 사이의 최소 안전 마진 확보 */
 
   span:first-child {
@@ -227,4 +231,5 @@ const LoadingMessage = styled.div`
   align-items: center;
   height: 100vh;
   font-size: 1rem;
+  letter-spacing: -1px;
 `;

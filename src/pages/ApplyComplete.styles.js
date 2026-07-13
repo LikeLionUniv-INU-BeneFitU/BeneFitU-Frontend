@@ -56,7 +56,7 @@ export const GraphicWrapper = styled.div`
   align-items: center;
   width: 100%;
 
-  height: 23vh;
+  height: 27vh;
   max-height: 300px;
   flex-shrink: 0;
   margin-top: calc(80 * (100dvh / 874));

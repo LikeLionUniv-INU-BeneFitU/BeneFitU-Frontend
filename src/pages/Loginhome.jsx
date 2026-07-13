@@ -91,7 +91,7 @@ const LogoimgBox = styled.div`
 const Subtitle = styled.div`
   font-size: clamp(0.7rem, 3.5vw, 1rem);
   letter-spacing: -1px;
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
 // 이용약관 텍스트
@@ -99,7 +99,7 @@ const Highlight = styled.span`
   color: #584FEA;
 `;
 const TermsAgreement = styled.div`
-  width: 50%;
+  width: 60%;
   
   font-weight: bold;
   font-size: 12px;

@@ -68,7 +68,7 @@ export default function InfoComplete() {
           맞춤 혜택 보러가기
         </BasicButton>
 
-        <BasicButton variant="white" onClick={() => navigate('/home')}>
+        <BasicButton  onClick={() => navigate('/home')}>
           홈화면으로 돌아가기
         </BasicButton>
       </S.ButtonContainer>

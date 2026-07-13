@@ -41,7 +41,7 @@ function App() {
           <Route path="/apply-complete" element={<ApplyComplete />} />
           <Route path="my-page" element={<MyPage />} />
           <Route path="/applied" element={<Applied />} />
-          <Route path="detail-applied" element={<DetailApplied />} />
+          <Route path="detail-applied/:benefitId" element={<DetailApplied />} />
           <Route path="/my-info" element={<MyInfo />} />
           <Route path="/edit-basic" element={<BasicInfo />} />
           <Route path="/edit-other" element={<OtherInfo />} />

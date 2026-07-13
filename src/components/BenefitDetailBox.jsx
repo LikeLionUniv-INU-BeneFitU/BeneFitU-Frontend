@@ -20,13 +20,12 @@ const Box = styled.div`
   font-size: 18px;
   letter-spacing: -1px;
 
-  background-color: #FFFFFF;
-  
+  background-color: #ffffff;
+
   border-radius: 12px; /* 전체 박스 모서리 */
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4); /* 전체 박스 그림자 */
 
   padding: 15px;
-  gap: 10px;
 
   display: flex;
   flex-direction: column;
@@ -35,7 +34,7 @@ const Box = styled.div`
 const Rowbox = styled.div`
   display: flex;
   flex-direction: row;
-  
+
   flex-wrap: wrap;
 `;
 
@@ -89,10 +88,10 @@ const BenefitIcon = styled.button`
 `;
 
 const categoryIconMap = {
-  '국가장학금': state2,
+  국가장학금: state2,
   '기업·재단 장학금': corporate2,
-  '지역 장학금': region2,
-  '조건별장학금': requirement2,
+  지역장학금: region2,
+  조건별장학금: requirement2,
 };
 
 export default function DetailBox({

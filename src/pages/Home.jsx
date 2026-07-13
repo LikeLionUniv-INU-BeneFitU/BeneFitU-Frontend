@@ -176,7 +176,7 @@ export default function Home() {
             <GridItem
               onClick={() =>
                 navigate('/benefit', {
-                  state: { category: '조건별 장학금' },
+                  state: { category: '조건별장학금' },
                 })
               }
             >
@@ -270,7 +270,6 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
-  gap: 2.29vh;
   overflow: hidden;
 `;
 
@@ -289,6 +288,9 @@ const Header = styled.header`
     width: 3.2vh;
     height: 3.2vh;
     cursor: pointer;
+
+    filter: invert(59%) sepia(6%) saturate(464%) hue-rotate(202deg)
+      brightness(88%) contrast(84%);
   }
 `;
 
@@ -309,11 +311,13 @@ const ScrollArea = styled.div`
 `;
 
 const Greeting = styled.div`
+  gap: 6px;
+
   h1 {
     font-size: 1.7rem;
     font-weight: 700;
     color: #111;
-    margin: 12px 0 4px 0;
+    margin: 0 0 4px 0;
   }
 
   p {

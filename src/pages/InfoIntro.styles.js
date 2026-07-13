@@ -5,31 +5,27 @@ export const PageWrapper = styled.div`
   width: 100%;
   height: 100dvh; /* 전체 화면 높이 꽉 채우기 */
   margin: 0 auto;
-  background-color: #fafaff;
+  background-color: linear-gradient(180deg, #edecff 0%, #ffffff 100%);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* 상단 콘텐츠와 하단 버튼 영역 분리 */
+  justify-content: space-between;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   position: relative;
   box-sizing: border-box;
-  overflow: hidden; /* 화면 밖으로 튕겨 나가는 스크롤 방지 */
+  overflow: hidden;
 `;
 
-// ⭐️ 피그마의 402x595 박스를 고스란히 재현하는 핵심 컨테이너
 export const MainContentBox = styled.div`
   width: 100%;
-  /* 874px 중 595px의 비율인 약 68vh를 최대 높이로 제한 (무작정 늘어나기 방지) */
   max-height: 70vh;
   height: 100%;
 
-  /* 피그마 상단 Status Bar 공간(9:41) 확보를 위해 상단 마진 배치 */
   margin-top: calc(99 * (100dvh / 874));
-  padding: 0 30px;
+  padding: 0 40px;
   box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
-  /* 화면이 작아지면 요소들 사이의 간격이 알아서 좁혀지도록 설정 */
   justify-content: space-between;
 
   flex-grow: 1;

@@ -34,7 +34,7 @@ const categories = [
   { label: '전체', value: '전체' },
   { label: '국가장학금', value: '국가장학금' },
   { label: '기업·재단 장학금', value: '기업·재단 장학금' },
-  { label: '지역 장학금', value: '지역 장학금' },
+  { label: '지역장학금', value: '지역장학금' },
   { label: '조건별장학금', value: '조건별장학금' },
 ];
 

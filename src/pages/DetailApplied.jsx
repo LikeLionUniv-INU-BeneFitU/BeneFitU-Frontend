@@ -17,45 +17,61 @@ export default function DetailApplied() {
   const { benefitId } = useParams();
   const location = useLocation();
 
-  // 이전 목록 페이지에서 넘어온 탭 활성화 상태 유지
   const [activeTab, setActiveTab] = useState(location.state?.fromTab || 'ALL');
 
-  // 심사 상태 변경 라디오 및 상세 데이터 조회를 위한 상태 정의
-  const [reviewStatus, setReviewStatus] = useState('UNDER_REVIEW');
+  const initialDefaultStatus =
+    activeTab === 'SELECTED' || activeTab === 'NOT_SELECTED'
+      ? activeTab
+      : 'UNDER_REVIEW';
+
+  const [reviewStatus, setReviewStatus] = useState(initialDefaultStatus);
+  const [initialStatus, setInitialStatus] = useState(initialDefaultStatus);
   const [benefitDetail, setBenefitDetail] = useState(null);
 
-  // 컴포넌트 마운트 시 URL 파라미터의 고유 ID 기반으로 상세 정보 로드
+  // 1. API 상세 조회 및 상태 동기화
   useEffect(() => {
     const fetchDetailData = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
-        const headers = { Authorization: `Bearer ${token}` };
-
-        const response = await api.get(`/api/benefits/${benefitId}`, {
-          headers,
-        });
+        const response = await api.get(`/api/benefits/${benefitId}`);
 
         if (response.data.isSuccess) {
-          const detail = response.data.result?.benefitDetail || {};
-          setBenefitDetail(detail);
+          const detail = response.data.result?.benefitDetails || {};
+          const matched = response.data.result?.matchedConditions;
+
+          setBenefitDetail({
+            benefitName: detail.benefitName,
+            category: detail.category,
+            amount: detail.amount,
+            deadline: detail.deadLine || detail.deadline,
+            requirements: matched ? Object.values(matched) : [],
+          });
+
+          if (detail.applyStatus) {
+            setReviewStatus(detail.applyStatus);
+            setInitialStatus(detail.applyStatus);
+            // 💡 최초 진입 시 '전체' 탭이 아니라면, 백엔드가 준 상태에 맞춰 상단 탭 밑줄도 동기화
+            if (activeTab !== 'ALL') {
+              setActiveTab(detail.applyStatus);
+            }
+          }
         }
       } catch (error) {
         console.error('혜택 상세 조회 중 오류 발생:', error);
       }
     };
 
-    if (benefitId) {
-      fetchDetailData();
-    }
+    if (benefitId) fetchDetailData();
   }, [benefitId]);
 
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-    navigate('/applied', { state: { activeTab: tabId } });
-  };
-
   const handleRadioClick = (statusId) => {
+    if (initialStatus === 'SELECTED' || initialStatus === 'NOT_SELECTED')
+      return;
     setReviewStatus(statusId);
+
+    // 💡 [실시간 연동] 심사 중 상태에서 라디오 버튼을 바꿀 때 상단 탭 밑줄도 즉시 같이 이동 (단, '전체' 탭 진입시는 제외)
+    if (activeTab !== 'ALL') {
+      setActiveTab(statusId);
+    }
   };
 
   const getDDay = (deadlineStr) => {
@@ -72,25 +88,29 @@ export default function DetailApplied() {
     return diffDays > 0 ? `D-${diffDays}` : `만료됨`;
   };
 
-  // 백엔드 명세서 예외 조항 조건 반영
   const formatAmount = (amount) => {
-    if (!amount || amount === '0' || amount === 0) {
+    if (!amount || amount === '0' || amount === 0 || amount.includes('0원')) {
       return '자세한 사항은 사이트 참고 바랍니다';
     }
     return amount;
   };
 
-  // 하단 현황 저장하기 클릭 시 상태 변경 API 호출 수행
+  // 2. 하단 버튼 핸들러 (수정 및 저장 API 호출)
   const handleSave = async () => {
-    try {
-      const token = localStorage.getItem('accessToken');
-      const headers = { Authorization: `Bearer ${token}` };
+    // 💡 '현황 수정하기' 클릭 시 상단 탭 밑줄도 '심사 중'으로 자동 복귀 (단, '전체' 탭 진입시는 제외)
+    if (initialStatus === 'SELECTED' || initialStatus === 'NOT_SELECTED') {
+      setInitialStatus('UNDER_REVIEW');
+      setReviewStatus('UNDER_REVIEW');
+      if (activeTab !== 'ALL') {
+        setActiveTab('UNDER_REVIEW');
+      }
+      return;
+    }
 
-      const response = await api.post(
-        `/api/benefits/${benefitId}/apply`,
-        { applyStatus: reviewStatus },
-        { headers },
-      );
+    try {
+      const response = await api.post(`/api/benefits/${benefitId}/apply`, {
+        applyStatus: reviewStatus,
+      });
 
       if (response.data.isSuccess) {
         const displayStatus =
@@ -101,8 +121,11 @@ export default function DetailApplied() {
               : '심사 중';
         alert(`현황이 저장되었습니다. (최종 상태: ${displayStatus})`);
 
-        // 저장이 완료된 후 이전에 보고 있던 상태 탭을 보존하며 목록으로 복귀
-        navigate('/applied', { state: { activeTab } });
+        setInitialStatus(reviewStatus);
+        // 💡 저장 완료 후 상단 탭 밑줄 위치 최종 확정 (단, '전체' 탭 진입시는 제외)
+        if (activeTab !== 'ALL') {
+          setActiveTab(reviewStatus);
+        }
       }
     } catch (error) {
       console.error('신청 상태 변경 중 오류 발생:', error);
@@ -110,19 +133,22 @@ export default function DetailApplied() {
     }
   };
 
-  if (!benefitDetail) return null;
+  if (!benefitDetail) return <LoadingText>로딩중...</LoadingText>;
+
+  const isReadOnly =
+    initialStatus === 'SELECTED' || initialStatus === 'NOT_SELECTED';
 
   return (
     <Container>
-      <Header title="신청 현황 상세" variant="white" />
+      <Header
+        title="신청 현황 상세"
+        variant="white"
+        onBack={() => navigate('/applied', { state: { activeTab } })}
+      />
 
       <TabContainer>
         {TABS.map((tab) => (
-          <TabButton
-            key={tab.id}
-            $isActive={activeTab === tab.id}
-            onClick={() => handleTabClick(tab.id)}
-          >
+          <TabButton key={tab.id} $isActive={activeTab === tab.id} disabled>
             {tab.label}
           </TabButton>
         ))}
@@ -133,21 +159,23 @@ export default function DetailApplied() {
           <CardTitle>{benefitDetail.benefitName}</CardTitle>
 
           <TagRow>
-            <Tag>{benefitDetail.category}</Tag>
-            <Tag>한국장학재단</Tag>
+            <Tag>{benefitDetail.category || '기타'}</Tag>
           </TagRow>
 
           <AmountText>{formatAmount(benefitDetail.amount)}</AmountText>
           <DeadlineText>
-            <span>마감일</span> {benefitDetail.deadline?.replace(/-/g, '.')} (
+            <span>마감일</span> {benefitDetail.deadline} (
             {getDDay(benefitDetail.deadline)})
           </DeadlineText>
 
-          <BulletList>
-            {benefitDetail.notes?.map((note, index) => (
-              <li key={index}>{note}</li>
-            ))}
-          </BulletList>
+          {benefitDetail.requirements &&
+            benefitDetail.requirements.length > 0 && (
+              <BulletList>
+                {benefitDetail.requirements.map((req, index) => (
+                  <li key={index}>{req}</li>
+                ))}
+              </BulletList>
+            )}
         </CardBox>
 
         <ReviewSection>
@@ -158,6 +186,7 @@ export default function DetailApplied() {
             <RadioBox
               $isSelected={reviewStatus === 'SELECTED'}
               onClick={() => handleRadioClick('SELECTED')}
+              style={{ cursor: isReadOnly ? 'default' : 'pointer' }}
             >
               <CheckCircle $isSelected={reviewStatus === 'SELECTED'} />
               선정
@@ -165,6 +194,7 @@ export default function DetailApplied() {
             <RadioBox
               $isSelected={reviewStatus === 'NOT_SELECTED'}
               onClick={() => handleRadioClick('NOT_SELECTED')}
+              style={{ cursor: isReadOnly ? 'default' : 'pointer' }}
             >
               <CheckCircle $isSelected={reviewStatus === 'NOT_SELECTED'} />
               미선정
@@ -181,13 +211,17 @@ export default function DetailApplied() {
       </ContentList>
 
       <ButtonWrapper>
-        <BasicButton onClick={handleSave}>현황 저장하기</BasicButton>
+        <BasicButton onClick={handleSave}>
+          {isReadOnly ? '현황 수정하기' : '현황 저장하기'}
+        </BasicButton>
       </ButtonWrapper>
     </Container>
   );
 }
 
-// 스타일 컴포넌트
+// -----------------------------------------------------------
+// 스타일 컴포넌트 영역 (기존 구조 100% 보존)
+// -----------------------------------------------------------
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -199,14 +233,12 @@ const Container = styled.div`
   position: relative;
   overflow: hidden;
 `;
-
 const TabContainer = styled.div`
   display: flex;
   border-bottom: 2px solid #aab3e7;
   margin-bottom: 5px;
   background-color: #ffffff;
 `;
-
 const TabButton = styled.button`
   flex: 1;
   padding: 12px 0;
@@ -215,9 +247,8 @@ const TabButton = styled.button`
   color: #0c0e19;
   background: none;
   border: none;
-  cursor: pointer;
   position: relative;
-
+  pointer-events: none;
   &::after {
     content: '';
     display: ${(props) => (props.$isActive ? 'block' : 'none')};
@@ -225,21 +256,18 @@ const TabButton = styled.button`
     bottom: 0;
     left: 0;
     right: 0;
-    height: 2px; /* 인디케이터 두께 일치 */
-    background-color: #5c59f0; /* 포인트 블루 컬러 일치 */
+    height: 2px;
+    background-color: #5c59f0;
   }
 `;
-
 const ContentList = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 16px; /* 카드 배치를 위한 패딩 미세 조정 */
-  background-color: #f8f9fa; /* 카드가 선명히 구분되도록 컨텐츠 영역만 연회색 적용 */
+  padding: 16px;
+  background-color: #f8f9fa;
   flex: 1;
-  padding-bottom: 110px; /* 하단 버튼 배치 공간 확보 */
+  padding-bottom: 110px;
 `;
-
-// --- 내부 엘리먼트 스타일 커스텀 ---
 const CardBox = styled.div`
   width: 100%;
   background-color: #ffffff;
@@ -249,86 +277,73 @@ const CardBox = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
 const CardTitle = styled.h3`
   font-size: 1.3rem;
   font-weight: 700;
   color: #111111;
   margin: 0;
 `;
-
 const TagRow = styled.div`
   display: flex;
   gap: 6px;
-  margin: 1.8vh 0;
+  margin: 1vh 0 1.8vh 0;
 `;
-
 const Tag = styled.span`
   padding: 4px 10px;
-  background-color: #d9d9d9;
-  color: #000000;
+  background-color: #eef0fa;
+  color: #5c59f0;
   font-size: 0.75rem;
-  font-weight: 400;
+  font-weight: 600;
   border-radius: 4px;
 `;
-
 const AmountText = styled.div`
   font-size: 1.2rem;
   font-weight: 700;
   color: #2578b0;
   margin-bottom: 10px;
 `;
-
 const DeadlineText = styled.div`
   font-size: 1.2rem;
   font-weight: 700;
   color: #111111;
   margin-bottom: 18px;
-
   span {
     font-weight: 400;
   }
 `;
-
 const BulletList = styled.ul`
   padding-left: 14px;
   margin: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
-
   li {
     font-size: 0.85rem;
-    color: #000000;
+    color: #495057;
     list-style-type: disc;
-    line-height: 1.2;
+    line-height: 1.4;
   }
 `;
-
 const ReviewSection = styled.div`
   margin-top: 1.8vh;
   display: flex;
   flex-direction: column;
 `;
-
 const SectionTitle = styled.h4`
   font-size: 0.95rem;
   font-weight: 700;
   color: #111111;
   margin: 0 0 4px 0;
 `;
-
 const SectionSubTitle = styled.span`
   font-size: 0.8rem;
   color: #8c94a4;
   margin-bottom: 12px;
 `;
-
 const RadioGroup = styled.div`
   display: flex;
   gap: 12px;
 `;
-
 const RadioBox = styled.div`
   flex: 1;
   height: 8vh;
@@ -342,9 +357,7 @@ const RadioBox = styled.div`
   font-size: 0.95rem;
   font-weight: 600;
   color: ${(props) => (props.$isSelected ? '#5c59f0' : '#495057')};
-  cursor: pointer;
 `;
-
 const CheckCircle = styled.div`
   width: 18px;
   height: 18px;
@@ -352,7 +365,6 @@ const CheckCircle = styled.div`
   border: 1px solid ${(props) => (props.$isSelected ? '#5c59f0' : '#adb5bd')};
   background-color: ${(props) => (props.$isSelected ? '#5c59f0' : '#ffffff')};
   position: relative;
-
   &::after {
     content: '';
     display: ${(props) => (props.$isSelected ? 'block' : 'none')};
@@ -366,26 +378,22 @@ const CheckCircle = styled.div`
     transform: translate(-50%, -50%);
   }
 `;
-
 const NoticeBox = styled.div`
   margin-top: 2vh;
   background-color: #f1f0fe;
   padding: 12px 16px;
   border-radius: 8px;
 `;
-
 const NoticeTitle = styled.div`
   font-size: 0.8rem;
   font-weight: 700;
   color: #5c59f0;
   margin-bottom: 2px;
 `;
-
 const NoticeContent = styled.div`
   font-size: 0.75rem;
   color: #666666;
 `;
-
 const ButtonWrapper = styled.div`
   position: absolute;
   bottom: 0;
@@ -397,4 +405,12 @@ const ButtonWrapper = styled.div`
   flex-direction: column;
   gap: 12px;
   z-index: 10;
+`;
+const LoadingText = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1rem;
+  color: #8c94a4;
 `;

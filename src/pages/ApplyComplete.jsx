@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as S from './ApplyComplete.styles';
 import BasicButton from '../components/BasicButton';
-import applycomplete from '../assets/images/applycomplete.png'
+import applycomplete from '../assets/images/applycomplete.png';
 
 export default function ApplyComplete() {
   const navigate = useNavigate();
@@ -28,21 +28,15 @@ export default function ApplyComplete() {
   return (
     <S.PageWrapper>
       <S.MainContentBox>
-        {/* 1. 메인 타이틀 */}
-        <S.MainTitle>
-          신청이 완료됐어요!
-        </S.MainTitle>
-
-        {/* 2. 중앙 일러스트 이미지 */}
+        <S.MainTitle>신청이 완료됐어요!</S.MainTitle>\
         <S.GraphicWrapper>
           <img src={applycomplete} alt="추천 완료 일러스트" />
         </S.GraphicWrapper>
       </S.MainContentBox>
 
-      {/* 4. 원본 그대로 유지되는 하단 고정 버튼 영역 */}
       <S.ButtonContainer>
-        <BasicButton onClick={() => navigate('/benefit')}>
-          맞춤 혜택 보러가기
+        <BasicButton onClick={() => navigate('/applied')}>
+          신청 현황 보러가기
         </BasicButton>
 
         <BasicButton variant="white" onClick={() => navigate('/home')}>

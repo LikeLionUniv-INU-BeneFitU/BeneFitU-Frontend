@@ -14,21 +14,24 @@ const TABS = [
 
 export default function DetailApplied() {
   const navigate = useNavigate();
-  const { benefitId } = useParams();
   const location = useLocation();
+
+  const statusFromList = location.state?.applyStatus;
+
+  const { benefitId } = useParams();
 
   const [activeTab, setActiveTab] = useState(location.state?.fromTab || 'ALL');
 
   const initialDefaultStatus =
-    activeTab === 'SELECTED' || activeTab === 'NOT_SELECTED'
+    statusFromList ||
+    (activeTab === 'SELECTED' || activeTab === 'NOT_SELECTED'
       ? activeTab
-      : 'UNDER_REVIEW';
+      : 'UNDER_REVIEW');
 
   const [reviewStatus, setReviewStatus] = useState(initialDefaultStatus);
   const [initialStatus, setInitialStatus] = useState(initialDefaultStatus);
   const [benefitDetail, setBenefitDetail] = useState(null);
 
-  // 1. API 상세 조회 및 상태 동기화
   useEffect(() => {
     const fetchDetailData = async () => {
       try {
@@ -45,15 +48,6 @@ export default function DetailApplied() {
             deadline: detail.deadLine || detail.deadline,
             requirements: matched ? Object.values(matched) : [],
           });
-
-          if (detail.applyStatus) {
-            setReviewStatus(detail.applyStatus);
-            setInitialStatus(detail.applyStatus);
-            // 💡 최초 진입 시 '전체' 탭이 아니라면, 백엔드가 준 상태에 맞춰 상단 탭 밑줄도 동기화
-            if (activeTab !== 'ALL') {
-              setActiveTab(detail.applyStatus);
-            }
-          }
         }
       } catch (error) {
         console.error('혜택 상세 조회 중 오류 발생:', error);
@@ -61,14 +55,13 @@ export default function DetailApplied() {
     };
 
     if (benefitId) fetchDetailData();
-  }, [benefitId]);
+  }, [benefitId, activeTab]);
 
   const handleRadioClick = (statusId) => {
     if (initialStatus === 'SELECTED' || initialStatus === 'NOT_SELECTED')
       return;
     setReviewStatus(statusId);
 
-    // 💡 [실시간 연동] 심사 중 상태에서 라디오 버튼을 바꿀 때 상단 탭 밑줄도 즉시 같이 이동 (단, '전체' 탭 진입시는 제외)
     if (activeTab !== 'ALL') {
       setActiveTab(statusId);
     }
@@ -95,9 +88,7 @@ export default function DetailApplied() {
     return amount;
   };
 
-  // 2. 하단 버튼 핸들러 (수정 및 저장 API 호출)
   const handleSave = async () => {
-    // 💡 '현황 수정하기' 클릭 시 상단 탭 밑줄도 '심사 중'으로 자동 복귀 (단, '전체' 탭 진입시는 제외)
     if (initialStatus === 'SELECTED' || initialStatus === 'NOT_SELECTED') {
       setInitialStatus('UNDER_REVIEW');
       setReviewStatus('UNDER_REVIEW');
@@ -122,7 +113,6 @@ export default function DetailApplied() {
         alert(`현황이 저장되었습니다. (최종 상태: ${displayStatus})`);
 
         setInitialStatus(reviewStatus);
-        // 💡 저장 완료 후 상단 탭 밑줄 위치 최종 확정 (단, '전체' 탭 진입시는 제외)
         if (activeTab !== 'ALL') {
           setActiveTab(reviewStatus);
         }
@@ -219,9 +209,6 @@ export default function DetailApplied() {
   );
 }
 
-// -----------------------------------------------------------
-// 스타일 컴포넌트 영역 (기존 구조 100% 보존)
-// -----------------------------------------------------------
 const Container = styled.div`
   display: flex;
   flex-direction: column;

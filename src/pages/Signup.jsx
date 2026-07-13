@@ -164,7 +164,7 @@ export default function Signup() {
 
     try {
       const response = await fetch(
-        'http://43.201.77.120:8080/api/auth/signup',
+        'https://benefitu-api.duckdns.org/api/auth/signup',
         {
           method: 'POST',
           headers: {

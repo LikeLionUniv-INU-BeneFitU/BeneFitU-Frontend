@@ -77,7 +77,7 @@ const Input = styled.input`
   }
 `;
 
-// 로그인 버튼 
+// 로그인 버튼
 const LoginButton = styled.button`
   height: 50px;
   background-color: #5c4ff2;
@@ -125,16 +125,19 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://43.201.77.120:8080/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'https://benefitu-api.duckdns.org/api/auth/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: userId,
+            password: password,
+          }),
         },
-        body: JSON.stringify({
-          username: userId,
-          password: password,
-        }),
-      });
+      );
 
       const data = await response.json();
 
@@ -142,7 +145,8 @@ export default function Login() {
         const newAccessToken = data.result.accessToken;
 
         localStorage.setItem('accessToken', newAccessToken);
-        api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+        api.defaults.headers.common['Authorization'] =
+          `Bearer ${newAccessToken}`;
 
         if (data.result.hasDetails) {
           alert('로그인 성공!');
@@ -162,7 +166,7 @@ export default function Login() {
 
   return (
     <PageWrapper>
-      <Header color={"#E9E6FF"} onBack={() => navigate(-1)} />
+      <Header color={'#E9E6FF'} onBack={() => navigate(-1)} />
       <ContentWrapper>
         <LogoImg src={Logo} alt="BeneFitU 로고" />
         <Label>아이디</Label>

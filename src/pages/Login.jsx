@@ -10,7 +10,8 @@ import api from '../api/axios';
 const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
+
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -19,15 +20,19 @@ const PageWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   width: 100%;
+  
   flex: 1;
   display: flex;
   flex-direction: column;
+
   padding: 20px;
   box-sizing: border-box;
   position: relative;
-  margin-top: 60px;
+  margin-top: 6.87vh;
+
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+
   background-color: #ffffff;
   box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
 `;
@@ -35,7 +40,7 @@ const ContentWrapper = styled.div`
 const LogoImg = styled.img`
   width: 80%;
   height: auto;
-  margin: 65px 0 65px 0;
+  margin: 7.44vh 0 7.44vh 0;
   display: block;
   align-self: center;
 `;
@@ -49,11 +54,12 @@ const Label = styled.label`
   margin-left: 15px;
 `;
 
+// 입력창
 const Input = styled.input`
   height: 45px;
   padding: 0 16px 0 40px;
 
-  margin-bottom: 12px; // 회원가입 화면이랑 통일
+  margin-bottom: 1.37vh; // 회원가입 화면이랑 통일
   margin-left: 15px;
   margin-right: 15px;
 
@@ -88,7 +94,7 @@ const LoginButton = styled.button`
   letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 65px;
+  margin-top: 7.44vh;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -97,7 +103,7 @@ const LoginButton = styled.button`
   }
 `;
 
-// 새로 만들기 버튼
+// 새계정 만들기 버튼
 const NewLoginButton = styled.button`
   height: 50px;
   background-color: #ffffff;
@@ -108,10 +114,11 @@ const NewLoginButton = styled.button`
   letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 13px;
+
+  margin-top: 1.49vh;
   margin-left: 15px;
   margin-right: 15px;
-  margin-bottom: 152px;
+  margin-bottom: 4.58vh;
 
   &:hover {
     background-color: #f0f0f0;

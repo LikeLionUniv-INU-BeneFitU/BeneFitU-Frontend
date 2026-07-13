@@ -9,16 +9,12 @@ import lockIcon from '../assets/images/lockIcon.png';
 const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
+  
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   background-color: #e9e6ff;
-`;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100vh;
 `;
 
 const ContentWrapper = styled.div`
@@ -27,11 +23,12 @@ const ContentWrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  
   padding: 20px;
   box-sizing: border-box;
   position: relative;
-
-  margin-top: 60px;
+  margin-top: 6.87vh;
+  
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 
@@ -43,7 +40,7 @@ const ContentWrapper = styled.div`
 const LogoImg = styled.img`
   width: 80%;
   height: auto;
-  margin: 65px 0 65px 0;
+  margin: 5.15vh 0 2.4vh 0;
   display: block;
   align-self: center;
 `;
@@ -59,8 +56,8 @@ const Title = styled.h1`
 const SubTitle = styled.p`
   font-size: 12px;
   color: #000000;
-  margin-top: 5pcx;
-  margin-bottom: 20px;
+  margin-top: 5px;
+  margin-bottom: 2.29vh;
   margin-left: 15px;
 `;
 
@@ -104,7 +101,7 @@ const Input = styled.input`
   outline: none;
   box-sizing: border-box;
 
-  margin-bottom: 12px; // 회원가입 화면이랑 통일
+  margin-bottom: 1.37vh; // 회원가입 화면이랑 통일
   margin-left: 15px;
   margin-right: 15px;
 
@@ -120,7 +117,7 @@ const Input = styled.input`
 const ErrorText = styled.p`
   color: #ff4d4d;
   font-size: 0.75rem;
-  margin: 0 0 20px 15px;
+  margin: 0 0 2.29vh 15px;
 `;
 
 // 회원가입 버튼
@@ -133,14 +130,13 @@ const SubmitButton = styled.button`
   border-radius: 12px;
 
   font-size: 18px;
-  letter-spacing: -1px;
   font-weight: 700;
   cursor: pointer;
 
-  margin-top: 88px;
+  margin-top: 8.01vh;
   margin-left: 15px;
   margin-right: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 4vh;
 
   &:hover {
     opacity: 0.9;
@@ -193,9 +189,8 @@ export default function Signup() {
 
   return (
     <PageWrapper>
-      <Container>
+      
         <Header color={'#E9E6FF'} onBack={() => navigate(-1)} />
-
         <ContentWrapper>
           <LogoImg src={Logo} alt="BeneFitU 로고" />
           <Title>회원가입</Title>
@@ -237,7 +232,7 @@ export default function Signup() {
 
           <SubmitButton onClick={handleSignup}>회원가입</SubmitButton>
         </ContentWrapper>
-      </Container>
+      
     </PageWrapper>
   );
 }

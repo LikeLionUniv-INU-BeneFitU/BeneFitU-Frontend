@@ -6,7 +6,7 @@ import loginhome2 from '../assets/images/loginhome2.png'
 
 const PageWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
 
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@ const LoginButton = styled.button`
   border: none;
   border-radius: 12px;
   font-size: 18px;
-  letter-spacing: -1px;
+  
   font-weight: 700;
   cursor: pointer;
   
@@ -54,7 +54,7 @@ const SignupButton = styled.button`
   border: 1px solid #5c4ff2;
   border-radius: 12px;
   font-size: 18px;
-  letter-spacing: -1px;
+  
   font-weight: 700;
   cursor: pointer;
   
@@ -90,6 +90,7 @@ const LogoimgBox = styled.div`
 // 로고 밑 텍스트
 const Subtitle = styled.div`
   font-size: clamp(0.7rem, 3.5vw, 1rem);
+  letter-spacing: -1px;
   margin-top: 5px;
 `;
 
@@ -102,8 +103,7 @@ const TermsAgreement = styled.div`
   
   font-weight: bold;
   font-size: 12px;
-  letter-spacing: -1px;
-
+  
   margin-bottom: 106px;
   margin-top: 23px;
 `;

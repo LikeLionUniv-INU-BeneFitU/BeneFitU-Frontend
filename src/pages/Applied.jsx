@@ -19,10 +19,13 @@ export default function Applied() {
   const [activeTab, setActiveTab] = useState(
     location.state?.activeTab || 'ALL',
   );
-  const [benefitsList, setBenefitsList] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
 
-  // 1페이지인 경우 숨기기 위해 기본값 0으로 설정
+  // 백엔드에서 받아온 순수 전체 데이터 저장
+  const [rawBenefitsList, setRawBenefitsList] = useState([]);
+  // 현재 탭에 맞춰 필터링된 데이터 저장
+  const [displayedList, setDisplayedList] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
   const currentBlock = Math.floor(currentPage / 10);
@@ -34,21 +37,17 @@ export default function Applied() {
     if (i >= 0) pageNumbers.push(i);
   }
 
-  // 1. activeTab 및 currentPage 변경 시마다 API 호출
+  // 1. 컴포넌트 마운트 시 최초 1회 전체 데이터를 받아옴
   useEffect(() => {
     const fetchAppliedBenefits = async () => {
       try {
-        const statusQuery =
-          activeTab === 'ALL' ? '' : `&applyStatus=${activeTab}`;
-
-        const response = await api.get(
-          `/api/benefits/applied?page=${currentPage}${statusQuery}`,
-        );
+        // 쿼리 스트링 의존성을 없애고 혜택 내역 전체를 요청
+        const response = await api.get('/api/benefits/applied');
 
         if (response.data && response.data.isSuccess) {
           const rawBenefits = response.data.result?.appliedBenefits || [];
 
-          // 날짜 기준 내림차순 정렬
+          // 날짜 기준 내림차순 기본 정렬
           const sorted = [...rawBenefits].sort((a, b) => {
             if (!a.appliedDate || !b.appliedDate) return 0;
             const dateA = new Date(a.appliedDate.replace(/\./g, '-'));
@@ -56,25 +55,37 @@ export default function Applied() {
             return dateB - dateA;
           });
 
-          setBenefitsList(sorted);
-
-          // 백엔드 응답에 totPages가 없으므로 정렬된 전체 데이터 개수로 totalPages 계산 (페이지당 10개 기준)
-          const calculatedPages =
-            sorted.length > 0 ? Math.ceil(sorted.length / 10) : 0;
-          setTotalPages(calculatedPages);
+          setRawBenefitsList(sorted);
         } else {
-          setBenefitsList([]);
-          setTotalPages(0);
+          setRawBenefitsList([]);
         }
       } catch (error) {
         console.error('신청 내역 조회 중 오류 발생:', error);
-        setBenefitsList([]);
-        setTotalPages(0);
+        setRawBenefitsList([]);
       }
     };
 
     fetchAppliedBenefits();
-  }, [activeTab, currentPage]);
+  }, []);
+
+  // 2. 전체 데이터(rawBenefitsList)나 선택된 탭(activeTab), 페이지가 바뀔 때 프론트에서 분류 처리
+  useEffect(() => {
+    // 탭이 'ALL'이면 전체 유지, 아니면 applyStatus가 탭 ID와 일치하는 것만 필터링
+    const filtered =
+      activeTab === 'ALL'
+        ? rawBenefitsList
+        : rawBenefitsList.filter((item) => item.applyStatus === activeTab);
+
+    // 필터링된 결과를 기준으로 전체 페이지 수 계산 (페이지당 10개 기준)
+    const calculatedPages =
+      filtered.length > 0 ? Math.ceil(filtered.length / 10) : 0;
+    setTotalPages(calculatedPages);
+
+    // 현재 페이지(0부터 시작)에 해당하는 10개의 데이터만 잘라서 렌더링용 상태에 저장
+    const startIndex = currentPage * 10;
+    const endIndex = startIndex + 10;
+    setDisplayedList(filtered.slice(startIndex, endIndex));
+  }, [rawBenefitsList, activeTab, currentPage]);
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -116,13 +127,13 @@ export default function Applied() {
       </TabContainer>
 
       <ContentList>
-        {benefitsList.length > 0 ? (
-          benefitsList.map((item) => (
+        {displayedList.length > 0 ? (
+          displayedList.map((item) => (
             <div
               key={item.benefitId}
               onClick={() =>
                 navigate(`/detail-applied/${item.benefitId}`, {
-                  state: { fromTab: activeTab },
+                  state: { fromTab: activeTab, applyStatus: item.applyStatus },
                 })
               }
               style={{ cursor: 'pointer' }}
@@ -139,8 +150,8 @@ export default function Applied() {
         )}
       </ContentList>
 
-      {/* BenefitAll과 동일: 2페이지 이상(totalPages > 1)이고 데이터가 있을 때만 노출 */}
-      {totalPages > 1 && benefitsList.length > 0 && (
+      {/* 2페이지 이상(totalPages > 1)이고 데이터가 있을 때만 노출 */}
+      {totalPages > 1 && displayedList.length > 0 && (
         <PaginationContainer>
           <BlockArrowBtn
             disabled={currentBlock === 0}

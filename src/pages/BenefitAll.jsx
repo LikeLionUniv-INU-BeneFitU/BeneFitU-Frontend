@@ -37,7 +37,7 @@ function BenefitAll() {
 
   // 데이터 fetch 로직 (기존 API 주소 및 의존성 배열 유지)
   useEffect(() => {
-    const backendUrl = `http://43.201.77.120:8080/api/benefits?category=ALL&sort=DEFAULT&page=${currentPage}`;
+    const backendUrl = `https://benefitu-api.duckdns.org/api/benefits?category=ALL&sort=DEFAULT&page=${currentPage}`;
     const token = localStorage.getItem('accessToken');
 
     fetch(backendUrl, {
@@ -65,7 +65,7 @@ function BenefitAll() {
 
   // 유저 정보 fetch
   useEffect(() => {
-    const userUrl = 'http://43.201.77.120:8080/api/users/info';
+    const userUrl = 'https://benefitu-api.duckdns.org/api/users/info';
     const token = localStorage.getItem('accessToken');
 
     fetch(userUrl, {

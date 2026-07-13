@@ -1,4 +1,4 @@
-<F1 /> 14th-BeneFitU-Backend : 대학생 맞춤 혜택 통합 플랫폼
+## 14th-BeneFitU-Backend : 대학생 맞춤 혜택 통합 플랫폼
 
 ### 1. 개발 환경 및 주요 기술 스택 (Tech Stack)
 

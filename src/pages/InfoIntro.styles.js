@@ -17,7 +17,7 @@ export const PageWrapper = styled.div`
 
 export const MainContentBox = styled.div`
   width: 100%;
-  max-height: 70vh;
+  max-height: 70dvh;
   height: 100%;
 
   margin-top: calc(99 * (100dvh / 874));
@@ -33,9 +33,9 @@ export const MainContentBox = styled.div`
 
 // 타이틀
 export const MainTitle = styled.h1`
-  font-size: 1.85rem;
-  letter-spacing: -1px;
+  font-size: 1.8rem;
   font-weight: 700;
+  letter-spacing: -1px;
   color: #111111;
   line-height: 1.4;
   margin: 0;
@@ -98,6 +98,7 @@ export const FeatureTitle = styled.h2`
   font-size: 1.15rem;
   letter-spacing: -1px;
   font-weight: 700;
+  letter-spacing: -1px;
   color: #111111;
   margin: 0;
 `;

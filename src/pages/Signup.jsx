@@ -55,6 +55,7 @@ const Title = styled.h1`
 
 const SubTitle = styled.p`
   font-size: 12px;
+  letter-spacing: -1px;
   color: #000000;
   margin-top: 5px;
   margin-bottom: 2.29vh;

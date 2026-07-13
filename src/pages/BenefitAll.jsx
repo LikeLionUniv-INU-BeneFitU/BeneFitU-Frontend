@@ -35,33 +35,39 @@ function BenefitAll() {
     pageNumbers.push(i);
   }
 
-  // 데이터 fetch 로직 (기존 API 주소 및 의존성 배열 유지)
-  useEffect(() => {
-    const backendUrl = `https://benefitu-api.duckdns.org/api/benefits?category=ALL&sort=DEFAULT&page=${currentPage}`;
-    const token = localStorage.getItem('accessToken');
+  // sortType(한글)을 API sort 파라미터로 변환
+const sortCodeMap = {
+  '최신순': 'DEFAULT',
+  '금액순': 'AMOUNT_HIGH',
+};
 
-    fetch(backendUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+// 데이터 fetch 로직
+useEffect(() => {
+  const sortCode = sortCodeMap[sortType] || 'DEFAULT';
+  const backendUrl = `https://benefitu-api.duckdns.org/api/benefits?category=ALL&sort=${sortCode}&page=${currentPage}`;
+  const token = localStorage.getItem('accessToken');
+
+  fetch(backendUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error('네트워크 응답이 올바르지 않습니다.');
+      }
+      return res.json();
     })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('네트워크 응답이 올바르지 않습니다.');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        // 기존 혜택 리스트 저장 + 백엔드 실제 totPages 적용
-        setBenefitList(data.result?.benefits || []);
-        setTotalPages(data.result?.totPages || 0);
-      })
-      .catch((error) => {
-        console.error('장학금 리스트 조회 실패', error);
-        setBenefitList([]);
-        setTotalPages(0);
-      });
-  }, [currentCategory, currentPage]); // 기존 의존성 배열 유지
+    .then((data) => {
+      setBenefitList(data.result?.benefits || []);
+      setTotalPages(data.result?.totPages || 0);
+    })
+    .catch((error) => {
+      console.error('장학금 리스트 조회 실패', error);
+      setBenefitList([]);
+      setTotalPages(0);
+    });
+}, [currentCategory, currentPage, sortType]); // sortType 추가!
 
   // 유저 정보 fetch
   useEffect(() => {
@@ -110,7 +116,6 @@ function BenefitAll() {
     }
   };
 
-  // 기존 프론트엔드 카테고리 필터링 로직 원상 복구
   const filteredList =
     currentCategory === '전체'
       ? benefitList
@@ -119,12 +124,18 @@ function BenefitAll() {
             item.categories && item.categories.includes(currentCategory),
         );
 
-  // 기존 프론트엔드 정렬 로직 원상 복구
+        
+  // 정렬박스
+  const parseAmount = (amount) => {
+    const num = Number(amount);
+    return isNaN(num) ? 0 : num;
+  };
+
   const sortedList = [...filteredList].sort((a, b) => {
     if (sortType === '최신순') {
       return new Date(b.date) - new Date(a.date);
     } else {
-      return b.priceValue - a.priceValue;
+      return parseAmount(b.amount) - parseAmount(a.amount);
     }
   });
 
@@ -165,7 +176,7 @@ function BenefitAll() {
                 <S.SortOption
                   $isActive={sortType === '금액순'}
                   onClick={() => {
-                    setSortType === '금액순';
+                    setSortType('금액순');
                     setIsSortOpen(false);
                   }}
                 >

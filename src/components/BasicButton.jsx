@@ -20,8 +20,6 @@ const StyledBtn = styled.button`
   border: ${(props) =>
     props.disabled
       ? '1px solid #9d9d9d'
-      : props.$variant === 'white'
-        ? '1px solid #111111'
         : '1px solid rgb(88, 79, 234)'};
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 

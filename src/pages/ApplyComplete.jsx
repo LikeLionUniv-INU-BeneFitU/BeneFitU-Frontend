@@ -28,7 +28,7 @@ export default function ApplyComplete() {
   return (
     <S.PageWrapper>
       <S.MainContentBox>
-        <S.MainTitle>신청이 완료됐어요!</S.MainTitle>\
+        <S.MainTitle>신청이 완료됐어요!</S.MainTitle>
         <S.GraphicWrapper>
           <img src={applycomplete} alt="추천 완료 일러스트" />
         </S.GraphicWrapper>

@@ -91,7 +91,7 @@ const LogoimgBox = styled.div`
 const Subtitle = styled.div`
   font-size: clamp(0.7rem, 3.5vw, 1rem);
   letter-spacing: -1px;
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
 // 이용약관 텍스트

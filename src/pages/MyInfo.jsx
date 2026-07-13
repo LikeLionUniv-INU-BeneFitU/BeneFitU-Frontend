@@ -153,10 +153,10 @@ const MyInfo = () => {
 export default MyInfo;
 
 const Container = styled.div`
-  max-width: 420px;
+  max-width: 100%;
   margin: 0 auto;
   background-color: #fff;
-  min-height: 100vh;
+  height: 100dvh;
   font-family: sans-serif;
 `;
 const Body = styled.div`

@@ -75,7 +75,7 @@ const Splash = ({ onAnimationEnd }) => {
   const styles = {
     container: {
       position: 'relative',
-      width: '420px',
+      width: '100%',
       height: '100dvh',
       display: 'flex',
       justifyContent: 'center',

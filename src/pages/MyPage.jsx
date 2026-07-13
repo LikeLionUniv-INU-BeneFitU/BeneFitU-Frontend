@@ -223,6 +223,7 @@ const UserNameRow = styled.div`
 
 const UserName = styled.span`
   font-size: 1.35rem;
+  letter-spacing: -1px;
   font-weight: 600;
 `;
 
@@ -238,6 +239,7 @@ const EditButton = styled.button`
 
 const UserDetail = styled.span`
   font-size: 0.95rem;
+  letter-spacing: -1px;
   color: rgba(255, 255, 255, 0.9);
 `;
 
@@ -249,6 +251,7 @@ const CardBottom = styled.div`
 
 const AmountLabel = styled.span`
   font-size: 1rem;
+  letter-spacing: -1px;
   color: rgba(255, 255, 255, 0.8);
 `;
 
@@ -260,6 +263,7 @@ const AmountValueRow = styled.div`
 
 const AmountValue = styled.span`
   font-size: 2rem;
+  letter-spacing: -1px;
   font-weight: 600;
   letter-spacing: -0.5px;
 `;
@@ -285,6 +289,7 @@ const SectionHeader = styled.div`
 
 const SectionTitle = styled.h2`
   font-size: 1.2rem;
+  letter-spacing: -1px;
   font-weight: 700;
   color: #1a1a1a;
   margin: 0;
@@ -297,6 +302,7 @@ const MoreButton = styled.button`
   border: none;
   color: #666666;
   font-size: 0.9rem;
+  letter-spacing: -1px;
   cursor: pointer;
   gap: 0.2vw;
   padding: 0;

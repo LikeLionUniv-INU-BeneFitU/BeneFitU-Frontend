@@ -17,7 +17,7 @@ const Card = styled.div`
   border-radius: 12px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
 
-  padding: 12px 20px;
+  padding: 16px 20px;
   margin: 14px;
   gap: 9px;
 
@@ -35,6 +35,7 @@ const NameText = styled.p`
   font-size: 20px;
   letter-spacing: -1px;
   color: #FFFFFF;
+  margin-bottom: 24px;
 `;
 
 // 마이페이지 이동 버튼
@@ -49,6 +50,7 @@ const MyButton = styled.button`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin-bottom: 24px;
 `;
 
 // 태그 관련 스타일
@@ -59,7 +61,6 @@ const TagRow = styled.div`
 
 const Tag = styled.span`
   font-size: 12px;
-  letter-spacing: -1px;
   background-color: #FFFFFF;
   color: #000000;
   padding: 4px 10px;

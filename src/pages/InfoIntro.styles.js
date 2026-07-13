@@ -97,6 +97,7 @@ export const TextGroup = styled.div`
 
 export const FeatureTitle = styled.h2`
   font-size: 1.15rem;
+  letter-spacing: -1px;
   font-weight: 700;
   letter-spacing: -1.5px;
   color: #111111;

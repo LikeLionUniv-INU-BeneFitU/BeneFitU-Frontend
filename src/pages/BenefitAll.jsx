@@ -187,6 +187,7 @@ useEffect(() => {
           </S.SortWrapper>
         </S.Rowbox>
 
+      
         {sortedList.map((benefit) => {
           return (
             <BenefitDetailBox

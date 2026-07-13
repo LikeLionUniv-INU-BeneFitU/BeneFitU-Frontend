@@ -238,6 +238,7 @@ const EmptyMessage = styled.div`
   padding: 40px 0;
   color: #767676;
   font-size: 14px;
+  letter-spacing: -1px;
 `;
 
 const PaginationContainer = styled.div`

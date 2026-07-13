@@ -315,6 +315,7 @@ const Greeting = styled.div`
 
   h1 {
     font-size: 1.7rem;
+    letter-spacing: -1px;
     font-weight: 700;
     color: #111;
     margin: 0 0 4px 0;
@@ -322,6 +323,7 @@ const Greeting = styled.div`
 
   p {
     font-size: 1rem;
+    letter-spacing: -1px;
     color: #555;
     margin: 0;
   }

@@ -99,7 +99,7 @@ const Highlight = styled.span`
   color: #584FEA;
 `;
 const TermsAgreement = styled.div`
-  width: 50%;
+  width: 60%;
   
   font-weight: bold;
   font-size: 12px;

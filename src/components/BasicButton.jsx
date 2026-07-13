@@ -18,9 +18,7 @@ const StyledBtn = styled.button`
         : 'rgb(88, 79, 234)'};
   color: ${(props) => (props.$variant === 'white' ? '#111111' : 'rgb(255, 255, 255)')};
   border: ${(props) =>
-    props.disabled
-      ? '1px solid #9d9d9d'
-        : '1px solid rgb(88, 79, 234)'};
+    props.disabled ? '1px solid #9d9d9d' : '1px solid rgb(88, 79, 234)'};
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 
   /*transition:

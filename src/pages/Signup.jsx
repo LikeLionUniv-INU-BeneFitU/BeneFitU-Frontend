@@ -55,6 +55,7 @@ const Title = styled.h1`
 
 const SubTitle = styled.p`
   font-size: 12px;
+  letter-spacing: -1px;
   color: #000000;
   margin-top: 5px;
   margin-bottom: 2.29vh;
@@ -73,8 +74,7 @@ export const Rowbox = styled.div`
 
 // 아이디, 비밀번호, 비밀번호 확인 텍스트
 const Label = styled.label`
-  font-size: 14px;
-  letter-spacing: -1px;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #111111;
   display: block;

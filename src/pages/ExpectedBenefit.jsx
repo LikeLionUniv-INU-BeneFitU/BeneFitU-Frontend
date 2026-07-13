@@ -26,7 +26,7 @@ export default function ExpectedBenefit() {
     const token = localStorage.getItem('accessToken');
 
     // 1. 총 금액 조회
-    fetch('http://43.201.77.120:8080/api/benefits/total-amount', {
+    fetch('https://benefitu-api.duckdns.org/api/benefits/total-amount', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -42,7 +42,7 @@ export default function ExpectedBenefit() {
 
     // 2. 혜택 목록 조회
     fetch(
-      `http://43.201.77.120:8080/api/benefits?category=ALL&page=${currentPage}`,
+      `https://benefitu-api.duckdns.org/api/benefits?category=ALL&page=${currentPage}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },

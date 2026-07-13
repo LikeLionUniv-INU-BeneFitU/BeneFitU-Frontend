@@ -1,4 +1,12 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
+import { useEffect } from 'react';
+
 import AppLayout from './styles/AppLayout';
 import GlobalStyle from './styles/GlobalStyle';
 
@@ -21,6 +29,19 @@ import DetailApplied from './pages/DetailApplied';
 import MyInfo from './pages/MyInfo';
 
 function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    //저장된 로그인 토큰이나 세션 값이 있는지 확인
+    const token = localStorage.getItem('token');
+
+    // 토큰이 없고, 현재 주소가 로그인 페이지가 아니라면 로그인으로 강제 이동
+    if (!token && location.pathname !== '/login') {
+      navigate('/login');
+    }
+  }, [location, navigate]);
+
   return (
     <BrowserRouter>
       <GlobalStyle />

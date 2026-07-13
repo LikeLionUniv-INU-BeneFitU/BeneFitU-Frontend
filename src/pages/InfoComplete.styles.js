@@ -36,12 +36,12 @@ export const MainContentBox = styled.div`
 `;
 
 export const MainTitle = styled.h1`
-  font-size: 1.85em;
+  font-size: 2rem;
   font-weight: 700;
   color: #111111;
   text-align: center;
   margin: 0;
-  letter-spacing: -1px;
+  letter-spacing: -1.5px;
   flex-shrink: 0;
 
   span {
@@ -73,8 +73,8 @@ export const GraphicWrapper = styled.div`
 
 // 하단 설명 안내 문구
 export const DescriptionText = styled.p`
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 400;
   line-height: 1.5;
   letter-spacing: -1px;
   color: #444444;

@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 
-
 export const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: #F7F6FF;
+  background-color: #f7f6ff;
   padding-bottom: 40px;
 `;
 
@@ -20,12 +19,11 @@ export const ScrollArea = styled.div`
 // 총 금액 텍스트
 export const TotalAmountText = styled.p`
   text-align: center;
-  color: #584FEA;
+  color: #584fea;
   font-weight: 700;
   font-size: 28px;
   margin: 20px 0;
 `;
-
 
 // 페이지네이션 스타일
 export const PaginationContainer = styled.div`

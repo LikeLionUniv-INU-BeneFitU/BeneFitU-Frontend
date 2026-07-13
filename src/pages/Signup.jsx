@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/Header';
-import Logo from '../assets/images/Logo.png'
-import mailIcon from '../assets/images/mailIcon.png'
-import lockIcon from '../assets/images/lockIcon.png'
+import Logo from '../assets/images/Logo.png';
+import mailIcon from '../assets/images/mailIcon.png';
+import lockIcon from '../assets/images/lockIcon.png';
 
 const PageWrapper = styled.div`
   max-width: 450px;
@@ -13,7 +13,12 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  background-color: #E9E6FF;  
+  background-color: #e9e6ff;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  height: 100vh;
 `;
 
 const ContentWrapper = styled.div`
@@ -108,12 +113,12 @@ const Input = styled.input`
   }
 
   &:focus {
-  border-color: ${(props) => (props.hasError ? '#FF4D4D' : '#5c4ff2')};
+    border-color: ${(props) => (props.hasError ? '#FF4D4D' : '#5c4ff2')};
   }
 `;
 
 const ErrorText = styled.p`
-  color: #FF4D4D;
+  color: #ff4d4d;
   font-size: 0.75rem;
   margin: 0 0 20px 15px;
 `;
@@ -151,84 +156,88 @@ export default function Signup() {
 
   // 비밀번호와 비밀번호 확인이 일치하는지 확인
   // passwordConfirm에 뭔가 입력된 상태에서만 에러 체크 (빈 값일 땐 에러 안 보여줌)
-  const isPasswordMismatch = passwordConfirm.length > 0 && password !== passwordConfirm;
-
-
+  const isPasswordMismatch =
+    passwordConfirm.length > 0 && password !== passwordConfirm;
 
   const handleSignup = async () => {
-  if (isPasswordMismatch) return;
+    if (isPasswordMismatch) return;
 
-  try {
-    const response = await fetch(
-      "http://43.201.77.120:8080/api/auth/signup",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await fetch(
+        'http://43.201.77.120:8080/api/auth/signup',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: userId,
+            password: password,
+          }),
         },
-        body: JSON.stringify({
-          username: userId,
-          password: password,
-        }),
+      );
+
+      const data = await response.json();
+
+      if (data.isSuccess) {
+        alert('회원가입 성공!');
+        navigate('/login');
+      } else {
+        alert(data.message);
       }
-    );
-
-    const data = await response.json();
-
-    if (data.isSuccess) {
-      alert("회원가입 성공!");
-      navigate("/login");
-    } else {
-      alert(data.message);
+    } catch (error) {
+      console.error(error);
+      alert('회원가입 실패');
     }
-  } catch (error) {
-    console.error(error);
-    alert("회원가입 실패");
-  }
-};
+  };
 
   return (
     <PageWrapper>
-    <Header color={"#E9E6FF"} onBack={() => navigate(-1)} />
+      <Container>
+        <Header color={'#E9E6FF'} onBack={() => navigate(-1)} />
 
-    <ContentWrapper>
-      <LogoImg src={Logo} alt="BeneFitU 로고" />
-      <Title>회원가입</Title>
-      <Rowbox>
-        <SubTitle><SubTitlehighlight>BeneFitU</SubTitlehighlight>와 함께 더 많은 혜택을 만나보세요!</SubTitle>
-      </Rowbox>
-      <Label>아이디</Label>
-      <Input
-        $icon={mailIcon} // 아이디 입력창 메일 아이콘
-        placeholder="아이디를 입력해주세요"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-      />
+        <ContentWrapper>
+          <LogoImg src={Logo} alt="BeneFitU 로고" />
+          <Title>회원가입</Title>
+          <Rowbox>
+            <SubTitle>
+              <SubTitlehighlight>BeneFitU</SubTitlehighlight>와 함께 더 많은
+              혜택을 만나보세요!
+            </SubTitle>
+          </Rowbox>
+          <Label>아이디</Label>
+          <Input
+            $icon={mailIcon} // 아이디 입력창 메일 아이콘
+            placeholder="아이디를 입력해주세요"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+          />
 
-      <Label>비밀번호</Label>
-      <Input
-        $icon={lockIcon} // 비번 입력창 자물쇠 아이콘
-        type="password"
-        placeholder="비밀번호를 입력해주세요"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+          <Label>비밀번호</Label>
+          <Input
+            $icon={lockIcon} // 비번 입력창 자물쇠 아이콘
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-      <Label>비밀번호 확인</Label>
-      <Input
-       $icon={lockIcon} // 비번 입력창 자물쇠 아이콘
-        type="password"
-        placeholder="비밀번호를 다시 입력해주세요"
-        value={passwordConfirm}
-        onChange={(e) => setPasswordConfirm(e.target.value)}
-        hasError={isPasswordMismatch}
-      />
-      {isPasswordMismatch && (
-        <ErrorText>ⓘ 입력한 비밀번호와 동일하지 않습니다.</ErrorText>
-      )}
+          <Label>비밀번호 확인</Label>
+          <Input
+            $icon={lockIcon} // 비번 입력창 자물쇠 아이콘
+            type="password"
+            placeholder="비밀번호를 다시 입력해주세요"
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            hasError={isPasswordMismatch}
+          />
+          {isPasswordMismatch && (
+            <ErrorText>ⓘ 입력한 비밀번호와 동일하지 않습니다.</ErrorText>
+          )}
 
-      <SubmitButton onClick={handleSignup}>회원가입</SubmitButton>
-    </ContentWrapper>
-  </PageWrapper>
-);
+          <SubmitButton onClick={handleSignup}>회원가입</SubmitButton>
+        </ContentWrapper>
+      </Container>
+    </PageWrapper>
+  );
 }

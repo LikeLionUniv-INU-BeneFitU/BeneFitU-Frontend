@@ -22,8 +22,8 @@ export default function Applied() {
   const [benefitsList, setBenefitsList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
 
-  // 백엔드에서 받아올 실제 전체 페이지 수 (기본값 1로 설정 후 API 응답에 따라 갱신)
-  const [totalPages, setTotalPages] = useState(1);
+  // 1페이지인 경우 숨기기 위해 기본값 0으로 설정
+  const [totalPages, setTotalPages] = useState(0);
 
   const currentBlock = Math.floor(currentPage / 10);
   const startPage = currentBlock * 10;
@@ -31,14 +31,13 @@ export default function Applied() {
 
   const pageNumbers = [];
   for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
+    if (i >= 0) pageNumbers.push(i);
   }
 
   // 1. activeTab 및 currentPage 변경 시마다 API 호출
   useEffect(() => {
     const fetchAppliedBenefits = async () => {
       try {
-        // 'ALL'이 아닐 때만 쿼리 스트링 추가
         const statusQuery =
           activeTab === 'ALL' ? '' : `&applyStatus=${activeTab}`;
 
@@ -47,18 +46,7 @@ export default function Applied() {
         );
 
         if (response.data && response.data.isSuccess) {
-          // 백엔드 API 응답 데이터 구조 확인 필요 (result 내부에 담겨있다고 가정)
           const rawBenefits = response.data.result?.appliedBenefits || [];
-
-          // 백엔드에서 전체 페이지 수(예: totalPages)를 같이 내려준다면 연동 (없으면 기본값 사용)
-          if (response.data.result?.totalPages) {
-            setTotalPages(response.data.result.totalPages);
-          } else {
-            // 임시로 데이터가 있으면 1페이지 이상으로 처리되도록 방어 코드 작성
-            setTotalPages(
-              rawBenefits.length > 0 ? Math.ceil(rawBenefits.length / 10) : 1,
-            );
-          }
 
           // 날짜 기준 내림차순 정렬
           const sorted = [...rawBenefits].sort((a, b) => {
@@ -69,21 +57,24 @@ export default function Applied() {
           });
 
           setBenefitsList(sorted);
+
+          // 백엔드 응답에 totPages가 없으므로 정렬된 전체 데이터 개수로 totalPages 계산 (페이지당 10개 기준)
+          const calculatedPages =
+            sorted.length > 0 ? Math.ceil(sorted.length / 10) : 0;
+          setTotalPages(calculatedPages);
         } else {
-          // 실패 응답 시 리스트 초기화
           setBenefitsList([]);
-          setTotalPages(1);
+          setTotalPages(0);
         }
       } catch (error) {
         console.error('신청 내역 조회 중 오류 발생:', error);
-        // 에러 발생 시 빈 배열 처리하여 렌더링 에러 방지
         setBenefitsList([]);
-        setTotalPages(1);
+        setTotalPages(0);
       }
     };
 
     fetchAppliedBenefits();
-  }, [activeTab, currentPage]); // 이 두 값이 바뀔 때마다 useEffect 실행
+  }, [activeTab, currentPage]);
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -148,8 +139,8 @@ export default function Applied() {
         )}
       </ContentList>
 
-      {/* 페이지가 1개보다 많고, 데이터가 있을 때만 페이지네이션 노출 */}
-      {benefitsList.length > 0 && totalPages > 1 && (
+      {/* BenefitAll과 동일: 2페이지 이상(totalPages > 1)이고 데이터가 있을 때만 노출 */}
+      {totalPages > 1 && benefitsList.length > 0 && (
         <PaginationContainer>
           <BlockArrowBtn
             disabled={currentBlock === 0}

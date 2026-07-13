@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import Header from '../components/Header';
 import BenefitDetailBox from '../components/BenefitDetailBox';
 import * as S from './ExpectedBenefit.styles';
@@ -10,9 +9,9 @@ export default function ExpectedBenefit() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [benefitList, setBenefitList] = useState([]);
 
-  // 페이지네이션 상태
+  // 페이지네이션 상태 (totPages 연동 및 0으로 초기화)
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 20; // 총 페이지 수 임시 정의
+  const [totalPages, setTotalPages] = useState(0);
 
   const currentBlock = Math.floor(currentPage / 10);
   const startPage = currentBlock * 10;
@@ -20,7 +19,7 @@ export default function ExpectedBenefit() {
 
   const pageNumbers = [];
   for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
+    if (i >= 0) pageNumbers.push(i);
   }
 
   useEffect(() => {
@@ -35,7 +34,7 @@ export default function ExpectedBenefit() {
         return res.json();
       })
       .then((data) => {
-        setTotalAmount(data.result.totalAmount);
+        setTotalAmount(data.result.totalAmount || 0);
       })
       .catch((error) => {
         console.error('총 금액 조회 실패', error);
@@ -53,11 +52,14 @@ export default function ExpectedBenefit() {
         return res.json();
       })
       .then((data) => {
-        setBenefitList(data.result.benefits || []);
+        // 백엔드 실제 데이터 필드(benefits, totPages) 연동
+        setBenefitList(data.result?.benefits || []);
+        setTotalPages(data.result?.totPages || 0);
       })
       .catch((error) => {
         console.error('혜택 목록 조회 실패', error);
         setBenefitList([]);
+        setTotalPages(0);
       });
   }, [currentPage]);
 
@@ -87,8 +89,8 @@ export default function ExpectedBenefit() {
               key={benefit.benefitId}
               buttonText="상세 보기"
               to={`/detail/${benefit.benefitId}`}
-              category={benefit.categories[0]}
-              tags={benefit.categories}
+              category={benefit.categories?.[0] || ''}
+              tags={benefit.categories || []}
             >
               <p
                 style={{
@@ -113,7 +115,7 @@ export default function ExpectedBenefit() {
           ))}
       </S.ScrollArea>
 
-      {benefitList.length > 0 && (
+      {totalPages > 1 && benefitList.length > 0 && (
         <S.PaginationContainer>
           <S.BlockArrowBtn
             disabled={currentBlock === 0}

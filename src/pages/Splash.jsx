@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// 1부터 16까지의 스플래시 이미지 import
 import splash1 from '../assets/images/Splash/splash1.png';
 import splash2 from '../assets/images/Splash/splash2.png';
 import splash3 from '../assets/images/Splash/splash3.png';
@@ -41,7 +40,7 @@ const frames = [
 const Splash = ({ onAnimationEnd }) => {
   const navigate = useNavigate();
   const [currentFrame, setCurrentFrame] = useState(0);
-  const [showText, setShowText] = useState(false); // 텍스트 표시 및 터치 활성화 여부
+  const [showText, setShowText] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,15 +62,12 @@ const Splash = ({ onAnimationEnd }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // 클릭/터치 이벤트 핸들러
   const handleScreenClick = () => {
-    // 텍스트가 뜨기 전에는 클릭해도 아무 동작도 하지 않음
     if (!showText) return;
 
     navigate('/login-home');
   };
 
-  // 인라인 스타일 객체
   const styles = {
     container: {
       position: 'relative',
@@ -110,7 +106,6 @@ const Splash = ({ onAnimationEnd }) => {
         alt={`Splash Screen Frame ${currentFrame + 1}`}
         style={styles.image}
       />
-      {/* 화면 터치 안내 텍스트 */}
       <div style={styles.touchText}>화면 터치하여 시작하기</div>
     </div>
   );

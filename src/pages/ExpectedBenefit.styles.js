@@ -16,7 +16,6 @@ export const ScrollArea = styled.div`
   gap: 16px 26px;
 `;
 
-// 총 금액 텍스트
 export const TotalAmountText = styled.p`
   text-align: center;
   color: #584fea;
@@ -25,7 +24,6 @@ export const TotalAmountText = styled.p`
   margin: 20px 0;
 `;
 
-// 페이지네이션 스타일
 export const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;

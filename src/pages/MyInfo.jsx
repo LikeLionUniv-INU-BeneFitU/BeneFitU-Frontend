@@ -10,7 +10,6 @@ const MyInfo = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // 마운트 시 사용자 정보 조회 API 호출
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -33,7 +32,6 @@ const MyInfo = () => {
 
   const { baseInfo, detailInfo } = userInfo;
 
-  // 학년 정수형 데이터를 화면 표시용 문자열로 변환
   const getGradeString = (gradeNum) => {
     if (gradeNum >= 5) return '대학원';
     if (gradeNum === 4) return '4학년 이상';
@@ -58,7 +56,6 @@ const MyInfo = () => {
       />
 
       <Body>
-        {/* 이름 섹션 */}
         <NameSection>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +79,6 @@ const MyInfo = () => {
           <h2>{baseInfo.name}님</h2>
         </NameSection>
 
-        {/* 기본 정보 섹션: 수정 이동 시 기존 전체 유저 데이터를 state로 전달 */}
         <Section>
           <SectionHeader>
             <h3>기본 정보</h3>
@@ -118,7 +114,6 @@ const MyInfo = () => {
           </InfoRow>
         </Section>
 
-        {/* 기타 정보 섹션: 수정 이동 시 기존 전체 유저 데이터를 state로 전달 */}
         <Section>
           <SectionHeader>
             <h3>기타 정보</h3>
@@ -206,22 +201,22 @@ const SectionHeader = styled.div`
 const InfoRow = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* 글자가 두 줄 이상이 될 때 세로 정렬 기준을 상단으로 맞춰 정돈 */
+  align-items: flex-start;
   margin-bottom: 1.8vh;
   font-size: 1rem;
   letter-spacing: -1px;
-  gap: 15px; /* 왼쪽 라벨과 오른쪽 데이터 사이의 최소 안전 마진 확보 */
+  gap: 15px;
 
   span:first-child {
     color: #5f5f5f;
-    flex-shrink: 0; /* 관심 분야 텍스트 영역이 공간 압박으로 인해 찌그러지는 현상 차단 */
+    flex-shrink: 0;
   }
 
   span:last-child {
     color: #000;
     font-weight: 500;
-    text-align: right; /* 내용물이 길어질 때 오른쪽 벽에 달라붙도록 유지 */
-    word-break: keep-all; /* 단어가 도중에 뜬금없이 잘리지 않고 어절 단위로 행바꿈 처리 */
+    text-align: right;
+    word-break: keep-all;
   }
 `;
 

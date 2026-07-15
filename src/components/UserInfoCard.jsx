@@ -10,7 +10,6 @@ const PageWrapper = styled.div`
   align-items: center;
 `;
 
-// 전체 박스 (보라색)
 const Card = styled.div`
   width: 90%;
   background-color: #584fea;
@@ -34,11 +33,10 @@ const TopRow = styled.div`
 const NameText = styled.p`
   font-size: 20px;
   letter-spacing: -1px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 24px;
 `;
 
-// 마이페이지 이동 버튼
 const MyButton = styled.button`
   width: 30px;
   height: 30px;
@@ -53,7 +51,6 @@ const MyButton = styled.button`
   margin-bottom: 24px;
 `;
 
-// 태그 관련 스타일
 const TagRow = styled.div`
   display: flex;
   gap: 0 6px;
@@ -61,7 +58,7 @@ const TagRow = styled.div`
 
 const Tag = styled.span`
   font-size: 12px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #000000;
   padding: 4px 10px;
   border-radius: 8px;
@@ -74,9 +71,7 @@ export default function UserInfoCard({ name, gpa, incomeLevel, onMyClick }) {
       <Card>
         <TopRow>
           <NameText>{name}님의 정보</NameText>
-          <MyButton
-            onClick={() => navigate('/my-page')}
-          ></MyButton>
+          <MyButton onClick={() => navigate('/my-page')}></MyButton>
         </TopRow>
         <TagRow>
           <Tag>성적 {gpa}/4.5</Tag>

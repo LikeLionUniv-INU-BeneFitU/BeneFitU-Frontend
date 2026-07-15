@@ -71,7 +71,6 @@ export const GraphicWrapper = styled.div`
   }
 `;
 
-// 하단 설명 안내 문구
 export const DescriptionText = styled.p`
   font-size: 0.9rem;
   font-weight: 400;

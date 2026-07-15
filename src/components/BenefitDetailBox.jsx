@@ -13,7 +13,6 @@ const PageWrapper = styled.div`
   align-items: center;
 `;
 
-// 전체 박스 (흰색)
 const Box = styled.div`
   width: 98%;
 
@@ -22,8 +21,8 @@ const Box = styled.div`
 
   background-color: #ffffff;
 
-  border-radius: 12px; /* 전체 박스 모서리 */
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4); /* 전체 박스 그림자 */
+  border-radius: 12px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
 
   padding: 15px;
 
@@ -48,7 +47,6 @@ const Columnbox = styled.div`
   word-break: keep-all;
 `;
 
-// 상세보기 버튼 스타일
 const MoveButton = styled.button`
   width: 100%;
   height: 40px;
@@ -61,7 +59,6 @@ const MoveButton = styled.button`
   align-items: center;
   justify-content: center;
 
-  /* 선택된 항목만 보라색 배경 + 흰 글씨 */
   background-color: ${(props) => (props.$isActive ? '#584FEA' : '#ffffff')};
   border: 1px solid #584fea;
   border-radius: 12px;
@@ -69,7 +66,6 @@ const MoveButton = styled.button`
   color: ${(props) => (props.$isActive ? '#ffffff' : '#111111')};
 `;
 
-// 혜택 아이콘 스타일
 const BenefitIcon = styled.button`
   width: 72px;
   height: 72px;

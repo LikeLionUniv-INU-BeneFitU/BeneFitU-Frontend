@@ -20,9 +20,7 @@ export default function Applied() {
     location.state?.activeTab || 'ALL',
   );
 
-  // 백엔드에서 받아온 순수 전체 데이터 저장
   const [rawBenefitsList, setRawBenefitsList] = useState([]);
-  // 현재 탭에 맞춰 필터링된 데이터 저장
   const [displayedList, setDisplayedList] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -37,17 +35,14 @@ export default function Applied() {
     if (i >= 0) pageNumbers.push(i);
   }
 
-  // 1. 컴포넌트 마운트 시 최초 1회 전체 데이터를 받아옴
   useEffect(() => {
     const fetchAppliedBenefits = async () => {
       try {
-        // 쿼리 스트링 의존성을 없애고 혜택 내역 전체를 요청
         const response = await api.get('/api/benefits/applied');
 
         if (response.data && response.data.isSuccess) {
           const rawBenefits = response.data.result?.appliedBenefits || [];
 
-          // 날짜 기준 내림차순 기본 정렬
           const sorted = [...rawBenefits].sort((a, b) => {
             if (!a.appliedDate || !b.appliedDate) return 0;
             const dateA = new Date(a.appliedDate.replace(/\./g, '-'));
@@ -68,20 +63,16 @@ export default function Applied() {
     fetchAppliedBenefits();
   }, []);
 
-  // 2. 전체 데이터(rawBenefitsList)나 선택된 탭(activeTab), 페이지가 바뀔 때 프론트에서 분류 처리
   useEffect(() => {
-    // 탭이 'ALL'이면 전체 유지, 아니면 applyStatus가 탭 ID와 일치하는 것만 필터링
     const filtered =
       activeTab === 'ALL'
         ? rawBenefitsList
         : rawBenefitsList.filter((item) => item.applyStatus === activeTab);
 
-    // 필터링된 결과를 기준으로 전체 페이지 수 계산 (페이지당 10개 기준)
     const calculatedPages =
       filtered.length > 0 ? Math.ceil(filtered.length / 10) : 0;
     setTotalPages(calculatedPages);
 
-    // 현재 페이지(0부터 시작)에 해당하는 10개의 데이터만 잘라서 렌더링용 상태에 저장
     const startIndex = currentPage * 10;
     const endIndex = startIndex + 10;
     setDisplayedList(filtered.slice(startIndex, endIndex));
@@ -89,7 +80,7 @@ export default function Applied() {
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
-    setCurrentPage(0); // 탭이 바뀔 때는 반드시 첫 페이지(0)로 리셋
+    setCurrentPage(0);
   };
 
   const handleNextBlock = () => {
@@ -150,7 +141,6 @@ export default function Applied() {
         )}
       </ContentList>
 
-      {/* 2페이지 이상(totalPages > 1)이고 데이터가 있을 때만 노출 */}
       {totalPages > 1 && displayedList.length > 0 && (
         <PaginationContainer>
           <BlockArrowBtn
@@ -182,9 +172,7 @@ export default function Applied() {
   );
 }
 
-// -----------------------------------------------------------
-// 스타일 컴포넌트 영역 (기존 구조 100% 보존)
-// -----------------------------------------------------------
+// 스타일 컴포넌트 영역
 const Container = styled.div`
   display: flex;
   flex-direction: column;

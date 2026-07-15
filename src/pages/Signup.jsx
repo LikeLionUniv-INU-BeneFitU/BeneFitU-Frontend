@@ -10,7 +10,7 @@ const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
   height: 100dvh;
-  
+
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -23,12 +23,12 @@ const ContentWrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  
+
   padding: 20px;
   box-sizing: border-box;
   position: relative;
   margin-top: 6.87vh;
-  
+
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 
@@ -36,7 +36,6 @@ const ContentWrapper = styled.div`
   box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
 `;
 
-// 로고 사진
 const LogoImg = styled.img`
   width: 80%;
   height: auto;
@@ -72,7 +71,6 @@ export const Rowbox = styled.div`
   align-items: center;
 `;
 
-// 아이디, 비밀번호, 비밀번호 확인 텍스트
 const Label = styled.label`
   font-size: 1.25rem;
   font-weight: 700;
@@ -82,7 +80,6 @@ const Label = styled.label`
   margin-left: 15px;
 `;
 
-// 입력창
 const Input = styled.input`
   height: 45px;
   padding: 0 16px 0 40px;
@@ -95,13 +92,13 @@ const Input = styled.input`
   background-color: #ffffff;
   background-image: url(${(props) => props.$icon});
   background-repeat: no-repeat;
-  background-position: 12px center; /* 왼쪽에서 12px 떨어진 위치 */
-  background-size: 18px 18px; /* 아이콘 크기 */
+  background-position: 12px center;
+  background-size: 18px 18px;
 
   outline: none;
   box-sizing: border-box;
 
-  margin-bottom: 1.37vh; // 회원가입 화면이랑 통일
+  margin-bottom: 1.37vh;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -120,7 +117,6 @@ const ErrorText = styled.p`
   margin: 0 0 2.29vh 15px;
 `;
 
-// 회원가입 버튼
 const SubmitButton = styled.button`
   height: 50px;
   background-color: #5c4ff2;
@@ -150,8 +146,6 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
-  // 비밀번호와 비밀번호 확인이 일치하는지 확인
-  // passwordConfirm에 뭔가 입력된 상태에서만 에러 체크 (빈 값일 땐 에러 안 보여줌)
   const isPasswordMismatch =
     passwordConfirm.length > 0 && password !== passwordConfirm;
 
@@ -189,50 +183,48 @@ export default function Signup() {
 
   return (
     <PageWrapper>
-      
-        <Header color={'#E9E6FF'} onBack={() => navigate(-1)} />
-        <ContentWrapper>
-          <LogoImg src={Logo} alt="BeneFitU 로고" />
-          <Title>회원가입</Title>
-          <Rowbox>
-            <SubTitle>
-              <SubTitlehighlight>BeneFitU</SubTitlehighlight>와 함께 더 많은
-              혜택을 만나보세요!
-            </SubTitle>
-          </Rowbox>
-          <Label>아이디</Label>
-          <Input
-            $icon={mailIcon} // 아이디 입력창 메일 아이콘
-            placeholder="아이디를 입력해주세요"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-          />
+      <Header color={'#E9E6FF'} onBack={() => navigate(-1)} />
+      <ContentWrapper>
+        <LogoImg src={Logo} alt="BeneFitU 로고" />
+        <Title>회원가입</Title>
+        <Rowbox>
+          <SubTitle>
+            <SubTitlehighlight>BeneFitU</SubTitlehighlight>와 함께 더 많은
+            혜택을 만나보세요!
+          </SubTitle>
+        </Rowbox>
+        <Label>아이디</Label>
+        <Input
+          $icon={mailIcon}
+          placeholder="아이디를 입력해주세요"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+        />
 
-          <Label>비밀번호</Label>
-          <Input
-            $icon={lockIcon} // 비번 입력창 자물쇠 아이콘
-            type="password"
-            placeholder="비밀번호를 입력해주세요"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <Label>비밀번호</Label>
+        <Input
+          $icon={lockIcon}
+          type="password"
+          placeholder="비밀번호를 입력해주세요"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-          <Label>비밀번호 확인</Label>
-          <Input
-            $icon={lockIcon} // 비번 입력창 자물쇠 아이콘
-            type="password"
-            placeholder="비밀번호를 다시 입력해주세요"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            hasError={isPasswordMismatch}
-          />
-          {isPasswordMismatch && (
-            <ErrorText>ⓘ 입력한 비밀번호와 동일하지 않습니다.</ErrorText>
-          )}
+        <Label>비밀번호 확인</Label>
+        <Input
+          $icon={lockIcon}
+          type="password"
+          placeholder="비밀번호를 다시 입력해주세요"
+          value={passwordConfirm}
+          onChange={(e) => setPasswordConfirm(e.target.value)}
+          hasError={isPasswordMismatch}
+        />
+        {isPasswordMismatch && (
+          <ErrorText>ⓘ 입력한 비밀번호와 동일하지 않습니다.</ErrorText>
+        )}
 
-          <SubmitButton onClick={handleSignup}>회원가입</SubmitButton>
-        </ContentWrapper>
-      
+        <SubmitButton onClick={handleSignup}>회원가입</SubmitButton>
+      </ContentWrapper>
     </PageWrapper>
   );
 }

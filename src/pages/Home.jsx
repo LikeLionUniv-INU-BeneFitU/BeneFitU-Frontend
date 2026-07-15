@@ -23,19 +23,16 @@ const FIXED_CATEGORIES = [
   { id: 'requirement', category: '조건별 장학금', icon: RequirementIcon },
 ];
 
-// 백엔드에서 내려주는 한글 카테고리 명칭 규격에 맞춰 Key 매핑 구조 전면 수정
 const CATEGORY_ICONS = {
   국가장학금: State,
   '기업·재단장학금': Corporate,
-  '기업·재단장학금': Corporate, // 띄어쓰기 혼용 대응용 이중 배치
+  '기업·재단장학금': Corporate,
   지역장학금: Region,
   조건별장학금: Requirement,
 };
 
 export default function Home() {
   const navigate = useNavigate();
-
-  // 백엔드 명세서 데이터 구조에 대응하는 상태 관리 정의
   const [userName, setUserName] = useState('');
   const [totalBenefitAmount, setTotalBenefitAmount] = useState(0);
   const [categoryCounts, setCategoryCounts] = useState({
@@ -46,7 +43,6 @@ export default function Home() {
   });
   const [deadlineBenefits, setDeadlineBenefits] = useState([]);
 
-  // 컴포넌트 마운트 시 4개의 API 호출 수행
   useEffect(() => {
     const fetchHomeAllData = async () => {
       try {
@@ -71,7 +67,7 @@ export default function Home() {
         }
         if (listRes.data.isSuccess) {
           const rawBenefits = listRes.data.result?.benefits || [];
-          setDeadlineBenefits(rawBenefits.slice(0, 3)); // 상위 3개 노출
+          setDeadlineBenefits(rawBenefits.slice(0, 3));
         }
       } catch (error) {
         console.error('홈 데이터를 불러오는 중 오류 발생:', error);
@@ -83,7 +79,6 @@ export default function Home() {
 
   return (
     <Container>
-      {/* 헤더 */}
       <Header>
         <img src={SmallLogo} alt="Logo" className="logo" />
         <img
@@ -94,14 +89,12 @@ export default function Home() {
         />
       </Header>
 
-      {/* 인사말 영역 */}
       <ScrollArea>
         <Greeting>
           <h1>{userName || '유저'}님,</h1>
           <p>마감 임박 혜택을 확인해 장학금을 놓치지 마세요!</p>
         </Greeting>
 
-        {/* 총 예상 혜택 금액 카드 */}
         <TotalBenefitCard>
           <span className="label">예상 혜택 금액</span>
           <h2 className="amount">총 {totalBenefitAmount.toLocaleString()}</h2>
@@ -113,7 +106,6 @@ export default function Home() {
           </button>
         </TotalBenefitCard>
 
-        {/* 맞춤 추천 혜택 섹션 */}
         <SectionCard>
           <SectionHeader>
             <div className="title">
@@ -199,7 +191,6 @@ export default function Home() {
           </RecommendGrid>
         </SectionCard>
 
-        {/* 마감 임박 혜택 섹션 */}
         <SectionCard>
           <SectionHeader>
             <div className="title">
@@ -253,9 +244,7 @@ export default function Home() {
   );
 }
 
-// ==============================
-// Styled Components (기존 코드 100% 원본 유지)
-// ==============================
+// 스타일 컴포넌트
 
 const Container = styled.div`
   width: 100%;

@@ -7,10 +7,8 @@ export default function Header({ title, onBack, variant = 'default' }) {
 
   const handleBackClick = () => {
     if (onBack) {
-      // 부모 컴포넌트에서 커스텀 루트나 함수를 지정했다면 실행
       onBack();
     } else {
-      // 별도로 지정하지 않았다면 단순히 이전 페이지로 이동
       navigate(-1);
     }
   };
@@ -22,7 +20,6 @@ export default function Header({ title, onBack, variant = 'default' }) {
         aria-label="뒤로가기"
         $variant={variant}
       >
-        {/* 와이어프레임의 < 모양 아이콘 (SVG로 깔끔하게 처리) */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -43,13 +40,13 @@ export default function Header({ title, onBack, variant = 'default' }) {
   );
 }
 
-// --- Styled Components (와이어프레임 기준 모바일 맞춤 스타일) ---
+// 스타일 컴포넌트
 const HeaderContainer = styled.header`
   position: sticky;
   top: 0;
   left: 0;
   right: 0;
-  height: 56px; /* 일반적인 모바일 상단 헤더 표준 높이 */
+  height: 56px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -87,7 +84,6 @@ const Title = styled.h1`
   color: ${(props) => (props.$variant === 'purple' ? '#ffffff' : '#111111')};
   margin: 0;
   text-align: center;
-  /* 절대적인 가운데 정렬을 보장하기 위한 설정 */
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -95,5 +91,5 @@ const Title = styled.h1`
 `;
 
 const EmptySpace = styled.div`
-  width: 32px; /* BackButton과 좌우 대칭을 맞추기 위한 크기 */
+  width: 32px;
 `;

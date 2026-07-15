@@ -3,9 +3,9 @@ import styled from 'styled-components';
 export const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
-  height: 100dvh; /* 전체 화면 높이 꽉 채우기 */
+  height: 100dvh;
   margin: 0 auto;
-  background-color:  #faf6ff;
+  background-color: #faf6ff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -31,7 +31,6 @@ export const MainContentBox = styled.div`
   flex-grow: 1;
 `;
 
-// 타이틀
 export const MainTitle = styled.h1`
   font-size: 1.8rem;
   font-weight: 700;
@@ -39,31 +38,29 @@ export const MainTitle = styled.h1`
   color: #111111;
   line-height: 1.2;
   margin: 0;
-  margin-bottom: 2dvh; /* 최소 여백 확보 */
+  margin-bottom: 2dvh;
 `;
 
-// 중앙 일러스트 영역
 export const ImageSection = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1; /* 남는 세로 공간을 차지 */
-  min-height: 150px; /* 화면이 엄청 작아져도 유지할 최소 높이 */
+  flex: 1;
+  min-height: 150px;
   margin-bottom: 2dvh;
 
   img {
     height: 100%;
-    max-height: 220px; /* 피그마 일러스트 높이 수준으로 제한 */
+    max-height: 220px;
     width: auto;
     object-fit: contain;
   }
 `;
 
-// 특장점 리스트 박스
 export const FeatureList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.2rem; /* 화면이 작아져도 깨지지 않을 최적의 간격 */
+  gap: 1.2rem;
   margin-bottom: 1rem;
 `;
 
@@ -114,7 +111,6 @@ export const FeatureDesc = styled.p`
   word-break: keep-all;
 `;
 
-// 하단 버튼 영역 (콘텐츠 박스와 물리적으로 분리되어 하단에 깔끔하게 안착)
 export const ButtonWrapper = styled.div`
   position: absolute;
   bottom: 0;
@@ -122,7 +118,6 @@ export const ButtonWrapper = styled.div`
   right: 0;
   padding: 16px 20px 32px 20px;
   background: linear-gradient(to top, #edeaff 80%, rgba(237, 234, 255, 0) 100%);
-  /* 💡 그라데이션 배경색을 PageWrapper 배경색(#edeaff)과 통일하여 자연스럽게 매칭 */
   display: flex;
   flex-direction: column;
   gap: 12px;

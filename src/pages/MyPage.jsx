@@ -9,7 +9,6 @@ import api from '../api/axios';
 const MyPage = () => {
   const navigate = useNavigate();
 
-  // 백엔드 명세서 데이터 구조에 대응하는 상태 관리 정의
   const [baseInfo, setBaseInfo] = useState({
     name: '',
     schoolName: '',
@@ -19,14 +18,11 @@ const MyPage = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [appliedBenefits, setAppliedBenefits] = useState([]);
 
-  // 컴포넌트 마운트 시 API 호출 수행
   useEffect(() => {
     const fetchMyPageData = async () => {
       try {
         const token = localStorage.getItem('accessToken');
         const headers = { Authorization: `Bearer ${token}` };
-
-        // 사용자 정보, 총 금액, 신청 혜택 내역 전체를 병렬로 호출
         const [userRes, amountRes, benefitsRes] = await Promise.all([
           api.get('/api/users/info', { headers }),
           api.get('/api/benefits/total-amount', { headers }),
@@ -42,12 +38,10 @@ const MyPage = () => {
         if (benefitsRes.data.isSuccess) {
           const rawBenefits = benefitsRes.data.result?.appliedBenefits || [];
 
-          // 심사 중(UNDER_REVIEW) 상태인 혜택만 필터링
           const reviewBenefits = rawBenefits.filter(
             (item) => item.applyStatus === 'UNDER_REVIEW',
           );
 
-          // 신청 처리가 빠른 순서(날짜 오름차순)로 정렬 후 상위 4개 추출
           const sorted = reviewBenefits
             .sort((a, b) => new Date(a.appliedDate) - new Date(b.appliedDate))
             .slice(0, 4);
@@ -71,7 +65,6 @@ const MyPage = () => {
       <Header title="MY" onBack={handleCustomBack} variant="purple" />
 
       <ContentWrapper>
-        {/* 상단 프로필 및 예상 혜택 금액 카드 */}
         <ProfileCard>
           <CardTop>
             <Avatar src={Profile} />
@@ -103,7 +96,6 @@ const MyPage = () => {
           </CardBottom>
         </ProfileCard>
 
-        {/* 신청 현황 섹션 */}
         <StatusSection>
           <SectionHeader>
             <SectionTitle>신청 현황</SectionTitle>
@@ -142,26 +134,22 @@ const MyPage = () => {
 
 export default MyPage;
 
-/* 2. 스타일 컴포넌트 (Styled-Components) */
-
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0;
-  left: 50%; /* 화면 중앙 정렬을 위한 설정 */
-  transform: translateX(-50%); /* 화면 중앙 정렬을 위한 설정 */
+  left: 50%;
+  transform: translateX(-50%);
 
-  /* 모바일 화면 규격 고정 (일반적인 모바일 앱 뷰 규격) */
   width: 100vw;
-  max-width: 430px; /* 아이폰 14/15 프로 맥스 등 대형 모바일 기준 너비 제한 */
+  max-width: 430px;
   height: 100dvh;
 
   background-color: #f8f9fa;
   box-sizing: border-box;
-  overflow: hidden; /* 전체 화면 스크롤 절대 방지 */
+  overflow: hidden;
 
-  /* 데스크톱 화면에서 모바일 얇은 테두리나 그림자 효과를 주고 싶다면 추가 (선택사항) */
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   border-left: 1px solid #e9ecef;
   border-right: 1px solid #e9ecef;
@@ -177,15 +165,13 @@ const ContentWrapper = styled.div`
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
-  /* 💡 스크롤바 투명하게 완전히 숨기기 */
   &::-webkit-scrollbar {
-    display: none; /* 크롬, 사파리 */
+    display: none;
   }
-  -ms-overflow-style: none; /* IE, Edge */
-  scrollbar-width: none; /* 파이어폭스 */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
-/* 프로필 카드 스타일 */
 const ProfileCard = styled.div`
   background-color: #584fea;
   border-radius: 10px;

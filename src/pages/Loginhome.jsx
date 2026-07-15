@@ -25,7 +25,6 @@ const ButtonWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-// 로그인 버튼
 const LoginButton = styled.button`
   height: 50px;
   background-color: #5c4ff2;
@@ -33,10 +32,8 @@ const LoginButton = styled.button`
   border: none;
   border-radius: 12px;
   font-size: 18px;
-
   font-weight: 700;
   cursor: pointer;
-
   margin-left: 15px;
   margin-right: 15px;
 
@@ -45,7 +42,6 @@ const LoginButton = styled.button`
   }
 `;
 
-// 회원가입 버튼
 const SignupButton = styled.button`
   height: 50px;
   background-color: #ffffff;
@@ -66,7 +62,6 @@ const SignupButton = styled.button`
   }
 `;
 
-// 로고 텍스트 이미지
 const LogoBox = styled.div`
   width: 75%;
   height: 90px;
@@ -76,7 +71,6 @@ const LogoBox = styled.div`
   flex-direction: column;
 `;
 
-// 로고 이미지
 const LogoimgBox = styled.div`
   width: 60%;
   height: 50%;
@@ -86,14 +80,12 @@ const LogoimgBox = styled.div`
   flex-direction: column;
 `;
 
-// 로고 밑 텍스트
 const Subtitle = styled.div`
   font-size: clamp(0.7rem, 3.5vw, 1rem);
   letter-spacing: -1px;
   margin-top: 10px;
 `;
 
-// 이용약관 텍스트
 const Highlight = styled.span`
   color: #584fea;
 `;

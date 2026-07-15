@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import BasicButton from '../components/BasicButton';
-import loginhome1 from '../assets/images/loginhome1.png'
-import loginhome2 from '../assets/images/loginhome2.png'
+import loginhome1 from '../assets/images/loginhome1.png';
+import loginhome2 from '../assets/images/loginhome2.png';
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -13,16 +13,15 @@ const PageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 80px 0 60px;
-  
 
-  background: linear-gradient(180deg, #E0DEFF, #FFFFFF);
+  background: linear-gradient(180deg, #e0deff, #ffffff);
 `;
 
 const ButtonWrapper = styled.div`
-  width: 100%; 
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 20px; 
+  padding: 0 20px;
   box-sizing: border-box;
 `;
 
@@ -34,10 +33,10 @@ const LoginButton = styled.button`
   border: none;
   border-radius: 12px;
   font-size: 18px;
-  
+
   font-weight: 700;
   cursor: pointer;
-  
+
   margin-left: 15px;
   margin-right: 15px;
 
@@ -54,10 +53,10 @@ const SignupButton = styled.button`
   border: 1px solid #5c4ff2;
   border-radius: 12px;
   font-size: 18px;
-  
+
   font-weight: 700;
   cursor: pointer;
-  
+
   margin-top: 23px;
   margin-left: 15px;
   margin-right: 15px;
@@ -96,18 +95,17 @@ const Subtitle = styled.div`
 
 // 이용약관 텍스트
 const Highlight = styled.span`
-  color: #584FEA;
+  color: #584fea;
 `;
 const TermsAgreement = styled.div`
   width: 60%;
-  
+
   font-weight: bold;
   font-size: 12px;
-  
+
   margin-bottom: 106px;
   margin-top: 23px;
 `;
-
 
 export default function LoginHome() {
   const navigate = useNavigate();
@@ -116,16 +114,22 @@ export default function LoginHome() {
       <LogoBox>
         <img src={loginhome2} />
       </LogoBox>
-      <Subtitle>내가 맞는 혜택을 찾고, 놓치지 않도록 도와드릴게요!</ Subtitle>
+      <Subtitle>내가 맞는 혜택을 찾고, 놓치지 않도록 도와드릴게요!</Subtitle>
       <LogoimgBox>
         <img src={loginhome1} />
       </LogoimgBox>
 
       <ButtonWrapper>
-        <LoginButton onClick={() => navigate('/login') }>로그인</LoginButton>
-        <SignupButton onClick={() => navigate('/signup') }>회원가입</SignupButton>
+        <LoginButton onClick={() => navigate('/login')}>로그인</LoginButton>
+        <SignupButton onClick={() => navigate('/signup')}>
+          회원가입
+        </SignupButton>
       </ButtonWrapper>
-      <TermsAgreement>로그인 또는 회원가입 시 <Highlight>BeneFitU 이용약관 및 개인정보 처리 방침</Highlight>에 동의한 것으로 간주됩니다.</TermsAgreement>
+      <TermsAgreement>
+        로그인 또는 회원가입 시{' '}
+        <Highlight>BeneFitU 이용약관 및 개인정보 처리 방침</Highlight>에 동의한
+        것으로 간주됩니다.
+      </TermsAgreement>
     </PageWrapper>
   );
 }

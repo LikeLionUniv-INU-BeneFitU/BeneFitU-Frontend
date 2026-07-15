@@ -168,7 +168,7 @@ const PageContainer = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  padding: 2.5vh 5vw 80px 5vw;
+  padding: 2.5vh 20px 80px 20px;
   display: flex;
   flex-direction: column;
   gap: 3vh;

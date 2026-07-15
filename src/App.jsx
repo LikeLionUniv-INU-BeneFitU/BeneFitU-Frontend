@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster, toast } from 'sonner';
+
 import AppLayout from './styles/AppLayout';
 import GlobalStyle from './styles/GlobalStyle';
 
@@ -20,9 +22,19 @@ import Applied from './pages/Applied';
 import DetailApplied from './pages/DetailApplied';
 import MyInfo from './pages/MyInfo';
 
+window.alert = (message) => {
+  toast(message);
+};
+
 function App() {
   return (
     <BrowserRouter>
+      <Toaster
+        position="top-center"
+        richColors
+        theme="light"
+        closeButton={false}
+      />
       <GlobalStyle />
       <AppLayout>
         <Routes>

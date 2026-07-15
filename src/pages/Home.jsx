@@ -334,7 +334,7 @@ const TotalBenefitCard = styled.div`
   width: 100%;
   height: 19.68vh;
   border-radius: 12px;
-  padding: 2.75vh 4vw;
+  padding: 2.75vh 1.5vw;
   color: white;
   box-shadow: 0 4px 12px rgba(91, 82, 239, 0.15);
 
@@ -368,7 +368,7 @@ const TotalBenefitCard = styled.div`
 const SectionCard = styled.div`
   background-color: white;
   border-radius: 12px;
-  padding: 2.75vh 4vw;
+  padding: 2.75vh 1.5vw;
   border: 1px solid #c3c0fb;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   height: auto;

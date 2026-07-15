@@ -1,6 +1,3 @@
-// 원하는 경로에 원하는 이름으로 생성
-// 저는 AppLayout.jsx로 해놓고 styles 폴더에 넣어둡니다. 정답은 없어요.
-
 import styled from 'styled-components';
 
 const AppLayout = ({ children }) => {
@@ -13,7 +10,6 @@ const AppLayout = ({ children }) => {
 
 export default AppLayout;
 
-// 바깥쪽 영역
 const Background = styled.div`
   display: flex;
   justify-content: center;
@@ -22,7 +18,6 @@ const Background = styled.div`
   background-color: #f0f0f5;
 `;
 
-// 실제 모바일 화면 영역
 const MobileContainer = styled.div`
   width: 100%;
   max-width: 430px;

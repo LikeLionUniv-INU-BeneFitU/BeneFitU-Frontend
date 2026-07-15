@@ -13,13 +13,9 @@ export default function BasicInfo() {
   const navigate = useNavigate();
   const location = useLocation();
   const dateInputRef = useRef(null);
-
   const isEdit = location.pathname.includes('edit');
-
-  // MyInfo 페이지에서 전달한 라우터 최신 상태 정보 확인
   const passedUserInfo = location.state?.userInfo;
 
-  // 학년 표시 문자열을 정수형 코드로 변경하는 헬퍼 함수
   const convertGradeToInteger = (gradeStr) => {
     switch (gradeStr) {
       case '1학년':
@@ -37,7 +33,6 @@ export default function BasicInfo() {
     }
   };
 
-  // 정수형 코드를 학년 표시 문자열로 변경하는 헬퍼 함수
   const convertGradeToString = (gradeNum) => {
     if (gradeNum >= 5) return '대학원';
     if (gradeNum === 4) return '4학년 이상';
@@ -66,7 +61,6 @@ export default function BasicInfo() {
 
   const grades = ['1학년', '2학년', '3학년', '4학년 이상', '대학원'];
 
-  // 기본 정보 선택 범위(메타데이터) 조회
   useEffect(() => {
     const fetchMetaData = async () => {
       try {
@@ -81,7 +75,6 @@ export default function BasicInfo() {
     fetchMetaData();
   }, []);
 
-  // [수정 모드] MyInfo에서 넘겨받은 기존 데이터를 입력 폼 초기값으로 파싱하여 세팅
   useEffect(() => {
     if (isEdit && passedUserInfo) {
       // 날짜 점(.) 형태 포맷 대응 교정 처리
@@ -104,7 +97,6 @@ export default function BasicInfo() {
     }
   }, [isEdit, passedUserInfo]);
 
-  // 서버 에러나 인증 실패로 인해 데이터가 유실(undefined)되더라도 trim() 오류로 크래시가 나지 않도록 차단 가드 처리 완료
   const isButtonActive = () => {
     if (!formState) return false;
 
@@ -156,7 +148,6 @@ export default function BasicInfo() {
     setIsRegionModalOpen(false);
   };
 
-  // [수정 모드 완료] 기존 기타 정보를 유지한 상태에서 기본 정보 필드만 업데이트하여 PATCH 호출
   const handleNextStep = async () => {
     if (!isEdit) {
       navigate('/other-info');

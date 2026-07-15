@@ -20,7 +20,7 @@ const PageWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   width: 100%;
-  
+
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -54,12 +54,11 @@ const Label = styled.label`
   margin-left: 15px;
 `;
 
-// 입력창
 const Input = styled.input`
   height: 45px;
   padding: 0 16px 0 40px;
 
-  margin-bottom: 1.37vh; // 회원가입 화면이랑 통일
+  margin-bottom: 1.37vh;
   margin-left: 15px;
   margin-right: 15px;
 
@@ -83,7 +82,6 @@ const Input = styled.input`
   }
 `;
 
-// 로그인 버튼
 const LoginButton = styled.button`
   height: 50px;
   background-color: #5c4ff2;
@@ -103,7 +101,6 @@ const LoginButton = styled.button`
   }
 `;
 
-// 새계정 만들기 버튼
 const NewLoginButton = styled.button`
   height: 50px;
   background-color: #ffffff;

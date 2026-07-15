@@ -1,25 +1,23 @@
 import styled from 'styled-components';
 
-// 모바일 웹앱 레이아웃 감싸기 (배경색 및 정렬)
 export const PageWrapper = styled.div`
   max-width: 450px;
   width: 100%;
-  height: 100dvh; /* 브라우저 화면 높이에 꽉 맞춤 */
+  height: 100dvh;
   margin: 0 auto;
   background-color: #fbfbff;
   display: flex;
-  flex-direction: column; /* 수직 배치: 헤더 -> 스크롤 영역 -> 버튼 */
+  flex-direction: column;
   position: relative;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  overflow: hidden; /* 영역을 벗어나는 모든 부모 스크롤 방지 */
+  overflow: hidden;
 `;
 
 export const ScrollArea = styled.div`
-  flex: 1; /* 헤더와 버튼 wrapper를 제외한 나머지 화면을 전부 차지 */
-  overflow-y: auto; /* 내용이 넘치면 이 안에서만 세로 스크롤 발생 */
-  -webkit-overflow-scrolling: touch; /* 모바일 부드러운 스크롤 대응 */
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
-  /* 스크롤바 커스텀 */
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -63,7 +61,7 @@ export const Input = styled.input`
   width: 100%;
   height: calc(46 * (100dvh / 874));
   padding: 0 16px;
-  border: 1px solid #828282; /* 와이어프레임의 선명한 테두리 느낌 반영 */
+  border: 1px solid #828282;
   border-radius: 5px;
   font-size: 0.875rem;
   background-color: #ffffff;
@@ -74,12 +72,12 @@ export const Input = styled.input`
   }
 
   &:focus {
-    border-color: #5c4ff2; /* 포인트 테마 컬러 (하단 다음 버튼 색상 계열) */
+    border-color: #5c4ff2;
   }
 `;
 
 export const DateContainer = styled.div`
-  position: relative; /* 투명 인풋을 위에 얹기 위한 기준점 */
+  position: relative;
   width: 100%;
   height: calc(46 * (100dvh / 874));
   border: 1px solid #828282;
@@ -93,7 +91,6 @@ export const DateContainer = styled.div`
   cursor: pointer;
 `;
 
-// 💡 껍데기 텍스트 스타일 (학교, 학과 선택 창과 디자인 통일)
 export const DateText = styled.span`
   font-size: 0.875rem;
   color: ${(props) => (props.isSelected ? '#111111' : '#BBBBBB')};
@@ -102,21 +99,18 @@ export const DateText = styled.span`
 export const CalendarIcon = styled.span`
   font-size: 16px;
   color: #888;
-  pointer-events: none; /* 아이콘이 클릭을 방해하지 않도록 설정 */
+  pointer-events: none;
   z-index: 2;
 `;
 
-// 💡 핵심: 실제 클릭되는 date 인풋을 투명하게 만들어 전체를 덮어버림
 export const HiddenDateInput = styled.input`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0; /* 완전히 투명하게 만듦 */
+  opacity: 0;
   cursor: pointer;
-
-  /* 투명해도 모바일에서 클릭 영역 확보를 위해 padding 등 초기화 */
   box-sizing: border-box;
 `;
 
@@ -167,7 +161,6 @@ export const GradeButton = styled.button`
   }
 `;
 
-// 모달 스타일 예시
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -188,21 +181,17 @@ export const ModalContent = styled.div`
   width: 80%;
   max-width: 340px;
 
-  /* 💡 전체 모달 창이 화면 높이의 80%를 넘지 않도록 설정 */
   max-height: 80vh;
   display: flex;
-  flex-direction: column; /* 내부 요소들을 세로로 정렬 */
+  flex-direction: column;
 `;
 
 export const ModalList = styled.div`
   margin-top: 16px;
-
-  /* 💡 핵심: 리스트 영역이 차지할 수 있는 남은 공간을 채우고, 넘치면 스크롤 생성 */
   flex: 1;
   overflow-y: auto;
-  padding-right: 4px; /* 스크롤바와 버튼이 겹치지 않도록 여백 */
+  padding-right: 4px;
 
-  /* 스크롤바 스타일 커스텀 (선택 사항: 깔끔하게 보이기 위함) */
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -234,7 +223,6 @@ export const ModalCloseButton = styled.button`
 `;
 
 //OtherInfo.jsx 스타일 코드
-// 소득분위용 select 기본 스타일 (기존 Input/SelectBox 디자인 톤앤매너 매칭)
 export const SelectStyle = styled.select`
   width: 100%;
   height: calc(46 * (100dvh / 874));
@@ -255,22 +243,19 @@ export const SelectStyle = styled.select`
   }
 `;
 
-// 학점 레이아웃 컨테이너
 export const GpaContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
 `;
 
-// 너비를 콤팩트하게 제한한 학점 전용 select 박스
 export const CompactSelect = styled(SelectStyle)`
-  width: 70px; /* 기존 100%에서 와이어프레임 비율에 맞게 축소 */
+  width: 70px;
   text-align: center;
   background-position: right 10px center;
   padding: 0 24px 0 12px;
 `;
 
-// 관심분야 2열 정렬 Grid
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -280,15 +265,13 @@ export const GridContainer = styled.div`
 
 export const InterestButton = styled.button`
   width: 100%;
-  height: calc(46 * (100dvh / 874)); /* 기존 인풋창들과 높이 균형 유지 */
-  border-radius: 20px; /* 요청하신 모서리 둥글기 값 20 */
+  height: calc(46 * (100dvh / 874));
+  border-radius: 20px;
   font-size: 1rem;
   font-weight: 500;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-
-  /* 비활성화 vs 활성화 상태 스타일 분기 */
   background-color: ${(props) => (props.isActive ? '#756df8' : '#ffffff')};
   color: ${(props) => (props.isActive ? '#ffffff' : '#111111')};
   border: 1px solid #828282;

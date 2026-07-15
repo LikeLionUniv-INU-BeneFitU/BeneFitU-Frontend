@@ -26,16 +26,14 @@ export const SubTitle = styled.div`
 `;
 
 export const ScrollArea = styled.div`
-  flex: 1; /* 헤더를 제외한 나머지 화면 높이를 다 차지 */
-  overflow-y: auto; /* 내용이 화면보다 많아지면 세로 스크롤을 자동으로 생성 */
+  flex: 1;
+  overflow-y: auto;
   padding: 16px;
-
   display: flex;
   flex-direction: column;
   gap: 14px;
 `;
 
-// 정렬순서 버튼 관련 스타일
 export const SortWrapper = styled.div`
   position: relative;
   display: inline-block;
@@ -64,7 +62,7 @@ export const SortDropdown = styled.div`
   top: 100%;
   width: 100%;
 
-  overflow: hidden; /* 안쪽 모서리도 둥글게 잘리도록 */
+  overflow: hidden;
   border-radius: 5px;
 `;
 
@@ -77,7 +75,6 @@ export const SortOption = styled.div`
   border: 1px solid #4a4a4a;
   border-radius: 5px;
 
-  /* 선택된 항목만 보라색 배경 + 흰 글씨 */
   background-color: ${(props) => (props.$isActive ? '#584FEA' : '#F7F6FF')};
   color: ${(props) => (props.$isActive ? '#ffffff' : '#111111')};
 
@@ -87,7 +84,6 @@ export const SortOption = styled.div`
   }
 `;
 
-// 페이지네이션 스타일
 export const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;

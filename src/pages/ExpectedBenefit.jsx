@@ -8,8 +8,6 @@ export default function ExpectedBenefit() {
   const navigate = useNavigate();
   const [totalAmount, setTotalAmount] = useState(0);
   const [benefitList, setBenefitList] = useState([]);
-
-  // 페이지네이션 상태 (totPages 연동 및 0으로 초기화)
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -25,7 +23,6 @@ export default function ExpectedBenefit() {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
 
-    // 1. 총 금액 조회
     fetch('https://benefitu-api.duckdns.org/api/benefits/total-amount', {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -40,7 +37,6 @@ export default function ExpectedBenefit() {
         console.error('총 금액 조회 실패', error);
       });
 
-    // 2. 혜택 목록 조회
     fetch(
       `https://benefitu-api.duckdns.org/api/benefits?category=ALL&page=${currentPage}`,
       {
@@ -52,7 +48,6 @@ export default function ExpectedBenefit() {
         return res.json();
       })
       .then((data) => {
-        // 백엔드 실제 데이터 필드(benefits, totPages) 연동
         setBenefitList(data.result?.benefits || []);
         setTotalPages(data.result?.totPages || 0);
       })

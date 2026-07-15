@@ -22,9 +22,8 @@ function BenefitAll() {
     incomeLevel: '',
   });
 
-  // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0); // 임시 20 제거 -> 백엔드 totPages 연동
+  const [totalPages, setTotalPages] = useState(0);
 
   const currentBlock = Math.floor(currentPage / 10);
   const startPage = currentBlock * 10;
@@ -35,41 +34,38 @@ function BenefitAll() {
     pageNumbers.push(i);
   }
 
-  // sortType(한글)을 API sort 파라미터로 변환
-const sortCodeMap = {
-  '최신순': 'DEFAULT',
-  '금액순': 'AMOUNT_HIGH',
-};
+  const sortCodeMap = {
+    최신순: 'DEFAULT',
+    금액순: 'AMOUNT_HIGH',
+  };
 
-// 데이터 fetch 로직
-useEffect(() => {
-  const sortCode = sortCodeMap[sortType] || 'DEFAULT';
-  const backendUrl = `https://benefitu-api.duckdns.org/api/benefits?category=ALL&sort=${sortCode}&page=${currentPage}`;
-  const token = localStorage.getItem('accessToken');
+  useEffect(() => {
+    const sortCode = sortCodeMap[sortType] || 'DEFAULT';
+    const backendUrl = `https://benefitu-api.duckdns.org/api/benefits?category=ALL&sort=${sortCode}&page=${currentPage}`;
+    const token = localStorage.getItem('accessToken');
 
-  fetch(backendUrl, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error('네트워크 응답이 올바르지 않습니다.');
-      }
-      return res.json();
+    fetch(backendUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .then((data) => {
-      setBenefitList(data.result?.benefits || []);
-      setTotalPages(data.result?.totPages || 0);
-    })
-    .catch((error) => {
-      console.error('장학금 리스트 조회 실패', error);
-      setBenefitList([]);
-      setTotalPages(0);
-    });
-}, [currentCategory, currentPage, sortType]); // sortType 추가!
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('네트워크 응답이 올바르지 않습니다.');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setBenefitList(data.result?.benefits || []);
+        setTotalPages(data.result?.totPages || 0);
+      })
+      .catch((error) => {
+        console.error('장학금 리스트 조회 실패', error);
+        setBenefitList([]);
+        setTotalPages(0);
+      });
+  }, [currentCategory, currentPage, sortType]);
 
-  // 유저 정보 fetch
   useEffect(() => {
     const userUrl = 'https://benefitu-api.duckdns.org/api/users/info';
     const token = localStorage.getItem('accessToken');
@@ -99,7 +95,7 @@ useEffect(() => {
 
   const handleCategoryChange = (category) => {
     setCurrentCategory(category);
-    setCurrentPage(0); // 카테고리 바뀌면 1페이지로 초기화
+    setCurrentPage(0);
   };
 
   const handleNextBlock = () => {
@@ -124,8 +120,6 @@ useEffect(() => {
             item.categories && item.categories.includes(currentCategory),
         );
 
-        
-  // 정렬박스
   const parseAmount = (amount) => {
     const num = Number(amount);
     return isNaN(num) ? 0 : num;
@@ -187,7 +181,6 @@ useEffect(() => {
           </S.SortWrapper>
         </S.Rowbox>
 
-      
         {sortedList.map((benefit) => {
           return (
             <BenefitDetailBox

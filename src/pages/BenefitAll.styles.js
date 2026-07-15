@@ -44,6 +44,7 @@ export const SortWrapper = styled.div`
 export const SortButton = styled.button`
   background-color: #f7f6ff;
   border: 1px solid #4a4a4a;
+  color: #000000;
 
   display: flex;
   align-items: center;

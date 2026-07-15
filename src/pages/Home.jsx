@@ -497,7 +497,7 @@ const DeadlineItem = styled.div`
     font-size: 0.7rem;
     font-weight: 600;
     text-align: center;
-    padding: 6px 10px;
+    padding: 4px 7px;
     margin-left: 3px;
     border-radius: 6px;
   }

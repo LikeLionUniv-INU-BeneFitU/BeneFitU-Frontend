@@ -1,16 +1,21 @@
-# React + Vite
+## 14th-BeneFitU-Backend : 대학생 맞춤 혜택 통합 플랫폼
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 1. 개발 환경 및 주요 기술 스택 (Tech Stack)
 
-Currently, two official plugins are available:
+🚀 Environment & Framework
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* **JavaScript **
+  * 이유: 정적 타입 지원을 통한 코드 안정성 확보 및 런타임 에러 사전 방지
+* **React **
+  * 이유: 컴포넌트 기반 아키텍처를 통한 UI 재사용성 극대화 및 활발한 생태계 활용
+* **Vite**
+  * 빌드 도구 및 개발 서버 (빠른 HMR과 효율적인 번들링 제공)
+* **Package Manager**: npm
 
-## React Compiler
+  
+📦 Dependencies (Libraries)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **Routing**: React Router DOM
+* **Data Fetching & Network**: Axios 
+* **Styling**:  Styled-Components 
+* **Tooling & UI Components**: Lucide React (아이콘), Framer Motion (애니메이션)

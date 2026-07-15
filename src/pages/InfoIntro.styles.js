@@ -5,7 +5,7 @@ export const PageWrapper = styled.div`
   width: 100%;
   height: 100dvh; /* 전체 화면 높이 꽉 채우기 */
   margin: 0 auto;
-  background-color: linear-gradient(180deg, #edecff 0%, #ffffff 100%);
+  background-color:  #faf6ff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
